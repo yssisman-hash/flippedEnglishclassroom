@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEÜ İngilizce II – Tersyüz Edilmiş Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════ RESET & VARS ══════════ */
+:root{
+  --ink:#16213e;--paper:#f4efe6;--card:#fffcf5;
+  --accent:#c84b31;--gold:#d4942a;--sage:#3d7a56;
+  --sky:#2a6fa8;--muted:#8a8070;--border:#ddd7c8;
+  --pass:#3d7a56;--fail:#c84b31;--warn:#d4942a;
+  --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+/* ══════════ TYPOGRAPHY ══════════ */
+.serif{font-family:'Playfair Display',serif}
+.mono{font-family:'DM Mono',monospace}
+
+/* ══════════ ANIMATIONS ══════════ */
+@keyframes shimmer{to{background-position:200% center}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* ══════════ HEADER ══════════ */
+header{background:var(--ink);color:var(--paper);padding:2.4rem 2rem 2rem;text-align:center;position:relative;overflow:hidden}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--gold),var(--sage),var(--sky),var(--accent));background-size:300%;animation:shimmer 5s linear infinite}
+.hbadge{display:inline-block;font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:.25rem .75rem;border-radius:2px;margin-bottom:1rem}
+header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3.5vw,2.5rem);font-weight:900;line-height:1.2}
+header p{margin-top:.6rem;font-size:.85rem;color:rgba(244,239,230,.5);letter-spacing:.04em}
+.header-user{position:absolute;top:1rem;right:1.2rem;display:flex;align-items:center;gap:.6rem}
+.header-user .avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.25)}
+.header-user .uname{font-size:.78rem;color:rgba(244,239,230,.7)}
+.btn-logout{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(244,239,230,.8);border-radius:4px;padding:.25rem .6rem;font-size:.72rem;cursor:pointer;transition:background .2s}
+.btn-logout:hover{background:rgba(255,255,255,.2)}
+
+/* ══════════ BREADCRUMB ══════════ */
+#breadcrumb{display:none;padding:.8rem 1.6rem;background:var(--card);border-bottom:1px solid var(--border);font-size:.8rem;color:var(--muted);align-items:center;gap:.4rem;flex-wrap:wrap}
+#breadcrumb.show{display:flex}
+#breadcrumb .bc-btn{background:none;border:none;cursor:pointer;color:var(--accent);font-size:.8rem;text-decoration:underline;padding:0}
+#breadcrumb .sep{color:var(--border)}
+#breadcrumb .bc-cur{color:var(--ink);font-weight:500}
+
+/* ══════════ PAGES ══════════ */
+.page{display:none}
+.page.active{display:block;animation:fadeUp .4s ease both}
+
+/* ══════════ LOGIN PAGE ══════════ */
+#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+.login-box{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:2.8rem 2.4rem;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(22,33,62,.1);animation:pop .4s ease both}
+.login-logo{text-align:center;margin-bottom:2rem}
+.login-logo h2{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;margin-bottom:.3rem}
+.login-logo p{font-size:.8rem;color:var(--muted)}
+.form-group{margin-bottom:1.1rem}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem}
+.form-group input,.form-group select{width:100%;background:var(--paper);border:1.5px solid var(--border);border-radius:7px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--ink);transition:border .2s}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--sky)}
+.btn-login{width:100%;background:var(--ink);color:var(--paper);border:none;border-radius:8px;padding:.85rem;font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:.4rem}
+.btn-login:hover{background:#2a2a4a}
+.login-hint{margin-top:1.2rem;text-align:center;font-size:.76rem;color:var(--muted);background:var(--paper);border-radius:6px;padding:.7rem;line-height:1.6}
+.login-hint strong{color:var(--ink)}
+
+/* ══════════ HOME ══════════ */
+.home-wrap{padding:3.5rem 2rem 5rem;max-width:920px;margin:0 auto}
+.home-intro{text-align:center;margin-bottom:2.8rem}
+.home-intro h2{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,2.5vw,1.55rem);font-weight:700;margin-bottom:.4rem}
+.home-intro p{font-size:.88rem;color:var(--muted)}
+.weeks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.9rem}
+.week-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.3rem .9rem;cursor:pointer;transition:all .25s;text-align:center;position:relative;overflow:hidden}
+.week-btn::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--accent);transform:scaleY(0);transition:transform .25s}
+.week-btn:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(200,75,49,.12)}
+.week-btn:hover::before{transform:scaleY(1)}
+.wk-label{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700}
+.wk-sub{font-size:.72rem;color:var(--muted);margin-top:.25rem}
+.wk-score-badge{display:inline-block;margin-top:.5rem;font-size:.7rem;font-family:'DM Mono',monospace;padding:.18rem .55rem;border-radius:20px;font-weight:500}
+.wk-score-badge.pass{background:#d4edda;color:var(--sage)}
+.wk-score-badge.fail{background:#f8d7da;color:var(--accent)}
+.wk-score-badge.none{background:#e9e5dc;color:var(--muted)}
+
+/* ══════════ WEEK PAGE ══════════ */
+.week-wrap{padding:2.8rem 2rem 5rem;max-width:760px;margin:0 auto}
+.week-title{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:900;margin-bottom:.3rem}
+.week-tagline{font-size:.82rem;color:var(--muted);margin-bottom:2.2rem;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.mlist{display:flex;flex-direction:column;gap:.85rem}
+.mcard{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;gap:1.1rem;padding:1.1rem 1.4rem;cursor:pointer;text-decoration:none;color:var(--ink);transition:all .22s;position:relative;overflow:hidden}
+.mcard::after{content:'→';position:absolute;right:1.4rem;font-size:1rem;opacity:.25;transition:all .22s}
+.mcard:hover{border-color:var(--accent);box-shadow:0 6px 20px rgba(200,75,49,.1);transform:translateX(4px)}
+.mcard:hover::after{opacity:1;right:1.1rem}
+.mcard.quiz-card{border-color:var(--gold);background:linear-gradient(135deg,#fffcf0,var(--card))}
+.mcard.quiz-card:hover{border-color:var(--accent);background:linear-gradient(135deg,#fff8e8,var(--card))}
+.mico{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.mico.video{background:#fde8e4}.mico.slide{background:#fdf3e4}.mico.pdf{background:#e4f0fd}
+.mico.forum{background:#e4fde9}.mico.hw{background:#f3e4fd}.mico.extra{background:#e4f6fd}
+.mico.quiz{background:linear-gradient(135deg,#fdf3cd,#fde8a0)}
+.minfo h3{font-size:.95rem;font-weight:500}
+.minfo p{font-size:.76rem;color:var(--muted);margin-top:.12rem}
+.quiz-done-badge{font-size:.7rem;font-family:'DM Mono',monospace;padding:.2rem .55rem;border-radius:20px;margin-left:.5rem;vertical-align:middle}
+.quiz-done-badge.pass{background:#d4edda;color:var(--sage)}
+.quiz-done-badge.fail{background:#f8d7da;color:var(--accent)}
+
+/* ══════════ QUIZ PAGE ══════════ */
+.quiz-wrap{padding:2.8rem 2rem 5rem;max-width:800px;margin:0 auto}
+.quiz-header{margin-bottom:2rem}
+.quiz-header h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;margin-bottom:.3rem}
+.quiz-header p{font-size:.82rem;color:var(--muted)}
+.quiz-meta{display:flex;gap:1.5rem;margin-top:.8rem;flex-wrap:wrap}
+.quiz-meta span{font-size:.78rem;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:.35rem}
+.quiz-meta strong{color:var(--ink)}
+
+/* progress bar */
+.q-progress-wrap{margin-bottom:2rem}
+.q-progress-label{font-size:.75rem;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:.35rem;display:flex;justify-content:space-between}
+.q-progress-track{height:8px;background:#e8e2d8;border-radius:8px;overflow:hidden}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--sage));border-radius:8px;transition:width .4s ease}
+
+/* question card */
+.q-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.6rem;margin-bottom:1rem;animation:fadeUp .3s ease both}
+.q-number{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem}
+.q-text{font-size:1rem;font-weight:500;line-height:1.5;margin-bottom:1.1rem}
+.q-options{display:flex;flex-direction:column;gap:.5rem}
+.q-opt{display:flex;align-items:center;gap:.8rem;padding:.65rem .9rem;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;transition:all .18s;font-size:.9rem}
+.q-opt:hover{border-color:var(--sky);background:#f0f6fd}
+.q-opt input[type=radio]{display:none}
+.q-opt.selected{border-color:var(--sky);background:#e8f2fd;font-weight:500}
+.q-opt.correct{border-color:var(--sage);background:#d4edda;color:var(--sage)}
+.q-opt.wrong{border-color:var(--accent);background:#f8d7da;color:var(--accent)}
+
+/* navigation */
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:1rem}
+.btn-qnav{background:var(--ink);color:var(--paper);border:none;border-radius:7px;padding:.65rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:background .2s}
+.btn-qnav:hover{background:#2a2a4a}
+.btn-qnav:disabled{background:#ccc;cursor:not-allowed}
+.btn-submit{background:var(--sage);color:#fff;border:none;border-radius:7px;padding:.65rem 1.8rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-submit:hover{background:#2d5e3f}
+.q-dots{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center}
+.q-dot{width:10px;height:10px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s}
+.q-dot.answered{background:var(--sky)}
+.q-dot.active{background:var(--ink);transform:scale(1.3)}
+
+/* ══════════ QUIZ RESULT ══════════ */
+.result-box{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;animation:pop .45s ease both;margin-top:1rem}
+.result-box.pass{border:2px solid var(--sage)}
+.result-box.fail{border:2px solid var(--accent)}
+.result-emoji{font-size:3.5rem;margin-bottom:.8rem}
+.result-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;margin-bottom:.5rem}
+.result-score{font-family:'DM Mono',monospace;font-size:2.8rem;font-weight:500;margin:.8rem 0}
+.result-score.pass{color:var(--sage)}
+.result-score.fail{color:var(--accent)}
+.result-detail{font-size:.88rem;color:var(--muted);line-height:1.6;max-width:440px;margin:0 auto .8rem}
+.result-bar-wrap{max-width:360px;margin:.6rem auto 1.4rem}
+.result-bar-track{height:14px;background:#e8e2d8;border-radius:14px;overflow:hidden}
+.result-bar-fill{height:100%;border-radius:14px;transition:width .8s ease}
+.result-bar-fill.pass{background:linear-gradient(90deg,var(--sage),#5aab78)}
+.result-bar-fill.fail{background:linear-gradient(90deg,var(--warn),var(--accent))}
+.result-bar-label{font-size:.75rem;font-family:'DM Mono',monospace;color:var(--muted);margin-top:.3rem}
+.btn-result-action{display:inline-block;margin:.3rem .4rem;padding:.6rem 1.4rem;border-radius:7px;font-size:.88rem;font-weight:500;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
+.btn-result-action.primary{background:var(--ink);color:var(--paper)}
+.btn-result-action.primary:hover{background:#2a2a4a}
+.btn-result-action.secondary{background:var(--accent);color:#fff}
+.btn-result-action.secondary:hover{background:#a83b24}
+
+/* ══════════ FORUM PAGE ══════════ */
+.inner-wrap{padding:2.8rem 2rem 5rem;max-width:760px;margin:0 auto}
+.page-heading{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;margin-bottom:.3rem}
+.page-sub{font-size:.83rem;color:var(--muted);margin-bottom:1.8rem}
+.forum-post-box{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.3rem;margin-bottom:1.8rem}
+.forum-post-box textarea{width:100%;background:var(--paper);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;resize:vertical;min-height:85px;color:var(--ink)}
+.forum-post-box textarea:focus{outline:2px solid var(--sky);border-color:transparent}
+.btn-post{margin-top:.7rem;background:var(--accent);color:#fff;border:none;border-radius:6px;padding:.55rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s}
+.btn-post:hover{background:#a83b24}
+.forum-thread{display:flex;flex-direction:column;gap:.9rem}
+.forum-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.3rem}
+.fi-meta{display:flex;gap:.6rem;align-items:center;margin-bottom:.55rem}
+.fi-avatar{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fi-name{font-size:.8rem;font-weight:500}
+.fi-date{font-size:.72rem;color:var(--muted);margin-left:auto;font-family:'DM Mono',monospace}
+.fi-body{font-size:.87rem;line-height:1.55}
+.placeholder-notice{text-align:center;padding:2.5rem;color:var(--muted);font-size:.84rem;font-style:italic}
+
+/* ══════════ EXTRA PAGE ══════════ */
+.extra-placeholder{background:var(--card);border:1.5px dashed var(--border);border-radius:var(--radius);padding:2.8rem 2rem;text-align:center;color:var(--muted)}
+.extra-placeholder span{font-size:2rem;display:block;margin-bottom:.7rem}
+.extra-placeholder p{font-size:.86rem;line-height:1.6}
+
+/* ══════════ TEACHER PANEL ══════════ */
+.teacher-wrap{padding:2.8rem 2rem 5rem;max-width:1100px;margin:0 auto}
+.teacher-wrap h2{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;margin-bottom:.4rem}
+.teacher-wrap .tsub{font-size:.85rem;color:var(--muted);margin-bottom:2rem}
+
+/* stats row */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:2.2rem}
+.stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.4rem}
+.stat-card .sval{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900}
+.stat-card .sval.green{color:var(--sage)}
+.stat-card .sval.red{color:var(--accent)}
+.stat-card .sval.blue{color:var(--sky)}
+.stat-card .slabel{font-size:.75rem;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-top:.2rem}
+
+/* week filter tabs */
+.week-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.wtab{background:var(--card);border:1.5px solid var(--border);border-radius:5px;padding:.35rem .75rem;font-size:.78rem;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s}
+.wtab.active,.wtab:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* student table */
+.t-section-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.8rem;color:var(--ink)}
+.student-table{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--card);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--border)}
+.student-table th{background:var(--ink);color:var(--paper);padding:.75rem 1rem;text-align:left;font-size:.72rem;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.student-table td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.student-table tr:last-child td{border-bottom:none}
+.student-table tr:hover td{background:#faf6ee}
+.score-pill{display:inline-block;padding:.2rem .65rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:.75rem;font-weight:500}
+.score-pill.pass{background:#d4edda;color:var(--sage)}
+.score-pill.fail{background:#f8d7da;color:var(--accent)}
+.score-pill.none{background:#e9e5dc;color:var(--muted)}
+.progress-mini{display:inline-block;vertical-align:middle;width:80px;height:7px;background:#e8e2d8;border-radius:7px;overflow:hidden;margin-left:.5rem}
+.progress-mini-fill{height:100%;border-radius:7px}
+.progress-mini-fill.pass{background:var(--sage)}
+.progress-mini-fill.fail{background:var(--accent)}
+.progress-mini-fill.warn{background:var(--warn)}
+
+/* chart bars */
+.week-chart{display:flex;gap:.4rem;align-items:flex-end;height:80px;padding:.5rem 0;margin-bottom:2rem;flex-wrap:wrap}
+.chart-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem;flex:1;min-width:28px}
+.chart-bar{width:100%;background:linear-gradient(to top,var(--sage),#6abd85);border-radius:3px 3px 0 0;transition:height .5s ease;min-height:2px;cursor:default;position:relative}
+.chart-bar:hover::after{content:attr(data-tip);position:absolute;bottom:105%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:.65rem;padding:.2rem .4rem;border-radius:3px;white-space:nowrap;pointer-events:none}
+.chart-bar.low{background:linear-gradient(to top,var(--accent),#e87060)}
+.chart-bar.mid{background:linear-gradient(to top,var(--warn),#e8c060)}
+.chart-lbl{font-size:.6rem;font-family:'DM Mono',monospace;color:var(--muted)}
+
+/* ══════════ REVIEW MODE ══════════ */
+.review-summary{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.6rem;margin-bottom:1.5rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center}
+.review-summary .rs-item{text-align:center}
+.review-summary .rs-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900}
+.review-summary .rs-lbl{font-size:.7rem;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.review-filter{display:flex;gap:.5rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.rf-btn{background:var(--card);border:1.5px solid var(--border);border-radius:5px;padding:.3rem .8rem;font-size:.76rem;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s}
+.rf-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.rf-btn.wrong-filter.active{background:var(--accent);border-color:var(--accent)}
+.rf-btn.correct-filter.active{background:var(--sage);border-color:var(--sage)}
+
+/* review card states */
+.q-card.reviewed-correct{border-color:var(--sage);background:linear-gradient(135deg,#f0faf4,var(--card))}
+.q-card.reviewed-wrong{border-color:var(--accent);background:linear-gradient(135deg,#fff5f4,var(--card))}
+.q-card.reviewed-skipped{border-color:var(--warn);background:linear-gradient(135deg,#fffbf0,var(--card))}
+
+/* explanation box */
+.q-explanation{margin-top:1rem;border-radius:8px;padding:1rem 1.1rem;font-size:.87rem;line-height:1.65;animation:fadeUp .3s ease both}
+.q-explanation.correct-exp{background:#eaf7ee;border-left:4px solid var(--sage)}
+.q-explanation.wrong-exp{background:#fff0ee;border-left:4px solid var(--accent)}
+.q-explanation.skipped-exp{background:#fffae8;border-left:4px solid var(--warn)}
+.q-explanation .exp-label{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:.4rem}
+.q-explanation.correct-exp .exp-label{color:var(--sage)}
+.q-explanation.wrong-exp .exp-label{color:var(--accent)}
+.q-explanation.skipped-exp .exp-label{color:var(--warn)}
+.q-explanation .exp-rule{margin-top:.5rem;font-size:.82rem;color:var(--muted);font-style:italic;border-top:1px solid rgba(0,0,0,.07);padding-top:.5rem}
+
+/* ══════════ FOOTER ══════════ */
+footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--border);font-family:'DM Mono',monospace;letter-spacing:.05em}
+</style>
+</head>
+<body>
+
+<header id="site-header" style="display:none">
+  <div class="header-user" id="header-user-area"></div>
+  <div class="hbadge">Flipped Classroom · 2024–2025</div>
+  <h1>NEÜ İngilizce II<br>Tersyüz Edilmiş Sınıfı</h1>
+  <p>Nevsehir Hacı Bektas Veli University · English II · 16-Week Program</p>
+</header>
+
+<nav id="breadcrumb">
+  <button class="bc-btn" onclick="goHome()">← All Weeks</button>
+  <span class="sep">/</span>
+  <span id="bc-week" class="bc-cur"></span>
+  <span id="bc-section" style="display:none">
+    <span class="sep"> / </span>
+    <span id="bc-section-name" class="bc-cur"></span>
+  </span>
+</nav>
+
+<!-- ════════════════════ LOGIN ════════════════════ -->
+<div id="login-page" class="page active" style="display:flex">
+  <div class="login-box">
+    <div class="login-logo">
+      <div style="font-size:2rem;margin-bottom:.5rem">🎓</div>
+      <h2>NEÜ İngilizce II</h2>
+      <p>Flipped Classroom · Please sign in to continue</p>
+    </div>
+    <div class="form-group">
+      <label>Student / Teacher ID</label>
+      <input type="text" id="login-id" placeholder="e.g. student1 or teacher">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pw" placeholder="••••••">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Sign In →</button>
+    <div class="login-hint">
+      <strong>Demo accounts:</strong><br>
+      Students: <code>student1 … student6</code> / pw: <code>1234</code><br>
+      Teacher: <code>teacher</code> / pw: <code>admin</code>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ HOME ════════════════════ -->
+<div id="home" class="page">
+  <div class="home-wrap">
+    <div class="home-intro">
+      <h2 id="home-greeting">Select Your Week</h2>
+      <p>Click on any week to access that week's learning materials and weekly quiz.</p>
+    </div>
+    <div class="weeks-grid" id="weeks-grid"></div>
+  </div>
+</div>
+
+<!-- ════════════════════ WEEK PAGE ════════════════════ -->
+<div id="week-page" class="page">
+  <div class="week-wrap">
+    <div class="week-title" id="wk-title"></div>
+    <div class="week-tagline">Weekly Learning Materials</div>
+    <div class="mlist">
+      <a class="mcard" id="link-video" href="#" target="_blank" onclick="return handleLink(this,'Lesson Video')">
+        <div class="mico video">🎬</div>
+        <div class="minfo"><h3>Lesson Video</h3><p>Watch before class — approx. 20–30 min</p></div>
+      </a>
+      <a class="mcard" id="link-slide" href="#" target="_blank" onclick="return handleLink(this,'Lesson Slides')">
+        <div class="mico slide">📊</div>
+        <div class="minfo"><h3>Lesson Slides</h3><p>Download the presentation slides</p></div>
+      </a>
+      <a class="mcard" id="link-pdf" href="#" target="_blank" onclick="return handleLink(this,'Lesson PDF')">
+        <div class="mico pdf">📄</div>
+        <div class="minfo"><h3>Lesson PDF File</h3><p>Supplementary reading &amp; notes</p></div>
+      </a>
+      <a class="mcard" href="#" onclick="return openForum()">
+        <div class="mico forum">💬</div>
+        <div class="minfo"><h3>Lesson Forum</h3><p>Ask questions, discuss, share ideas</p></div>
+      </a>
+      <a class="mcard" id="link-hw" href="#" target="_blank" onclick="return handleLink(this,'Lesson Homework')">
+        <div class="mico hw">📝</div>
+        <div class="minfo"><h3>Lesson Homework</h3><p>Complete &amp; submit before next session</p></div>
+      </a>
+      <a class="mcard" href="#" onclick="return openExtra()">
+        <div class="mico extra">📚</div>
+        <div class="minfo"><h3>Extra Support Materials</h3><p>Additional exercises for deeper practice</p></div>
+      </a>
+      <!-- ASK CLAUDE CARD -->
+      <a class="mcard" href="https://claude.ai" target="_blank" style="border-color:#7c5cbf;background:linear-gradient(135deg,#f5f0ff,var(--card))">
+        <div class="mico" style="background:linear-gradient(135deg,#e8deff,#d4c5ff);font-size:1.4rem">🤖</div>
+        <div class="minfo">
+          <h3 style="color:#5a3fa0">Ask Claude AI</h3>
+          <p>Have a question? Ask Claude AI for instant help &amp; explanations</p>
+        </div>
+      </a>
+
+      <!-- QUIZ CARD -->
+      <a class="mcard quiz-card" href="#" onclick="return openQuiz()">
+        <div class="mico quiz">📝</div>
+        <div class="minfo">
+          <h3>Weekly Quiz <span id="quiz-done-badge" class="quiz-done-badge" style="display:none"></span></h3>
+          <p>25 questions · 4 pts each · Pass: 70/100</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ QUIZ PAGE ════════════════════ -->
+<div id="quiz-page" class="page">
+  <div class="quiz-wrap">
+    <div class="quiz-header">
+      <h2 id="quiz-title">Week 1 Quiz</h2>
+      <p id="quiz-subtitle">Grammar &amp; Vocabulary · 25 Questions · 4 pts each</p>
+      <div class="quiz-meta">
+        <span>📋 <strong>25</strong> questions</span>
+        <span>⏱ Untimed</span>
+        <span>🏆 Pass: <strong>70 pts</strong></span>
+      </div>
+    </div>
+    <div class="q-progress-wrap" id="q-progress-wrap">
+      <div class="q-progress-label">
+        <span id="q-prog-label">Question 1 of 25</span>
+        <span id="q-prog-pct">0%</span>
+      </div>
+      <div class="q-progress-track"><div class="q-progress-fill" id="q-prog-bar" style="width:0%"></div></div>
+    </div>
+    <div id="q-dots-row" class="q-dots"></div>
+    <div id="q-container" style="margin-top:1.2rem"></div>
+    <div class="quiz-nav" id="quiz-nav">
+      <button class="btn-qnav" id="btn-prev" onclick="quizNav(-1)">← Previous</button>
+      <span id="q-counter" style="font-size:.82rem;color:var(--muted);font-family:'DM Mono',monospace"></span>
+      <button class="btn-qnav" id="btn-next" onclick="quizNav(1)">Next →</button>
+      <button class="btn-submit" id="btn-submit" onclick="submitQuiz()" style="display:none">Submit Quiz ✓</button>
+    </div>
+    <div id="quiz-result" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ════════════════════ FORUM ════════════════════ -->
+<div id="forum-page" class="page">
+  <div class="inner-wrap">
+    <h2 class="page-heading" id="forum-title">Forum</h2>
+    <p class="page-sub" id="forum-sub"></p>
+    <div class="forum-post-box">
+      <textarea id="forum-input" placeholder="Write your question or comment here…"></textarea>
+      <button class="btn-post" onclick="postComment()">Post</button>
+    </div>
+    <div class="forum-thread" id="forum-thread"><div class="placeholder-notice">No posts yet. Be the first! 🌱</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════ EXTRA ════════════════════ -->
+<div id="extra-page" class="page">
+  <div class="inner-wrap">
+    <h2 class="page-heading" id="extra-title">Extra Support Materials</h2>
+    <p class="page-sub" id="extra-sub"></p>
+    <div class="extra-placeholder">
+      <span>📚</span>
+      <p>Extra support materials for this week will be added by your instructor.<br>
+         Post your questions in the <strong>Forum</strong> in the meantime.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ TEACHER PANEL ════════════════════ -->
+<div id="teacher-page" class="page">
+  <div class="teacher-wrap">
+    <h2>Teacher Dashboard</h2>
+    <p class="tsub">NEÜ English II · Flipped Classroom · 2024–2025 · Quiz Performance Overview</p>
+
+    <div class="stats-row" id="stats-row"></div>
+
+    <div class="t-section-title">Average Quiz Score by Week</div>
+    <div class="week-chart" id="week-chart"></div>
+
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+      <div class="t-section-title" style="margin-bottom:0">Student Results</div>
+      <div class="week-tabs" id="week-tabs"></div>
+    </div>
+    <table class="student-table" id="student-table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>ID</th>
+          <th id="th-week">Week 1 Score</th>
+          <th>Status</th>
+          <th>Overall Progress</th>
+        </tr>
+      </thead>
+      <tbody id="student-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer id="site-footer" style="display:none">NEÜ English II · Flipped Classroom · All rights reserved</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   DATA LAYER
+   ════════════════════════════════════════════════════════ */
+
+// Demo users
+const USERS = {
+  student1:{ pw:'1234', name:'Ayşe Kaya',       role:'student', id:'2021001' },
+  student2:{ pw:'1234', name:'Mehmet Demir',    role:'student', id:'2021002' },
+  student3:{ pw:'1234', name:'Fatma Şahin',     role:'student', id:'2021003' },
+  student4:{ pw:'1234', name:'Ali Yıldız',      role:'student', id:'2021004' },
+  student5:{ pw:'1234', name:'Zeynep Arslan',   role:'student', id:'2021005' },
+  student6:{ pw:'1234', name:'Can Özdemir',     role:'student', id:'2021006' },
+  teacher:  { pw:'admin',name:'Dr. Öğr. Üyesi', role:'teacher', id:'T001'    }
+};
+
+// Week 1 quiz — 25 questions with explanations
+const QUIZZES = {
+  1: {
+    topic: 'Simple Present & To Be / Everyday Vocabulary',
+    questions: [
+      {
+        q:"She ___ a teacher at our school.",
+        opts:["am","is","are","be"], ans:1,
+        exp:"The verb 'to be' changes depending on the subject. With <strong>she / he / it</strong> (third person singular) we always use <em>is</em>. 'Am' is only for <em>I</em>, and 'are' is for <em>you / we / they</em>.",
+        rule:"To Be: I am · He/She/It is · You/We/They are"
+      },
+      {
+        q:"They ___ from Istanbul.",
+        opts:["is","am","are","was"], ans:2,
+        exp:"<strong>They</strong> is a plural subject, so we use <em>are</em>. 'Is' is for singular third person (he/she/it), 'am' is only for 'I', and 'was' is past tense.",
+        rule:"Plural subjects (they, we, you) → are"
+      },
+      {
+        q:"What is the meaning of the word 'communicate'?",
+        opts:["to fight","to travel","to share information","to cook"], ans:2,
+        exp:"<strong>Communicate</strong> means to share or exchange information, ideas or feelings with another person. Example: <em>We communicate by email.</em> The other options describe completely different actions.",
+        rule:"Vocabulary: communicate = to share/exchange information"
+      },
+      {
+        q:"I ___ English every day.",
+        opts:["study","studies","studying","studied"], ans:0,
+        exp:"With <strong>I</strong> in the Simple Present tense, we use the base form of the verb without any ending. <em>Studies</em> is for he/she/it. <em>Studying</em> is the continuous form. <em>Studied</em> is past tense.",
+        rule:"Simple Present + I/You/We/They → base verb (no -s)"
+      },
+      {
+        q:"He ___ not like coffee.",
+        opts:["do","does","is","are"], ans:1,
+        exp:"In Simple Present negative sentences with <strong>he / she / it</strong>, we use <em>does not (doesn't)</em>. <em>Do not</em> is for I/you/we/they. 'Is' and 'are' are forms of 'to be', not used here.",
+        rule:"Negative: He/She/It + does not + base verb"
+      },
+      {
+        q:"Which word means the same as 'begin'?",
+        opts:["finish","start","stop","wait"], ans:1,
+        exp:"<strong>Begin</strong> and <strong>start</strong> are synonyms — they both mean to do something for the first time or to commence an action. 'Finish' means to end, 'stop' means to cease, and 'wait' means to stay until something happens.",
+        rule:"Vocabulary: begin = start (synonyms)"
+      },
+      {
+        q:"___ you understand the lesson?",
+        opts:["Does","Is","Do","Are"], ans:2,
+        exp:"In Simple Present yes/no questions with <strong>you</strong>, the auxiliary verb is <em>Do</em>. <em>Does</em> is used with he/she/it. 'Is' and 'Are' are forms of 'to be' and are not used with action verbs like 'understand'.",
+        rule:"Questions: Do + I/You/We/They + base verb?"
+      },
+      {
+        q:"The students ___ in the classroom right now.",
+        opts:["is","be","am","are"], ans:3,
+        exp:"<strong>The students</strong> is a plural noun phrase, equivalent to 'they'. For plural subjects, the verb 'to be' takes the form <em>are</em>. 'Is' is for singular, 'am' is only for 'I', and 'be' is the infinitive form.",
+        rule:"Plural noun phrase → are"
+      },
+      {
+        q:"Choose the correct spelling:",
+        opts:["recieve","receive","receve","receeve"], ans:1,
+        exp:"The correct spelling is <strong>receive</strong>. Remember the classic English spelling rule: <em>i before e, except after c</em>. After the letter 'c', we write 'ei' not 'ie'. So: rec<strong>ei</strong>ve ✓",
+        rule:"Spelling rule: i before e, except after c → receive"
+      },
+      {
+        q:"She speaks English very ___.",
+        opts:["good","well","nice","fine"], ans:1,
+        exp:"After a verb like 'speaks', we need an <strong>adverb</strong> to describe how she speaks. <em>Well</em> is the adverb form. <em>Good</em> is an adjective (used before nouns, e.g. <em>a good student</em>). 'Nice' and 'fine' do not fit here grammatically.",
+        rule:"Adverb modifies a verb: speaks + well (not 'good')"
+      },
+      {
+        q:"We ___ happy about the exam results.",
+        opts:["is","am","are","be"], ans:2,
+        exp:"<strong>We</strong> is a plural first-person pronoun. With 'we', the verb 'to be' is always <em>are</em>. 'Is' = he/she/it, 'am' = I, 'be' = infinitive.",
+        rule:"We + are (present tense)"
+      },
+      {
+        q:"What does 'vocabulary' mean?",
+        opts:["grammar rules","pronunciation","set of words","sentence structure"], ans:2,
+        exp:"<strong>Vocabulary</strong> refers to the complete set of words that a person knows or that exist in a language. Grammar rules describe how words are combined, pronunciation is how words are said, and sentence structure refers to word order.",
+        rule:"Vocabulary: vocabulary = the set/collection of words in a language"
+      },
+      {
+        q:"___ he play football at weekends?",
+        opts:["Do","Is","Are","Does"], ans:3,
+        exp:"In Simple Present questions with <strong>he / she / it</strong>, we use the auxiliary <em>Does</em>. Note that when 'does' is used, the main verb stays in its base form: <em>Does he play</em> (not 'plays').",
+        rule:"Questions: Does + He/She/It + base verb?"
+      },
+      {
+        q:"The opposite of 'difficult' is:",
+        opts:["hard","easy","boring","long"], ans:1,
+        exp:"<strong>Difficult</strong> means something requires a lot of effort or skill. Its antonym (opposite) is <em>easy</em> — something that requires little effort. 'Hard' is actually a synonym of difficult, not an antonym.",
+        rule:"Antonyms: difficult ↔ easy"
+      },
+      {
+        q:"My brother ___ in a hospital.",
+        opts:["work","working","works","to work"], ans:2,
+        exp:"With the subject <strong>my brother</strong> (= he, third person singular) in the Simple Present, the verb takes an <em>-s</em> ending: <em>works</em>. 'Work' would be used with I/you/we/they. 'Working' needs an auxiliary verb. 'To work' is an infinitive.",
+        rule:"Simple Present: He/She/It + verb + -s → works"
+      },
+      {
+        q:"Which sentence is correct?",
+        opts:["She don't like music.","She doesn't likes music.","She doesn't like music.","She not like music."], ans:2,
+        exp:"The correct structure for third person singular negative is <em>Subject + doesn't + base verb</em>. Option A uses 'don't' (wrong for she). Option B incorrectly adds '-s' to the main verb after 'doesn't'. Option D omits the auxiliary entirely.",
+        rule:"Negative: She + doesn't + base verb (no -s on main verb)"
+      },
+      {
+        q:"'Fluent' means:",
+        opts:["slow and careful","able to speak smoothly","unable to understand","using a dictionary"], ans:1,
+        exp:"<strong>Fluent</strong> describes the ability to speak or write a language easily, accurately and at a natural pace. Example: <em>She is fluent in three languages.</em> It is the opposite of speaking slowly or with difficulty.",
+        rule:"Vocabulary: fluent = speaking a language smoothly and naturally"
+      },
+      {
+        q:"They ___ very tired after school.",
+        opts:["is","am","are","be"], ans:2,
+        exp:"<strong>They</strong> is a third-person plural pronoun. The correct form of 'to be' for 'they' in the present tense is <em>are</em>. This is the same rule as with 'we' and 'you'.",
+        rule:"They/We/You + are (present tense)"
+      },
+      {
+        q:"___ your parents speak English?",
+        opts:["Does","Is","Do","Are"], ans:2,
+        exp:"<strong>Your parents</strong> is a plural subject (= they). For questions in Simple Present with plural subjects, we use the auxiliary <em>Do</em>. 'Does' is only for singular third person (he/she/it).",
+        rule:"Questions: Do + plural subject + base verb?"
+      },
+      {
+        q:"Choose the correct option: I ___ breakfast every morning.",
+        opts:["have","has","having","to have"], ans:0,
+        exp:"With the subject <strong>I</strong>, we use the base form of the verb in Simple Present: <em>have</em>. <em>Has</em> is the third person singular form (he/she/it has). 'Having' is the continuous form and requires an auxiliary. 'To have' is the infinitive.",
+        rule:"Simple Present: I + base verb → I have"
+      },
+      {
+        q:"What is a synonym of 'important'?",
+        opts:["small","significant","simple","strange"], ans:1,
+        exp:"A synonym is a word that has the same or a very similar meaning. <strong>Significant</strong> means having great meaning or consequence — just like 'important'. 'Small', 'simple', and 'strange' all begin with 's' but have completely different meanings.",
+        rule:"Vocabulary: important = significant (synonyms)"
+      },
+      {
+        q:"He ___ a doctor — he is a teacher.",
+        opts:["is not","are not","am not","not is"], ans:0,
+        exp:"The subject is <strong>he</strong> (third person singular). The negative of 'is' is <em>is not</em> (or isn't). 'Are not' is for you/we/they, 'am not' is only for I. 'Not is' is never correct in English — the negative particle always follows the verb 'be'.",
+        rule:"Negative to be: He + is not (isn't)"
+      },
+      {
+        q:"Which word does NOT belong? apple, banana, chair, orange",
+        opts:["apple","banana","chair","orange"], ans:2,
+        exp:"Apple, banana, and orange are all <strong>fruits</strong>. <em>Chair</em> is a piece of furniture — it belongs to a completely different category. This is a vocabulary categorisation exercise testing whether you can identify the odd-one-out.",
+        rule:"Vocabulary: categorisation — chair is furniture, not a fruit"
+      },
+      {
+        q:"She ___ three languages: Turkish, English and French.",
+        opts:["speak","speaks","speaking","to speak"], ans:1,
+        exp:"The subject is <strong>she</strong> (third person singular). In Simple Present, the verb takes the <em>-s</em> ending with he/she/it: <em>speaks</em>. 'Speak' (no -s) is used with I/you/we/they. 'Speaking' needs an auxiliary. 'To speak' is an infinitive.",
+        rule:"Simple Present: She + verb + -s → speaks"
+      },
+      {
+        q:"The correct form of 'be' for 'I' is:",
+        opts:["is","are","am","be"], ans:2,
+        exp:"The verb 'to be' is irregular and changes completely depending on the subject. With <strong>I</strong>, the only correct present tense form is <em>am</em>. 'Is' = he/she/it, 'are' = you/we/they, 'be' = base/infinitive form.",
+        rule:"To Be summary: I am · He/She/It is · You/We/They are"
+      }
+    ]
+  }
+};
+// Weeks 2-16 placeholder
+for(let i=2;i<=16;i++) QUIZZES[i] = {
+  topic:`Week ${i} Grammar & Vocabulary`,
+  questions: Array.from({length:25},(_,j)=>({
+    q:`[Week ${i}] Sample question ${j+1} — to be added by instructor.`,
+    opts:["Option A","Option B","Option C","Option D"], ans:0
+  }))
+};
+
+// Pre-seeded student scores (for demo)
+const SCORES = {
+  student1:{ 1:88, 2:76, 3:92, 4:null, 5:null },
+  student2:{ 1:64, 2:null, 3:72, 4:null },
+  student3:{ 1:100,2:88,  3:96, 4:80   },
+  student4:{ 1:56, 2:60,  3:null },
+  student5:{ 1:72, 2:80,  3:84, 4:68   },
+  student6:{ 1:48, 2:null }
+};
+
+// Runtime state
+let currentUser = null;
+let currentWeek = null;
+let forumData   = {};
+let quizState   = { weekNum:null, idx:0, answers:[], submitted:false };
+
+/* ════════════════════════════════════════════════════════
+   LOGIN
+   ════════════════════════════════════════════════════════ */
+function doLogin(){
+  const uid = document.getElementById('login-id').value.trim().toLowerCase();
+  const pw  = document.getElementById('login-pw').value;
+  const user = USERS[uid];
+  if(!user || user.pw !== pw){
+    alert('Incorrect ID or password. Please try again.');
+    return;
+  }
+  currentUser = { ...user, uid };
+  document.getElementById('site-header').style.display = '';
+  document.getElementById('site-footer').style.display = '';
+  renderHeaderUser();
+
+  if(user.role === 'teacher'){
+    showPage('teacher-page');
+    renderTeacherPanel();
+  } else {
+    showPage('home');
+    renderHome();
+  }
+}
+
+document.getElementById('login-id').addEventListener('keydown', e=> { if(e.key==='Enter') doLogin(); });
+document.getElementById('login-pw').addEventListener('keydown', e=> { if(e.key==='Enter') doLogin(); });
+
+function renderHeaderUser(){
+  const initials = currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('header-user-area').innerHTML = `
+    <span class="uname">${currentUser.name}</span>
+    <div class="avatar">${initials}</div>
+    ${currentUser.role==='teacher' ? `<button class="btn-logout" onclick="showPage('home');renderHome()">Students</button>` : ''}
+    <button class="btn-logout" onclick="logout()">Sign out</button>
+  `;
+}
+function logout(){
+  currentUser=null; currentWeek=null;
+  document.getElementById('site-header').style.display='none';
+  document.getElementById('site-footer').style.display='none';
+  document.getElementById('breadcrumb').classList.remove('show');
+  document.getElementById('login-id').value='';
+  document.getElementById('login-pw').value='';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const lp = document.getElementById('login-page');
+  lp.classList.add('active'); lp.style.display='flex';
+}
+
+/* ════════════════════════════════════════════════════════
+   HOME
+   ════════════════════════════════════════════════════════ */
+function renderHome(){
+  document.getElementById('home-greeting').textContent =
+    `Welcome, ${currentUser.name.split(' ')[0]}! Choose a week.`;
+  const grid = document.getElementById('weeks-grid');
+  grid.innerHTML = '';
+  for(let i=1;i<=16;i++){
+    const score = getUserScore(i);
+    let badge='', badgeCls='none';
+    if(score!==null){ badge=`${score} pts`; badgeCls = score>=70?'pass':'fail'; }
+    else badge='Not taken';
+    const btn = document.createElement('button');
+    btn.className='week-btn';
+    btn.innerHTML=`
+      <div style="font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem">Week</div>
+      <div class="wk-label">${i}</div>
+      <div class="wk-sub">Tap to open</div>
+      <div><span class="wk-score-badge ${badgeCls}">${badge}</span></div>`;
+    btn.onclick = () => openWeek(i);
+    grid.appendChild(btn);
+  }
+}
+
+function getUserScore(weekNum){
+  if(!currentUser) return null;
+  const s = SCORES[currentUser.uid];
+  if(!s) return null;
+  return s[weekNum] !== undefined ? s[weekNum] : null;
+}
+
+/* ════════════════════════════════════════════════════════
+   NAVIGATION
+   ════════════════════════════════════════════════════════ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>{ p.classList.remove('active'); p.style.display=''; });
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function setBreadcrumb(weekLabel, section){
+  const bc = document.getElementById('breadcrumb');
+  bc.classList.add('show');
+  document.getElementById('bc-week').textContent = weekLabel;
+  const secEl = document.getElementById('bc-section');
+  if(section){ secEl.style.display=''; document.getElementById('bc-section-name').textContent=section; }
+  else secEl.style.display='none';
+}
+function goHome(){
+  if(!currentUser) return;
+  currentWeek=null;
+  document.getElementById('breadcrumb').classList.remove('show');
+  if(currentUser.role==='teacher'){ showPage('teacher-page'); return; }
+  showPage('home'); renderHome();
+}
+
+function openWeek(num){
+  currentWeek=num;
+  document.getElementById('wk-title').textContent=`Week ${num}`;
+  setBreadcrumb(`Week ${num}`, null);
+  document.getElementById('link-video').href='#';
+  document.getElementById('link-slide').href='#';
+  document.getElementById('link-pdf').href='#';
+  document.getElementById('link-hw').href='#';
+
+  // quiz badge
+  const score = getUserScore(num);
+  const badge = document.getElementById('quiz-done-badge');
+  if(score!==null){
+    badge.style.display='inline';
+    badge.textContent = score>=70 ? `✓ ${score} pts` : `✗ ${score} pts`;
+    badge.className = 'quiz-done-badge ' + (score>=70?'pass':'fail');
+  } else { badge.style.display='none'; }
+
+  showPage('week-page');
+}
+
+function handleLink(el, label){
+  if(el.getAttribute('href')==='#'){
+    alert(`"${label}" for this week will be available soon!`);
+    return false;
+  }
+  return true;
+}
+
+/* ════════════════════════════════════════════════════════
+   FORUM
+   ════════════════════════════════════════════════════════ */
+function openForum(){
+  if(!currentWeek) return false;
+  document.getElementById('forum-title').textContent=`Week ${currentWeek} — Discussion Forum`;
+  document.getElementById('forum-sub').textContent=`Ask questions and discuss Week ${currentWeek} topics with your classmates.`;
+  setBreadcrumb(`Week ${currentWeek}`,'Forum');
+  document.getElementById('forum-input').value='';
+  renderForum();
+  showPage('forum-page');
+  return false;
+}
+function renderForum(){
+  const thread=document.getElementById('forum-thread');
+  const posts=(forumData[currentWeek]||[]);
+  if(!posts.length){ thread.innerHTML=`<div class="placeholder-notice">No posts yet. Be the first! 🌱</div>`; return; }
+  thread.innerHTML=posts.map(p=>`
+    <div class="forum-item">
+      <div class="fi-meta">
+        <div class="fi-avatar">${p.initials}</div>
+        <div class="fi-name">${p.author}</div>
+        <div class="fi-date">${p.date}</div>
+      </div>
+      <div class="fi-body">${esc(p.text)}</div>
+    </div>`).join('');
+}
+function postComment(){
+  const text=document.getElementById('forum-input').value.trim();
+  if(!text) return;
+  if(!forumData[currentWeek]) forumData[currentWeek]=[];
+  const initials=currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  forumData[currentWeek].push({
+    author:currentUser.name, initials,
+    date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    text
+  });
+  document.getElementById('forum-input').value='';
+  renderForum();
+}
+
+/* ════════════════════════════════════════════════════════
+   EXTRA
+   ════════════════════════════════════════════════════════ */
+function openExtra(){
+  if(!currentWeek) return false;
+  document.getElementById('extra-title').textContent=`Week ${currentWeek} — Extra Support Materials`;
+  document.getElementById('extra-sub').textContent=`Additional exercises for Week ${currentWeek} — assigned by your instructor.`;
+  setBreadcrumb(`Week ${currentWeek}`,'Extra Support');
+  showPage('extra-page');
+  return false;
+}
+
+/* ════════════════════════════════════════════════════════
+   QUIZ ENGINE
+   ════════════════════════════════════════════════════════ */
+function openQuiz(){
+  if(!currentWeek) return false;
+  const existingScore = getUserScore(currentWeek);
+  if(existingScore!==null){
+    if(!confirm(`You already scored ${existingScore} pts on this quiz. Retake?`)) return false;
+    if(!SCORES[currentUser.uid]) SCORES[currentUser.uid]={};
+    SCORES[currentUser.uid][currentWeek]=null;
+  }
+  const qdata = QUIZZES[currentWeek];
+  quizState = { weekNum:currentWeek, idx:0, answers:Array(25).fill(null), submitted:false };
+  document.getElementById('quiz-title').textContent=`Week ${currentWeek} Quiz`;
+  document.getElementById('quiz-subtitle').textContent=`${qdata.topic} · 25 Questions · 4 pts each`;
+  setBreadcrumb(`Week ${currentWeek}`,'Quiz');
+  renderQuizDots();
+  renderQuestion();
+  document.getElementById('quiz-result').style.display='none';
+  showPage('quiz-page');
+  return false;
+}
+
+function renderQuizDots(){
+  const row=document.getElementById('q-dots-row');
+  row.innerHTML=quizState.answers.map((_,i)=>`
+    <div class="q-dot ${i===quizState.idx?'active':''} ${quizState.answers[i]!==null?'answered':''}"
+         onclick="jumpTo(${i})" title="Q${i+1}"></div>`).join('');
+}
+
+function renderQuestion(){
+  const {idx,answers,weekNum}=quizState;
+  const total=25;
+  const qs=QUIZZES[weekNum].questions;
+  const q=qs[idx];
+
+  document.getElementById('q-prog-label').textContent=`Question ${idx+1} of ${total}`;
+  const pct=Math.round(((idx+1)/total)*100);
+  document.getElementById('q-prog-pct').textContent=pct+'%';
+  document.getElementById('q-prog-bar').style.width=pct+'%';
+  document.getElementById('q-counter').textContent=`${idx+1} / ${total}`;
+
+  document.getElementById('btn-prev').disabled=(idx===0);
+  const isLast=(idx===total-1);
+  document.getElementById('btn-next').style.display=isLast?'none':'inline-block';
+  document.getElementById('btn-submit').style.display=isLast?'inline-block':'none';
+
+  const container=document.getElementById('q-container');
+  container.innerHTML=`
+    <div class="q-card">
+      <div class="q-number">Question ${idx+1} of ${total} &nbsp;·&nbsp; 4 pts</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-options">
+        ${q.opts.map((opt,oi)=>`
+          <div class="q-opt ${answers[idx]===oi?'selected':''}" onclick="selectOpt(${oi})">
+            <input type="radio" ${answers[idx]===oi?'checked':''}>
+            <span><strong>${String.fromCharCode(65+oi)}.</strong> ${opt}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  renderQuizDots();
+}
+
+function selectOpt(oi){
+  if(quizState.submitted) return;
+  quizState.answers[quizState.idx]=oi;
+  renderQuestion();
+}
+function quizNav(dir){
+  quizState.idx=Math.max(0,Math.min(24,quizState.idx+dir));
+  renderQuestion();
+}
+function jumpTo(i){ quizState.idx=i; renderQuestion(); }
+
+function submitQuiz(){
+  const unanswered=quizState.answers.filter(a=>a===null).length;
+  if(unanswered>0){
+    if(!confirm(`You have ${unanswered} unanswered question(s). Submit anyway? (Unanswered = 0 pts)`)) return;
+  }
+  quizState.submitted=true;
+  const qs=QUIZZES[quizState.weekNum].questions;
+  let correct=0;
+  quizState.answers.forEach((a,i)=>{ if(a!==null && a===qs[i].ans) correct++; });
+  const score=correct*4;
+  const passed=score>=70;
+
+  // Save score
+  if(!SCORES[currentUser.uid]) SCORES[currentUser.uid]={};
+  SCORES[currentUser.uid][quizState.weekNum]=score;
+
+  // Show result
+  const resultEl=document.getElementById('quiz-result');
+  resultEl.style.display='block';
+  resultEl.innerHTML=`
+    <div class="result-box ${passed?'pass':'fail'}">
+      <div class="result-emoji">${passed?'🎉':'📌'}</div>
+      <div class="result-title serif">${passed?'Congratulations!':'Keep Going!'}</div>
+      <div class="result-score ${passed?'pass':'fail'}">${score} / 100</div>
+      <div class="result-bar-wrap">
+        <div class="result-bar-track">
+          <div class="result-bar-fill ${passed?'pass':'fail'}" style="width:${score}%"></div>
+        </div>
+        <div class="result-bar-label">${correct} correct · ${25-correct} incorrect · ${score} pts</div>
+      </div>
+      <p class="result-detail">${passed
+        ? `You scored <strong>${score} pts</strong> — above the 70-point pass threshold! You have successfully achieved this week's learning objectives. Well done! 🌟`
+        : `Your score of <strong>${score} pts</strong> is below the 70-point threshold. Don't worry — visit the Extra Support Materials to strengthen your understanding and try again!`
+      }</p>
+      <div>
+        <button class="btn-result-action primary" onclick="reviewQuiz()">Review Answers</button>
+        ${!passed?`<button class="btn-result-action secondary" onclick="openExtra()">📚 Extra Support</button>`:''}
+        <button class="btn-result-action primary" onclick="openWeek(${quizState.weekNum})" style="background:var(--sky)">← Back to Week</button>
+      </div>
+    </div>`;
+  resultEl.scrollIntoView({behavior:'smooth'});
+}
+
+let reviewFilter='all';
+
+function reviewQuiz(){
+  const qs=QUIZZES[quizState.weekNum].questions;
+  const answers=quizState.answers;
+  let correct=0, wrong=0, skipped=0;
+  qs.forEach((q,i)=>{
+    if(answers[i]===null) skipped++;
+    else if(answers[i]===q.ans) correct++;
+    else wrong++;
+  });
+
+  // Hide quiz nav bar
+  document.getElementById('quiz-nav').style.display='none';
+  document.getElementById('q-dots-row').style.display='none';
+  document.getElementById('q-progress-wrap').style.display='none';
+
+  const container=document.getElementById('q-container');
+
+  // Summary + filter bar
+  container.innerHTML=`
+    <div class="review-summary">
+      <div class="rs-item"><div class="rs-val" style="color:var(--sage)">${correct}</div><div class="rs-lbl">Correct</div></div>
+      <div class="rs-item"><div class="rs-val" style="color:var(--accent)">${wrong}</div><div class="rs-lbl">Wrong</div></div>
+      ${skipped?`<div class="rs-item"><div class="rs-val" style="color:var(--warn)">${skipped}</div><div class="rs-lbl">Skipped</div></div>`:''}
+      <div class="rs-item"><div class="rs-val">${correct*4} / 100</div><div class="rs-lbl">Your Score</div></div>
+    </div>
+    <div class="review-filter">
+      <div class="rf-btn active" id="rf-all"       onclick="setReviewFilter('all')">All Questions (${qs.length})</div>
+      <div class="rf-btn wrong-filter"   id="rf-wrong"   onclick="setReviewFilter('wrong')">❌ Wrong (${wrong})</div>
+      <div class="rf-btn correct-filter" id="rf-correct" onclick="setReviewFilter('correct')">✅ Correct (${correct})</div>
+      ${skipped?`<div class="rf-btn" id="rf-skipped" onclick="setReviewFilter('skipped')" style="border-color:var(--warn)">⚠️ Skipped (${skipped})</div>`:''}
+    </div>
+    <div id="review-cards"></div>`;
+
+  reviewFilter='all';
+  renderReviewCards();
+  container.scrollIntoView({behavior:'smooth'});
+}
+
+function setReviewFilter(f){
+  reviewFilter=f;
+  document.querySelectorAll('.rf-btn').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById('rf-'+f);
+  if(el) el.classList.add('active');
+  renderReviewCards();
+}
+
+function renderReviewCards(){
+  const qs=QUIZZES[quizState.weekNum].questions;
+  const answers=quizState.answers;
+  const wrap=document.getElementById('review-cards');
+  if(!wrap) return;
+
+  const cards=qs.map((q,i)=>{
+    const userAns=answers[i];
+    const isCorrect=(userAns!==null && userAns===q.ans);
+    const isSkipped=(userAns===null);
+    const isWrong=(!isSkipped && !isCorrect);
+
+    if(reviewFilter==='wrong'    && !isWrong)    return '';
+    if(reviewFilter==='correct'  && !isCorrect)  return '';
+    if(reviewFilter==='skipped'  && !isSkipped)  return '';
+
+    const cardCls=isCorrect?'reviewed-correct':isSkipped?'reviewed-skipped':'reviewed-wrong';
+    const badge  =isCorrect?'✅ Correct':isSkipped?'⚠️ Skipped':'❌ Wrong';
+    const expCls =isCorrect?'correct-exp':isSkipped?'skipped-exp':'wrong-exp';
+    const expLabel=isCorrect?'✅ Why this is correct':'❌ Why this is wrong';
+
+    const opts=q.opts.map((opt,oi)=>{
+      let cls='';
+      if(oi===q.ans) cls='correct';
+      else if(oi===userAns && !isCorrect) cls='wrong';
+      return `<div class="q-opt ${cls}">
+        <span><strong>${String.fromCharCode(65+oi)}.</strong> ${opt}
+        ${oi===q.ans?' <span style="font-size:.75rem;color:var(--sage);font-weight:600">← Correct Answer</span>':''}
+        ${oi===userAns && !isCorrect?' <span style="font-size:.75rem;color:var(--accent);font-weight:600">← Your Answer</span>':''}
+        </span></div>`;
+    }).join('');
+
+    const explanation=isSkipped
+      ? `<div class="q-explanation ${expCls}"><div class="exp-label">⚠️ Not answered</div>You skipped this question. The correct answer is <strong>${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}</strong>.<br>${q.exp||''}<div class="exp-rule">📌 Rule: ${q.rule||''}</div></div>`
+      : `<div class="q-explanation ${expCls}"><div class="exp-label">${expLabel}</div>${q.exp||'No explanation available.'}<div class="exp-rule">📌 Grammar Rule: ${q.rule||''}</div></div>`;
+
+    return `
+      <div class="q-card ${cardCls}" style="animation-delay:${(i%10)*.04}s">
+        <div class="q-number" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Question ${i+1} of 25 &nbsp;·&nbsp; 4 pts</span>
+          <span>${badge}</span>
+        </div>
+        <div class="q-text">${q.q}</div>
+        <div class="q-options">${opts}</div>
+        ${explanation}
+      </div>`;
+  }).join('');
+
+  wrap.innerHTML=cards || `<div class="placeholder-notice">No questions in this category.</div>`;
+}
+
+/* ════════════════════════════════════════════════════════
+   TEACHER PANEL
+   ════════════════════════════════════════════════════════ */
+let teacherSelectedWeek=1;
+
+function renderTeacherPanel(){
+  setBreadcrumb('Teacher Dashboard',null);
+  document.getElementById('breadcrumb').classList.add('show');
+  renderStats();
+  renderWeekChart();
+  renderWeekTabs();
+  renderStudentTable(teacherSelectedWeek);
+}
+
+function renderStats(){
+  const studentIds=Object.keys(USERS).filter(u=>USERS[u].role==='student');
+  let totalTests=0, totalPassed=0, allScores=[];
+  studentIds.forEach(uid=>{
+    const s=SCORES[uid]||{};
+    Object.values(s).forEach(score=>{ if(score!==null){ totalTests++; allScores.push(score); if(score>=70) totalPassed++; }});
+  });
+  const avg=allScores.length ? Math.round(allScores.reduce((a,b)=>a+b,0)/allScores.length) : 0;
+  const passRate=totalTests ? Math.round((totalPassed/totalTests)*100) : 0;
+
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card"><div class="sval blue">${studentIds.length}</div><div class="slabel">Total Students</div></div>
+    <div class="stat-card"><div class="sval">${totalTests}</div><div class="slabel">Quizzes Taken</div></div>
+    <div class="stat-card"><div class="sval green">${totalPassed}</div><div class="slabel">Passed (≥70)</div></div>
+    <div class="stat-card"><div class="sval red">${totalTests-totalPassed}</div><div class="slabel">Failed (&lt;70)</div></div>
+    <div class="stat-card"><div class="sval ${avg>=70?'green':avg>=50?'':'red'}">${avg}</div><div class="slabel">Avg Score</div></div>
+    <div class="stat-card"><div class="sval ${passRate>=70?'green':'red'}">${passRate}%</div><div class="slabel">Pass Rate</div></div>
+  `;
+}
+
+function renderWeekChart(){
+  const studentIds=Object.keys(USERS).filter(u=>USERS[u].role==='student');
+  const chart=document.getElementById('week-chart');
+  let bars='';
+  for(let w=1;w<=16;w++){
+    const scores=studentIds.map(uid=>SCORES[uid]&&SCORES[uid][w]!==undefined&&SCORES[uid][w]!==null?SCORES[uid][w]:null).filter(s=>s!==null);
+    const avg=scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
+    const hPct=scores.length ? Math.round((avg/100)*70) : 0;
+    const cls=avg>=70?'':'mid';
+    bars+=`<div class="chart-bar-wrap">
+      <div class="chart-bar ${cls}" style="height:${hPct||2}px" data-tip="Wk${w}: ${scores.length?avg+' avg':'no data'}"></div>
+      <div class="chart-lbl">W${w}</div>
+    </div>`;
+  }
+  chart.innerHTML=bars;
+}
+
+function renderWeekTabs(){
+  const tabs=document.getElementById('week-tabs');
+  tabs.innerHTML=Array.from({length:16},(_,i)=>`
+    <div class="wtab ${i+1===teacherSelectedWeek?'active':''}" onclick="selectTeacherWeek(${i+1})">W${i+1}</div>`).join('');
+}
+
+function selectTeacherWeek(w){
+  teacherSelectedWeek=w;
+  renderWeekTabs();
+  renderStudentTable(w);
+}
+
+function renderStudentTable(weekNum){
+  document.getElementById('th-week').textContent=`Week ${weekNum} Score`;
+  const studentIds=Object.keys(USERS).filter(u=>USERS[u].role==='student');
+  const tbody=document.getElementById('student-tbody');
+  tbody.innerHTML=studentIds.map(uid=>{
+    const u=USERS[uid];
+    const s=SCORES[uid]||{};
+    const wScore=s[weekNum]!==undefined?s[weekNum]:null;
+    const scorePill = wScore===null
+      ? `<span class="score-pill none">Not taken</span>`
+      : `<span class="score-pill ${wScore>=70?'pass':'fail'}">${wScore} pts</span>`;
+
+    // Overall: count weeks done
+    const allWeekScores=Object.values(s).filter(v=>v!==null);
+    const done=allWeekScores.length;
+    const avgAll=done ? Math.round(allWeekScores.reduce((a,b)=>a+b,0)/done) : 0;
+    const progressPct=Math.round((done/16)*100);
+    const avgCls=avgAll>=70?'pass':avgAll>=50?'warn':'fail';
+
+    return `<tr>
+      <td><strong>${u.name}</strong></td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted)">${u.id}</span></td>
+      <td>${scorePill}</td>
+      <td>${wScore===null?'<span style="color:var(--muted);font-size:.82rem">—</span>'
+          :`<span style="font-size:.82rem;color:${wScore>=70?'var(--sage)':'var(--accent)'}">${wScore>=70?'✅ Passed':'❌ Failed'}</span>`}</td>
+      <td>
+        <span style="font-size:.78rem;font-family:'DM Mono',monospace;color:var(--muted)">${done}/16 quizzes</span>
+        <span class="progress-mini"><span class="progress-mini-fill ${avgCls}" style="width:${progressPct}%"></span></span>
+        ${done>0?`<span style="font-size:.75rem;color:var(--muted)"> avg ${avgAll}</span>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   UTILS
+   ════════════════════════════════════════════════════════ */
+function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+</body>
+</html>
