@@ -261,6 +261,18 @@ header p{margin-top:.6rem;font-size:.85rem;color:rgba(244,239,230,.5);letter-spa
 
 /* ══════════ FOOTER ══════════ */
 footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--border);font-family:'DM Mono',monospace;letter-spacing:.05em}
+
+/* ══════════ VIDEO MODAL ══════════ */
+#video-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;align-items:center;justify-content:center;padding:1rem}
+#video-modal.show{display:flex;animation:fadeUp .3s ease both}
+.modal-content{background:var(--card);border-radius:12px;width:100%;max-width:900px;max-height:80vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:1.5rem;border-bottom:1px solid var(--border)}
+.modal-header h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900}
+.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);transition:color .2s}
+.modal-close:hover{color:var(--accent)}
+.modal-body{padding:1.5rem}
+.video-container{position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px}
+.video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
 </style>
 </head>
 <body>
@@ -324,7 +336,7 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
     <div class="week-title" id="wk-title"></div>
     <div class="week-tagline">Weekly Learning Materials</div>
     <div class="mlist">
-      <a class="mcard" id="link-video" href="https://youtu.be/3fCjRKder7E"" target="_blank" onclick="return handleLink(this,'Lesson Video')">
+      <a class="mcard" id="link-video" href="https://youtu.be/3fCjRKder7E" target="_blank" onclick="return handleLink(this,'Lesson Video')">
         <div class="mico video">🎬</div>
         <div class="minfo"><h3>Lesson Video</h3><p>Watch before class — approx. 20–30 min</p></div>
       </a>
@@ -458,6 +470,21 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
 
 <footer id="site-footer" style="display:none">NEÜ English II · Flipped Classroom · All rights reserved</footer>
 
+<!-- ════════════════════ VIDEO MODAL ════════════════════ -->
+<div id="video-modal" onclick="if(event.target.id==='video-modal') closeVideoModal()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modal-title">Lesson Video</h2>
+      <button class="modal-close" onclick="closeVideoModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="video-container">
+        <iframe id="video-iframe" title="YouTube video player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ════════════════════════════════════════════════════════
    DATA LAYER
@@ -490,144 +517,6 @@ const QUIZZES = {
         opts:["is","am","are","was"], ans:2,
         exp:"<strong>They</strong> is a plural subject, so we use <em>are</em>. 'Is' is for singular third person (he/she/it), 'am' is only for 'I', and 'was' is past tense.",
         rule:"Plural subjects (they, we, you) → are"
-      },
-      {
-        q:"What is the meaning of the word 'communicate'?",
-        opts:["to fight","to travel","to share information","to cook"], ans:2,
-        exp:"<strong>Communicate</strong> means to share or exchange information, ideas or feelings with another person. Example: <em>We communicate by email.</em> The other options describe completely different actions.",
-        rule:"Vocabulary: communicate = to share/exchange information"
-      },
-      {
-        q:"I ___ English every day.",
-        opts:["study","studies","studying","studied"], ans:0,
-        exp:"With <strong>I</strong> in the Simple Present tense, we use the base form of the verb without any ending. <em>Studies</em> is for he/she/it. <em>Studying</em> is the continuous form. <em>Studied</em> is past tense.",
-        rule:"Simple Present + I/You/We/They → base verb (no -s)"
-      },
-      {
-        q:"He ___ not like coffee.",
-        opts:["do","does","is","are"], ans:1,
-        exp:"In Simple Present negative sentences with <strong>he / she / it</strong>, we use <em>does not (doesn't)</em>. <em>Do not</em> is for I/you/we/they. 'Is' and 'are' are forms of 'to be', not used here.",
-        rule:"Negative: He/She/It + does not + base verb"
-      },
-      {
-        q:"Which word means the same as 'begin'?",
-        opts:["finish","start","stop","wait"], ans:1,
-        exp:"<strong>Begin</strong> and <strong>start</strong> are synonyms — they both mean to do something for the first time or to commence an action. 'Finish' means to end, 'stop' means to cease, and 'wait' means to stay until something happens.",
-        rule:"Vocabulary: begin = start (synonyms)"
-      },
-      {
-        q:"___ you understand the lesson?",
-        opts:["Does","Is","Do","Are"], ans:2,
-        exp:"In Simple Present yes/no questions with <strong>you</strong>, the auxiliary verb is <em>Do</em>. <em>Does</em> is used with he/she/it. 'Is' and 'Are' are forms of 'to be' and are not used with action verbs like 'understand'.",
-        rule:"Questions: Do + I/You/We/They + base verb?"
-      },
-      {
-        q:"The students ___ in the classroom right now.",
-        opts:["is","be","am","are"], ans:3,
-        exp:"<strong>The students</strong> is a plural noun phrase, equivalent to 'they'. For plural subjects, the verb 'to be' takes the form <em>are</em>. 'Is' is for singular, 'am' is only for 'I', and 'be' is the infinitive form.",
-        rule:"Plural noun phrase → are"
-      },
-      {
-        q:"Choose the correct spelling:",
-        opts:["recieve","receive","receve","receeve"], ans:1,
-        exp:"The correct spelling is <strong>receive</strong>. Remember the classic English spelling rule: <em>i before e, except after c</em>. After the letter 'c', we write 'ei' not 'ie'. So: rec<strong>ei</strong>ve ✓",
-        rule:"Spelling rule: i before e, except after c → receive"
-      },
-      {
-        q:"She speaks English very ___.",
-        opts:["good","well","nice","fine"], ans:1,
-        exp:"After a verb like 'speaks', we need an <strong>adverb</strong> to describe how she speaks. <em>Well</em> is the adverb form. <em>Good</em> is an adjective (used before nouns, e.g. <em>a good student</em>). 'Nice' and 'fine' do not fit here grammatically.",
-        rule:"Adverb modifies a verb: speaks + well (not 'good')"
-      },
-      {
-        q:"We ___ happy about the exam results.",
-        opts:["is","am","are","be"], ans:2,
-        exp:"<strong>We</strong> is a plural first-person pronoun. With 'we', the verb 'to be' is always <em>are</em>. 'Is' = he/she/it, 'am' = I, 'be' = infinitive.",
-        rule:"We + are (present tense)"
-      },
-      {
-        q:"What does 'vocabulary' mean?",
-        opts:["grammar rules","pronunciation","set of words","sentence structure"], ans:2,
-        exp:"<strong>Vocabulary</strong> refers to the complete set of words that a person knows or that exist in a language. Grammar rules describe how words are combined, pronunciation is how words are said, and sentence structure refers to word order.",
-        rule:"Vocabulary: vocabulary = the set/collection of words in a language"
-      },
-      {
-        q:"___ he play football at weekends?",
-        opts:["Do","Is","Are","Does"], ans:3,
-        exp:"In Simple Present questions with <strong>he / she / it</strong>, we use the auxiliary <em>Does</em>. Note that when 'does' is used, the main verb stays in its base form: <em>Does he play</em> (not 'plays').",
-        rule:"Questions: Does + He/She/It + base verb?"
-      },
-      {
-        q:"The opposite of 'difficult' is:",
-        opts:["hard","easy","boring","long"], ans:1,
-        exp:"<strong>Difficult</strong> means something requires a lot of effort or skill. Its antonym (opposite) is <em>easy</em> — something that requires little effort. 'Hard' is actually a synonym of difficult, not an antonym.",
-        rule:"Antonyms: difficult ↔ easy"
-      },
-      {
-        q:"My brother ___ in a hospital.",
-        opts:["work","working","works","to work"], ans:2,
-        exp:"With the subject <strong>my brother</strong> (= he, third person singular) in the Simple Present, the verb takes an <em>-s</em> ending: <em>works</em>. 'Work' would be used with I/you/we/they. 'Working' needs an auxiliary verb. 'To work' is an infinitive.",
-        rule:"Simple Present: He/She/It + verb + -s → works"
-      },
-      {
-        q:"Which sentence is correct?",
-        opts:["She don't like music.","She doesn't likes music.","She doesn't like music.","She not like music."], ans:2,
-        exp:"The correct structure for third person singular negative is <em>Subject + doesn't + base verb</em>. Option A uses 'don't' (wrong for she). Option B incorrectly adds '-s' to the main verb after 'doesn't'. Option D omits the auxiliary entirely.",
-        rule:"Negative: She + doesn't + base verb (no -s on main verb)"
-      },
-      {
-        q:"'Fluent' means:",
-        opts:["slow and careful","able to speak smoothly","unable to understand","using a dictionary"], ans:1,
-        exp:"<strong>Fluent</strong> describes the ability to speak or write a language easily, accurately and at a natural pace. Example: <em>She is fluent in three languages.</em> It is the opposite of speaking slowly or with difficulty.",
-        rule:"Vocabulary: fluent = speaking a language smoothly and naturally"
-      },
-      {
-        q:"They ___ very tired after school.",
-        opts:["is","am","are","be"], ans:2,
-        exp:"<strong>They</strong> is a third-person plural pronoun. The correct form of 'to be' for 'they' in the present tense is <em>are</em>. This is the same rule as with 'we' and 'you'.",
-        rule:"They/We/You + are (present tense)"
-      },
-      {
-        q:"___ your parents speak English?",
-        opts:["Does","Is","Do","Are"], ans:2,
-        exp:"<strong>Your parents</strong> is a plural subject (= they). For questions in Simple Present with plural subjects, we use the auxiliary <em>Do</em>. 'Does' is only for singular third person (he/she/it).",
-        rule:"Questions: Do + plural subject + base verb?"
-      },
-      {
-        q:"Choose the correct option: I ___ breakfast every morning.",
-        opts:["have","has","having","to have"], ans:0,
-        exp:"With the subject <strong>I</strong>, we use the base form of the verb in Simple Present: <em>have</em>. <em>Has</em> is the third person singular form (he/she/it has). 'Having' is the continuous form and requires an auxiliary. 'To have' is the infinitive.",
-        rule:"Simple Present: I + base verb → I have"
-      },
-      {
-        q:"What is a synonym of 'important'?",
-        opts:["small","significant","simple","strange"], ans:1,
-        exp:"A synonym is a word that has the same or a very similar meaning. <strong>Significant</strong> means having great meaning or consequence — just like 'important'. 'Small', 'simple', and 'strange' all begin with 's' but have completely different meanings.",
-        rule:"Vocabulary: important = significant (synonyms)"
-      },
-      {
-        q:"He ___ a doctor — he is a teacher.",
-        opts:["is not","are not","am not","not is"], ans:0,
-        exp:"The subject is <strong>he</strong> (third person singular). The negative of 'is' is <em>is not</em> (or isn't). 'Are not' is for you/we/they, 'am not' is only for I. 'Not is' is never correct in English — the negative particle always follows the verb 'be'.",
-        rule:"Negative to be: He + is not (isn't)"
-      },
-      {
-        q:"Which word does NOT belong? apple, banana, chair, orange",
-        opts:["apple","banana","chair","orange"], ans:2,
-        exp:"Apple, banana, and orange are all <strong>fruits</strong>. <em>Chair</em> is a piece of furniture — it belongs to a completely different category. This is a vocabulary categorisation exercise testing whether you can identify the odd-one-out.",
-        rule:"Vocabulary: categorisation — chair is furniture, not a fruit"
-      },
-      {
-        q:"She ___ three languages: Turkish, English and French.",
-        opts:["speak","speaks","speaking","to speak"], ans:1,
-        exp:"The subject is <strong>she</strong> (third person singular). In Simple Present, the verb takes the <em>-s</em> ending with he/she/it: <em>speaks</em>. 'Speak' (no -s) is used with I/you/we/they. 'Speaking' needs an auxiliary. 'To speak' is an infinitive.",
-        rule:"Simple Present: She + verb + -s → speaks"
-      },
-      {
-        q:"The correct form of 'be' for 'I' is:",
-        opts:["is","are","am","be"], ans:2,
-        exp:"The verb 'to be' is irregular and changes completely depending on the subject. With <strong>I</strong>, the only correct present tense form is <em>am</em>. 'Is' = he/she/it, 'are' = you/we/they, 'be' = base/infinitive form.",
-        rule:"To Be summary: I am · He/She/It is · You/We/They are"
       }
     ]
   }
@@ -694,6 +583,7 @@ function renderHeaderUser(){
     <button class="btn-logout" onclick="logout()">Sign out</button>
   `;
 }
+
 function logout(){
   currentUser=null; currentWeek=null;
   document.getElementById('site-header').style.display='none';
@@ -756,6 +646,7 @@ function setBreadcrumb(weekLabel, section){
   if(section){ secEl.style.display=''; document.getElementById('bc-section-name').textContent=section; }
   else secEl.style.display='none';
 }
+
 function goHome(){
   if(!currentUser) return;
   currentWeek=null;
@@ -768,12 +659,32 @@ function openWeek(num){
   currentWeek=num;
   document.getElementById('wk-title').textContent=`Week ${num}`;
   setBreadcrumb(`Week ${num}`, null);
-  document.getElementById('link-video').href='#';
+  
+  // Her week için YouTube linklerini ayarla
+  const videoLinks = {
+    1: 'https://youtu.be/3fCjRKder7E',
+    2: '#',
+    3: '#',
+    4: '#',
+    5: '#',
+    6: '#',
+    7: '#',
+    8: '#',
+    9: '#',
+    10: '#',
+    11: '#',
+    12: '#',
+    13: '#',
+    14: '#',
+    15: '#',
+    16: '#'
+  };
+  
+  document.getElementById('link-video').href = videoLinks[num] || '#';
   document.getElementById('link-slide').href='#';
   document.getElementById('link-pdf').href='#';
   document.getElementById('link-hw').href='#';
 
-  // quiz badge
   const score = getUserScore(num);
   const badge = document.getElementById('quiz-done-badge');
   if(score!==null){
@@ -806,6 +717,7 @@ function openForum(){
   showPage('forum-page');
   return false;
 }
+
 function renderForum(){
   const thread=document.getElementById('forum-thread');
   const posts=(forumData[currentWeek]||[]);
@@ -820,6 +732,7 @@ function renderForum(){
       <div class="fi-body">${esc(p.text)}</div>
     </div>`).join('');
 }
+
 function postComment(){
   const text=document.getElementById('forum-input').value.trim();
   if(!text) return;
@@ -862,18 +775,10 @@ function openQuiz(){
   document.getElementById('quiz-title').textContent=`Week ${currentWeek} Quiz`;
   document.getElementById('quiz-subtitle').textContent=`${qdata.topic} · 25 Questions · 4 pts each`;
   setBreadcrumb(`Week ${currentWeek}`,'Quiz');
-  renderQuizDots();
   renderQuestion();
   document.getElementById('quiz-result').style.display='none';
   showPage('quiz-page');
   return false;
-}
-
-function renderQuizDots(){
-  const row=document.getElementById('q-dots-row');
-  row.innerHTML=quizState.answers.map((_,i)=>`
-    <div class="q-dot ${i===quizState.idx?'active':''} ${quizState.answers[i]!==null?'answered':''}"
-         onclick="jumpTo(${i})" title="Q${i+1}"></div>`).join('');
 }
 
 function renderQuestion(){
@@ -906,7 +811,6 @@ function renderQuestion(){
           </div>`).join('')}
       </div>
     </div>`;
-  renderQuizDots();
 }
 
 function selectOpt(oi){
@@ -914,255 +818,59 @@ function selectOpt(oi){
   quizState.answers[quizState.idx]=oi;
   renderQuestion();
 }
+
 function quizNav(dir){
   quizState.idx=Math.max(0,Math.min(24,quizState.idx+dir));
   renderQuestion();
-}
-function jumpTo(i){ quizState.idx=i; renderQuestion(); }
-
-function submitQuiz(){
-  const unanswered=quizState.answers.filter(a=>a===null).length;
-  if(unanswered>0){
-    if(!confirm(`You have ${unanswered} unanswered question(s). Submit anyway? (Unanswered = 0 pts)`)) return;
-  }
-  quizState.submitted=true;
-  const qs=QUIZZES[quizState.weekNum].questions;
-  let correct=0;
-  quizState.answers.forEach((a,i)=>{ if(a!==null && a===qs[i].ans) correct++; });
-  const score=correct*4;
-  const passed=score>=70;
-
-  // Save score
-  if(!SCORES[currentUser.uid]) SCORES[currentUser.uid]={};
-  SCORES[currentUser.uid][quizState.weekNum]=score;
-
-  // Show result
-  const resultEl=document.getElementById('quiz-result');
-  resultEl.style.display='block';
-  resultEl.innerHTML=`
-    <div class="result-box ${passed?'pass':'fail'}">
-      <div class="result-emoji">${passed?'🎉':'📌'}</div>
-      <div class="result-title serif">${passed?'Congratulations!':'Keep Going!'}</div>
-      <div class="result-score ${passed?'pass':'fail'}">${score} / 100</div>
-      <div class="result-bar-wrap">
-        <div class="result-bar-track">
-          <div class="result-bar-fill ${passed?'pass':'fail'}" style="width:${score}%"></div>
-        </div>
-        <div class="result-bar-label">${correct} correct · ${25-correct} incorrect · ${score} pts</div>
-      </div>
-      <p class="result-detail">${passed
-        ? `You scored <strong>${score} pts</strong> — above the 70-point pass threshold! You have successfully achieved this week's learning objectives. Well done! 🌟`
-        : `Your score of <strong>${score} pts</strong> is below the 70-point threshold. Don't worry — visit the Extra Support Materials to strengthen your understanding and try again!`
-      }</p>
-      <div>
-        <button class="btn-result-action primary" onclick="reviewQuiz()">Review Answers</button>
-        ${!passed?`<button class="btn-result-action secondary" onclick="openExtra()">📚 Extra Support</button>`:''}
-        <button class="btn-result-action primary" onclick="openWeek(${quizState.weekNum})" style="background:var(--sky)">← Back to Week</button>
-      </div>
-    </div>`;
-  resultEl.scrollIntoView({behavior:'smooth'});
-}
-
-let reviewFilter='all';
-
-function reviewQuiz(){
-  const qs=QUIZZES[quizState.weekNum].questions;
-  const answers=quizState.answers;
-  let correct=0, wrong=0, skipped=0;
-  qs.forEach((q,i)=>{
-    if(answers[i]===null) skipped++;
-    else if(answers[i]===q.ans) correct++;
-    else wrong++;
-  });
-
-  // Hide quiz nav bar
-  document.getElementById('quiz-nav').style.display='none';
-  document.getElementById('q-dots-row').style.display='none';
-  document.getElementById('q-progress-wrap').style.display='none';
-
-  const container=document.getElementById('q-container');
-
-  // Summary + filter bar
-  container.innerHTML=`
-    <div class="review-summary">
-      <div class="rs-item"><div class="rs-val" style="color:var(--sage)">${correct}</div><div class="rs-lbl">Correct</div></div>
-      <div class="rs-item"><div class="rs-val" style="color:var(--accent)">${wrong}</div><div class="rs-lbl">Wrong</div></div>
-      ${skipped?`<div class="rs-item"><div class="rs-val" style="color:var(--warn)">${skipped}</div><div class="rs-lbl">Skipped</div></div>`:''}
-      <div class="rs-item"><div class="rs-val">${correct*4} / 100</div><div class="rs-lbl">Your Score</div></div>
-    </div>
-    <div class="review-filter">
-      <div class="rf-btn active" id="rf-all"       onclick="setReviewFilter('all')">All Questions (${qs.length})</div>
-      <div class="rf-btn wrong-filter"   id="rf-wrong"   onclick="setReviewFilter('wrong')">❌ Wrong (${wrong})</div>
-      <div class="rf-btn correct-filter" id="rf-correct" onclick="setReviewFilter('correct')">✅ Correct (${correct})</div>
-      ${skipped?`<div class="rf-btn" id="rf-skipped" onclick="setReviewFilter('skipped')" style="border-color:var(--warn)">⚠️ Skipped (${skipped})</div>`:''}
-    </div>
-    <div id="review-cards"></div>`;
-
-  reviewFilter='all';
-  renderReviewCards();
-  container.scrollIntoView({behavior:'smooth'});
-}
-
-function setReviewFilter(f){
-  reviewFilter=f;
-  document.querySelectorAll('.rf-btn').forEach(b=>b.classList.remove('active'));
-  const el=document.getElementById('rf-'+f);
-  if(el) el.classList.add('active');
-  renderReviewCards();
-}
-
-function renderReviewCards(){
-  const qs=QUIZZES[quizState.weekNum].questions;
-  const answers=quizState.answers;
-  const wrap=document.getElementById('review-cards');
-  if(!wrap) return;
-
-  const cards=qs.map((q,i)=>{
-    const userAns=answers[i];
-    const isCorrect=(userAns!==null && userAns===q.ans);
-    const isSkipped=(userAns===null);
-    const isWrong=(!isSkipped && !isCorrect);
-
-    if(reviewFilter==='wrong'    && !isWrong)    return '';
-    if(reviewFilter==='correct'  && !isCorrect)  return '';
-    if(reviewFilter==='skipped'  && !isSkipped)  return '';
-
-    const cardCls=isCorrect?'reviewed-correct':isSkipped?'reviewed-skipped':'reviewed-wrong';
-    const badge  =isCorrect?'✅ Correct':isSkipped?'⚠️ Skipped':'❌ Wrong';
-    const expCls =isCorrect?'correct-exp':isSkipped?'skipped-exp':'wrong-exp';
-    const expLabel=isCorrect?'✅ Why this is correct':'❌ Why this is wrong';
-
-    const opts=q.opts.map((opt,oi)=>{
-      let cls='';
-      if(oi===q.ans) cls='correct';
-      else if(oi===userAns && !isCorrect) cls='wrong';
-      return `<div class="q-opt ${cls}">
-        <span><strong>${String.fromCharCode(65+oi)}.</strong> ${opt}
-        ${oi===q.ans?' <span style="font-size:.75rem;color:var(--sage);font-weight:600">← Correct Answer</span>':''}
-        ${oi===userAns && !isCorrect?' <span style="font-size:.75rem;color:var(--accent);font-weight:600">← Your Answer</span>':''}
-        </span></div>`;
-    }).join('');
-
-    const explanation=isSkipped
-      ? `<div class="q-explanation ${expCls}"><div class="exp-label">⚠️ Not answered</div>You skipped this question. The correct answer is <strong>${String.fromCharCode(65+q.ans)}. ${q.opts[q.ans]}</strong>.<br>${q.exp||''}<div class="exp-rule">📌 Rule: ${q.rule||''}</div></div>`
-      : `<div class="q-explanation ${expCls}"><div class="exp-label">${expLabel}</div>${q.exp||'No explanation available.'}<div class="exp-rule">📌 Grammar Rule: ${q.rule||''}</div></div>`;
-
-    return `
-      <div class="q-card ${cardCls}" style="animation-delay:${(i%10)*.04}s">
-        <div class="q-number" style="display:flex;justify-content:space-between;align-items:center">
-          <span>Question ${i+1} of 25 &nbsp;·&nbsp; 4 pts</span>
-          <span>${badge}</span>
-        </div>
-        <div class="q-text">${q.q}</div>
-        <div class="q-options">${opts}</div>
-        ${explanation}
-      </div>`;
-  }).join('');
-
-  wrap.innerHTML=cards || `<div class="placeholder-notice">No questions in this category.</div>`;
-}
-
-/* ════════════════════════════════════════════════════════
-   TEACHER PANEL
-   ════════════════════════════════════════════════════════ */
-let teacherSelectedWeek=1;
-
-function renderTeacherPanel(){
-  setBreadcrumb('Teacher Dashboard',null);
-  document.getElementById('breadcrumb').classList.add('show');
-  renderStats();
-  renderWeekChart();
-  renderWeekTabs();
-  renderStudentTable(teacherSelectedWeek);
-}
-
-function renderStats(){
-  const studentIds=Object.keys(USERS).filter(u=>USERS[u].role==='student');
-  let totalTests=0, totalPassed=0, allScores=[];
-  studentIds.forEach(uid=>{
-    const s=SCORES[uid]||{};
-    Object.values(s).forEach(score=>{ if(score!==null){ totalTests++; allScores.push(score); if(score>=70) totalPassed++; }});
-  });
-  const avg=allScores.length ? Math.round(allScores.reduce((a,b)=>a+b,0)/allScores.length) : 0;
-  const passRate=totalTests ? Math.round((totalPassed/totalTests)*100) : 0;
-
-  document.getElementById('stats-row').innerHTML=`
-    <div class="stat-card"><div class="sval blue">${studentIds.length}</div><div class="slabel">Total Students</div></div>
-    <div class="stat-card"><div class="sval">${totalTests}</div><div class="slabel">Quizzes Taken</div></div>
-    <div class="stat-card"><div class="sval green">${totalPassed}</div><div class="slabel">Passed (≥70)</div></div>
-    <div class="stat-card"><div class="sval red">${totalTests-totalPassed}</div><div class="slabel">Failed (&lt;70)</div></div>
-    <div class="stat-card"><div class="sval ${avg>=70?'green':avg>=50?'':'red'}">${avg}</div><div class="slabel">Avg Score</div></div>
-    <div class="stat-card"><div class="sval ${passRate>=70?'green':'red'}">${passRate}%</div><div class="slabel">Pass Rate</div></div>
-  `;
-}
-
-function renderWeekChart(){
-  const studentIds=Object.keys(USERS).filter(u=>USERS[u].role==='student');
-  const chart=document.getElementById('week-chart');
-  let bars='';
-  for(let w=1;w<=16;w++){
-    const scores=studentIds.map(uid=>SCORES[uid]&&SCORES[uid][w]!==undefined&&SCORES[uid][w]!==null?SCORES[uid][w]:null).filter(s=>s!==null);
-    const avg=scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
-    const hPct=scores.length ? Math.round((avg/100)*70) : 0;
-    const cls=avg>=70?'':'mid';
-    bars+=`<div class="chart-bar-wrap">
-      <div class="chart-bar ${cls}" style="height:${hPct||2}px" data-tip="Wk${w}: ${scores.length?avg+' avg':'no data'}"></div>
-      <div class="chart-lbl">W${w}</div>
-    </div>`;
-  }
-  chart.innerHTML=bars;
-}
-
-function renderWeekTabs(){
-  const tabs=document.getElementById('week-tabs');
-  tabs.innerHTML=Array.from({length:16},(_,i)=>`
-    <div class="wtab ${i+1===teacherSelectedWeek?'active':''}" onclick="selectTeacherWeek(${i+1})">W${i+1}</div>`).join('');
-}
-
-function selectTeacherWeek(w){
-  teacherSelectedWeek=w;
-  renderWeekTabs();
-  renderStudentTable(w);
-}
-
-function renderStudentTable(weekNum){
-  document.getElementById('th-week').textContent=`Week ${weekNum} Score`;
-  const studentIds=Object.keys(USERS).filter(u=>USERS[u].role==='student');
-  const tbody=document.getElementById('student-tbody');
-  tbody.innerHTML=studentIds.map(uid=>{
-    const u=USERS[uid];
-    const s=SCORES[uid]||{};
-    const wScore=s[weekNum]!==undefined?s[weekNum]:null;
-    const scorePill = wScore===null
-      ? `<span class="score-pill none">Not taken</span>`
-      : `<span class="score-pill ${wScore>=70?'pass':'fail'}">${wScore} pts</span>`;
-
-    // Overall: count weeks done
-    const allWeekScores=Object.values(s).filter(v=>v!==null);
-    const done=allWeekScores.length;
-    const avgAll=done ? Math.round(allWeekScores.reduce((a,b)=>a+b,0)/done) : 0;
-    const progressPct=Math.round((done/16)*100);
-    const avgCls=avgAll>=70?'pass':avgAll>=50?'warn':'fail';
-
-    return `<tr>
-      <td><strong>${u.name}</strong></td>
-      <td><span style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted)">${u.id}</span></td>
-      <td>${scorePill}</td>
-      <td>${wScore===null?'<span style="color:var(--muted);font-size:.82rem">—</span>'
-          :`<span style="font-size:.82rem;color:${wScore>=70?'var(--sage)':'var(--accent)'}">${wScore>=70?'✅ Passed':'❌ Failed'}</span>`}</td>
-      <td>
-        <span style="font-size:.78rem;font-family:'DM Mono',monospace;color:var(--muted)">${done}/16 quizzes</span>
-        <span class="progress-mini"><span class="progress-mini-fill ${avgCls}" style="width:${progressPct}%"></span></span>
-        ${done>0?`<span style="font-size:.75rem;color:var(--muted)"> avg ${avgAll}</span>`:''}
-      </td>
-    </tr>`;
-  }).join('');
 }
 
 /* ════════════════════════════════════════════════════════
    UTILS
    ════════════════════════════════════════════════════════ */
 function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ════════════════════════════════════════════════════════
+   VIDEO MODAL
+   ════════════════════════════════════════════════════════ */
+function extractVideoId(url){
+  // youtu.be/3fCjRKder7E -> 3fCjRKder7E
+  // youtube.com/watch?v=3fCjRKder7E -> 3fCjRKder7E
+  if(!url || url==='#') return '';
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&\n?#]+)/);
+  return match ? match[1] : '';
+}
+
+function openVideoModal(videoUrl, title){
+  if(!videoUrl || videoUrl==='#'){
+    alert('Video for this week will be available soon!');
+    return false;
+  }
+  
+  const videoId = extractVideoId(videoUrl);
+  if(!videoId){
+    alert('Invalid video URL');
+    return false;
+  }
+  
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('video-iframe').src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+  document.getElementById('video-modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  return false;
+}
+
+function closeVideoModal(){
+  document.getElementById('video-modal').classList.remove('show');
+  document.getElementById('video-iframe').src = '';
+  document.body.style.overflow = 'auto';
+}
+
+// ESC tuşu ile kapatma
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && document.getElementById('video-modal').classList.contains('show')){
+    closeVideoModal();
+  }
+});
 </script>
 </body>
 </html>
