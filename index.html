@@ -6,7 +6,7 @@
 <title>NEÜ İngilizce II – Tersyüz Edilmiş Sınıf</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ══════════ RESET & VARS ══════════ */
+/* ══════════ RESET & CSS VARIABLES ══════════ */
 :root{
   --ink:#16213e;--paper:#f4efe6;--card:#fffcf5;
   --accent:#c84b31;--gold:#d4942a;--sage:#3d7a56;
@@ -17,8 +17,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
-
-/* ══════════ TYPOGRAPHY ══════════ */
 .serif{font-family:'Playfair Display',serif}
 .mono{font-family:'DM Mono',monospace}
 
@@ -97,72 +95,46 @@ header p{margin-top:.6rem;font-size:.85rem;color:rgba(244,239,230,.5);letter-spa
 .mico.video{background:#fde8e4}.mico.slide{background:#fdf3e4}.mico.pdf{background:#e4f0fd}
 .mico.forum{background:#e4fde9}.mico.hw{background:#f3e4fd}.mico.extra{background:#e4f6fd}
 .mico.quiz{background:linear-gradient(135deg,#fdf3cd,#fde8a0)}
+.mico.self-assess{background:#e8f5e9}
 .minfo h3{font-size:.95rem;font-weight:500}
 .minfo p{font-size:.76rem;color:var(--muted);margin-top:.12rem}
 .quiz-done-badge{font-size:.7rem;font-family:'DM Mono',monospace;padding:.2rem .55rem;border-radius:20px;margin-left:.5rem;vertical-align:middle}
 .quiz-done-badge.pass{background:#d4edda;color:var(--sage)}
 .quiz-done-badge.fail{background:#f8d7da;color:var(--accent)}
 
-/* ══════════ QUIZ PAGE ══════════ */
+/* ══════════ QUIZ PAGE (Fill-in-the-blank) ══════════ */
 .quiz-wrap{padding:2.8rem 2rem 5rem;max-width:800px;margin:0 auto}
 .quiz-header{margin-bottom:2rem}
 .quiz-header h2{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;margin-bottom:.3rem}
 .quiz-header p{font-size:.82rem;color:var(--muted)}
-.quiz-meta{display:flex;gap:1.5rem;margin-top:.8rem;flex-wrap:wrap}
-.quiz-meta span{font-size:.78rem;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:.35rem}
-.quiz-meta strong{color:var(--ink)}
-
-/* progress bar */
-.q-progress-wrap{margin-bottom:2rem}
-.q-progress-label{font-size:.75rem;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:.35rem;display:flex;justify-content:space-between}
-.q-progress-track{height:8px;background:#e8e2d8;border-radius:8px;overflow:hidden}
-.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--sage));border-radius:8px;transition:width .4s ease}
-
-/* question card */
 .q-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.6rem;margin-bottom:1rem;animation:fadeUp .3s ease both}
 .q-number{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem}
-.q-text{font-size:1rem;font-weight:500;line-height:1.5;margin-bottom:1.1rem}
-.q-options{display:flex;flex-direction:column;gap:.5rem}
-.q-opt{display:flex;align-items:center;gap:.8rem;padding:.65rem .9rem;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;transition:all .18s;font-size:.9rem}
-.q-opt:hover{border-color:var(--sky);background:#f0f6fd}
-.q-opt input[type=radio]{display:none}
-.q-opt.selected{border-color:var(--sky);background:#e8f2fd;font-weight:500}
-.q-opt.correct{border-color:var(--sage);background:#d4edda;color:var(--sage)}
-.q-opt.wrong{border-color:var(--accent);background:#f8d7da;color:var(--accent)}
+.q-text{font-size:1rem;font-weight:500;line-height:1.5;margin-bottom:1rem}
+.q-input{width:100%;background:var(--paper);border:1.5px solid var(--border);border-radius:7px;padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--ink);transition:border .2s}
+.q-input:focus{outline:none;border-color:var(--sky)}
+.q-input.correct{border-color:var(--sage);background:#d4edda}
+.q-input.wrong{border-color:var(--accent);background:#f8d7da}
+.q-feedback{margin-top:.6rem;font-size:.85rem;padding:.5rem .8rem;border-radius:6px;display:none}
+.q-feedback.show{display:block}
+.q-feedback.correct{background:#eaf7ee;color:var(--sage);border-left:3px solid var(--sage)}
+.q-feedback.wrong{background:#fff0ee;color:var(--accent);border-left:3px solid var(--accent)}
+.btn-check{background:var(--sage);color:#fff;border:none;border-radius:8px;padding:.75rem 2rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:1.5rem}
+.btn-check:hover{background:#2d5e3f}
+.quiz-result-summary{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.8rem;text-align:center;margin-top:1.5rem;animation:pop .4s ease both}
+.quiz-result-summary.pass{border-color:var(--sage)}
+.quiz-result-summary.fail{border-color:var(--accent)}
 
-/* navigation */
-.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:1rem}
-.btn-qnav{background:var(--ink);color:var(--paper);border:none;border-radius:7px;padding:.65rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:background .2s}
-.btn-qnav:hover{background:#2a2a4a}
-.btn-qnav:disabled{background:#ccc;cursor:not-allowed}
-.btn-submit{background:var(--sage);color:#fff;border:none;border-radius:7px;padding:.65rem 1.8rem;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;cursor:pointer;transition:background .2s}
-.btn-submit:hover{background:#2d5e3f}
-.q-dots{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:center}
-.q-dot{width:10px;height:10px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s}
-.q-dot.answered{background:var(--sky)}
-.q-dot.active{background:var(--ink);transform:scale(1.3)}
-
-/* ══════════ QUIZ RESULT ══════════ */
-.result-box{background:var(--card);border-radius:16px;padding:2.5rem;text-align:center;animation:pop .45s ease both;margin-top:1rem}
-.result-box.pass{border:2px solid var(--sage)}
-.result-box.fail{border:2px solid var(--accent)}
-.result-emoji{font-size:3.5rem;margin-bottom:.8rem}
-.result-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;margin-bottom:.5rem}
-.result-score{font-family:'DM Mono',monospace;font-size:2.8rem;font-weight:500;margin:.8rem 0}
-.result-score.pass{color:var(--sage)}
-.result-score.fail{color:var(--accent)}
-.result-detail{font-size:.88rem;color:var(--muted);line-height:1.6;max-width:440px;margin:0 auto .8rem}
-.result-bar-wrap{max-width:360px;margin:.6rem auto 1.4rem}
-.result-bar-track{height:14px;background:#e8e2d8;border-radius:14px;overflow:hidden}
-.result-bar-fill{height:100%;border-radius:14px;transition:width .8s ease}
-.result-bar-fill.pass{background:linear-gradient(90deg,var(--sage),#5aab78)}
-.result-bar-fill.fail{background:linear-gradient(90deg,var(--warn),var(--accent))}
-.result-bar-label{font-size:.75rem;font-family:'DM Mono',monospace;color:var(--muted);margin-top:.3rem}
-.btn-result-action{display:inline-block;margin:.3rem .4rem;padding:.6rem 1.4rem;border-radius:7px;font-size:.88rem;font-weight:500;cursor:pointer;border:none;transition:all .2s;text-decoration:none}
-.btn-result-action.primary{background:var(--ink);color:var(--paper)}
-.btn-result-action.primary:hover{background:#2a2a4a}
-.btn-result-action.secondary{background:var(--accent);color:#fff}
-.btn-result-action.secondary:hover{background:#a83b24}
+/* ══════════ SELF-ASSESSMENT ══════════ */
+.sa-wrap{padding:2.8rem 2rem 5rem;max-width:760px;margin:0 auto}
+.sa-list{display:flex;flex-direction:column;gap:.6rem;margin-top:1.2rem}
+.sa-item{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem;background:var(--card);border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s}
+.sa-item:hover{border-color:var(--sky);background:#f0f6fd}
+.sa-item.checked{border-color:var(--sage);background:#eaf7ee}
+.sa-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--sage);cursor:pointer;flex-shrink:0}
+.sa-item label{cursor:pointer;font-size:.9rem;line-height:1.4}
+.sa-progress{margin-top:1.2rem;font-size:.82rem;font-family:'DM Mono',monospace;color:var(--muted)}
+.sa-bar{height:10px;background:#e8e2d8;border-radius:10px;overflow:hidden;margin-top:.4rem}
+.sa-bar-fill{height:100%;background:linear-gradient(90deg,var(--sage),#6abd85);border-radius:10px;transition:width .4s ease}
 
 /* ══════════ FORUM PAGE ══════════ */
 .inner-wrap{padding:2.8rem 2rem 5rem;max-width:760px;margin:0 auto}
@@ -191,88 +163,49 @@ header p{margin-top:.6rem;font-size:.85rem;color:rgba(244,239,230,.5);letter-spa
 .teacher-wrap{padding:2.8rem 2rem 5rem;max-width:1100px;margin:0 auto}
 .teacher-wrap h2{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;margin-bottom:.4rem}
 .teacher-wrap .tsub{font-size:.85rem;color:var(--muted);margin-bottom:2rem}
-
-/* stats row */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:2.2rem}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:2.2rem}
 .stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.4rem}
 .stat-card .sval{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900}
 .stat-card .sval.green{color:var(--sage)}
 .stat-card .sval.red{color:var(--accent)}
 .stat-card .sval.blue{color:var(--sky)}
 .stat-card .slabel{font-size:.75rem;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-top:.2rem}
-
-/* week filter tabs */
-.week-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.wtab{background:var(--card);border:1.5px solid var(--border);border-radius:5px;padding:.35rem .75rem;font-size:.78rem;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s}
-.wtab.active,.wtab:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-
-/* student table */
 .t-section-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.8rem;color:var(--ink)}
-.student-table{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--card);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--border)}
-.student-table th{background:var(--ink);color:var(--paper);padding:.75rem 1rem;text-align:left;font-size:.72rem;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
-.student-table td{padding:.7rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle}
-.student-table tr:last-child td{border-bottom:none}
-.student-table tr:hover td{background:#faf6ee}
-.score-pill{display:inline-block;padding:.2rem .65rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:.75rem;font-weight:500}
-.score-pill.pass{background:#d4edda;color:var(--sage)}
-.score-pill.fail{background:#f8d7da;color:var(--accent)}
-.score-pill.none{background:#e9e5dc;color:var(--muted)}
-.progress-mini{display:inline-block;vertical-align:middle;width:80px;height:7px;background:#e8e2d8;border-radius:7px;overflow:hidden;margin-left:.5rem}
-.progress-mini-fill{height:100%;border-radius:7px}
-.progress-mini-fill.pass{background:var(--sage)}
-.progress-mini-fill.fail{background:var(--accent)}
-.progress-mini-fill.warn{background:var(--warn)}
 
-/* chart bars */
-.week-chart{display:flex;gap:.4rem;align-items:flex-end;height:80px;padding:.5rem 0;margin-bottom:2rem;flex-wrap:wrap}
-.chart-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:.3rem;flex:1;min-width:28px}
-.chart-bar{width:100%;background:linear-gradient(to top,var(--sage),#6abd85);border-radius:3px 3px 0 0;transition:height .5s ease;min-height:2px;cursor:default;position:relative}
-.chart-bar:hover::after{content:attr(data-tip);position:absolute;bottom:105%;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:.65rem;padding:.2rem .4rem;border-radius:3px;white-space:nowrap;pointer-events:none}
-.chart-bar.low{background:linear-gradient(to top,var(--accent),#e87060)}
-.chart-bar.mid{background:linear-gradient(to top,var(--warn),#e8c060)}
-.chart-lbl{font-size:.6rem;font-family:'DM Mono',monospace;color:var(--muted)}
-
-/* ══════════ REVIEW MODE ══════════ */
-.review-summary{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.6rem;margin-bottom:1.5rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center}
-.review-summary .rs-item{text-align:center}
-.review-summary .rs-val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900}
-.review-summary .rs-lbl{font-size:.7rem;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.review-filter{display:flex;gap:.5rem;margin-bottom:1.2rem;flex-wrap:wrap}
-.rf-btn{background:var(--card);border:1.5px solid var(--border);border-radius:5px;padding:.3rem .8rem;font-size:.76rem;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s}
-.rf-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.rf-btn.wrong-filter.active{background:var(--accent);border-color:var(--accent)}
-.rf-btn.correct-filter.active{background:var(--sage);border-color:var(--sage)}
-
-/* review card states */
-.q-card.reviewed-correct{border-color:var(--sage);background:linear-gradient(135deg,#f0faf4,var(--card))}
-.q-card.reviewed-wrong{border-color:var(--accent);background:linear-gradient(135deg,#fff5f4,var(--card))}
-.q-card.reviewed-skipped{border-color:var(--warn);background:linear-gradient(135deg,#fffbf0,var(--card))}
-
-/* explanation box */
-.q-explanation{margin-top:1rem;border-radius:8px;padding:1rem 1.1rem;font-size:.87rem;line-height:1.65;animation:fadeUp .3s ease both}
-.q-explanation.correct-exp{background:#eaf7ee;border-left:4px solid var(--sage)}
-.q-explanation.wrong-exp{background:#fff0ee;border-left:4px solid var(--accent)}
-.q-explanation.skipped-exp{background:#fffae8;border-left:4px solid var(--warn)}
-.q-explanation .exp-label{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:.4rem}
-.q-explanation.correct-exp .exp-label{color:var(--sage)}
-.q-explanation.wrong-exp .exp-label{color:var(--accent)}
-.q-explanation.skipped-exp .exp-label{color:var(--warn)}
-.q-explanation .exp-rule{margin-top:.5rem;font-size:.82rem;color:var(--muted);font-style:italic;border-top:1px solid rgba(0,0,0,.07);padding-top:.5rem}
+/* Student cards - clickable & expandable */
+.student-cards{display:flex;flex-direction:column;gap:.8rem}
+.stu-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .2s}
+.stu-card:hover{border-color:var(--sky);box-shadow:0 4px 16px rgba(42,111,168,.1)}
+.stu-header{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;cursor:pointer}
+.stu-avatar{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stu-name{font-weight:600;font-size:.95rem}
+.stu-id{font-size:.72rem;font-family:'DM Mono',monospace;color:var(--muted)}
+.stu-summary{margin-left:auto;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap}
+.stu-pill{display:inline-block;padding:.2rem .6rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:.72rem;font-weight:500}
+.stu-pill.pass{background:#d4edda;color:var(--sage)}
+.stu-pill.fail{background:#f8d7da;color:var(--accent)}
+.stu-pill.none{background:#e9e5dc;color:var(--muted)}
+.stu-toggle{font-size:1.2rem;color:var(--muted);transition:transform .3s}
+.stu-toggle.open{transform:rotate(180deg)}
+.stu-detail{display:none;padding:0 1.4rem 1.2rem;border-top:1px solid var(--border);animation:fadeUp .3s ease both}
+.stu-detail.show{display:block}
+.stu-detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.7rem;margin-top:1rem}
+.stu-detail-item{background:var(--paper);border-radius:8px;padding:.8rem;text-align:center}
+.stu-detail-item .sdv{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700}
+.stu-detail-item .sdl{font-size:.68rem;font-family:'DM Mono',monospace;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem}
+.stu-week-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.8rem}
+.stu-wk-badge{padding:.2rem .5rem;border-radius:4px;font-size:.68rem;font-family:'DM Mono',monospace}
 
 /* ══════════ FOOTER ══════════ */
 footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--border);font-family:'DM Mono',monospace;letter-spacing:.05em}
 
-/* ══════════ VIDEO MODAL ══════════ */
-#video-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:10000;align-items:center;justify-content:center;padding:1rem}
-#video-modal.show{display:flex;animation:fadeUp .3s ease both}
-.modal-content{background:var(--card);border-radius:12px;width:100%;max-width:900px;max-height:80vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.modal-header{display:flex;justify-content:space-between;align-items:center;padding:1.5rem;border-bottom:1px solid var(--border)}
-.modal-header h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900}
-.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);transition:color .2s}
-.modal-close:hover{color:var(--accent)}
-.modal-body{padding:1.5rem}
-.video-container{position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px}
-.video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+/* ══════════ RESPONSIVE ══════════ */
+@media(max-width:600px){
+  .header-user{position:static;justify-content:center;margin-top:.8rem}
+  .stu-summary{flex-direction:column;align-items:flex-end;gap:.3rem}
+  .stu-detail-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
@@ -336,31 +269,45 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
     <div class="week-title" id="wk-title"></div>
     <div class="week-tagline">Weekly Learning Materials</div>
     <div class="mlist">
-      <a class="mcard" id="link-video" href="https://youtu.be/3fCjRKder7E" target="_blank" onclick="return handleLink(this,'Lesson Video')">
+      <!-- Video -->
+      <a class="mcard" id="link-video" href="#" target="_blank" onclick="return handleLink(this,'Lesson Video')">
         <div class="mico video">🎬</div>
         <div class="minfo"><h3>Lesson Video</h3><p>Watch before class — approx. 20–30 min</p></div>
       </a>
+      <!-- Slides -->
       <a class="mcard" id="link-slide" href="#" target="_blank" onclick="return handleLink(this,'Lesson Slides')">
         <div class="mico slide">📊</div>
         <div class="minfo"><h3>Lesson Slides</h3><p>Download the presentation slides</p></div>
       </a>
+      <!-- PDF -->
       <a class="mcard" id="link-pdf" href="#" target="_blank" onclick="return handleLink(this,'Lesson PDF')">
         <div class="mico pdf">📄</div>
         <div class="minfo"><h3>Lesson PDF File</h3><p>Supplementary reading &amp; notes</p></div>
       </a>
+      <!-- Forum -->
       <a class="mcard" href="#" onclick="return openForum()">
         <div class="mico forum">💬</div>
         <div class="minfo"><h3>Lesson Forum</h3><p>Ask questions, discuss, share ideas</p></div>
       </a>
+      <!-- Homework -->
       <a class="mcard" id="link-hw" href="#" target="_blank" onclick="return handleLink(this,'Lesson Homework')">
         <div class="mico hw">📝</div>
         <div class="minfo"><h3>Lesson Homework</h3><p>Complete &amp; submit before next session</p></div>
       </a>
-      <a class="mcard" href="#" onclick="return openExtra()">
+      <!-- Extra Support -->
+      <a class="mcard" id="link-extra" href="#" target="_blank" onclick="return handleLink(this,'Extra Support Materials')">
         <div class="mico extra">📚</div>
         <div class="minfo"><h3>Extra Support Materials</h3><p>Additional exercises for deeper practice</p></div>
       </a>
-      <!-- ASK CLAUDE CARD -->
+      <!-- Self-Assessment -->
+      <a class="mcard" href="#" onclick="return openSelfAssessment()" style="border-color:var(--sage);background:linear-gradient(135deg,#f0faf4,var(--card))">
+        <div class="mico self-assess">✅</div>
+        <div class="minfo">
+          <h3 style="color:var(--sage)">Self-Assessment</h3>
+          <p>Check your weekly learning objectives</p>
+        </div>
+      </a>
+      <!-- Ask Claude -->
       <a class="mcard" href="https://claude.ai" target="_blank" style="border-color:#7c5cbf;background:linear-gradient(135deg,#f5f0ff,var(--card))">
         <div class="mico" style="background:linear-gradient(135deg,#e8deff,#d4c5ff);font-size:1.4rem">🤖</div>
         <div class="minfo">
@@ -368,47 +315,39 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
           <p>Have a question? Ask Claude AI for instant help &amp; explanations</p>
         </div>
       </a>
-
-      <!-- QUIZ CARD -->
+      <!-- Quiz -->
       <a class="mcard quiz-card" href="#" onclick="return openQuiz()">
         <div class="mico quiz">📝</div>
         <div class="minfo">
           <h3>Weekly Quiz <span id="quiz-done-badge" class="quiz-done-badge" style="display:none"></span></h3>
-          <p>25 questions · 4 pts each · Pass: 70/100</p>
+          <p>Fill-in-the-blank · 5 questions · Check your answers</p>
         </div>
       </a>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════ QUIZ PAGE ════════════════════ -->
+<!-- ════════════════════ QUIZ PAGE (Fill-in-the-blank) ════════════════════ -->
 <div id="quiz-page" class="page">
   <div class="quiz-wrap">
     <div class="quiz-header">
       <h2 id="quiz-title">Week 1 Quiz</h2>
-      <p id="quiz-subtitle">Grammar &amp; Vocabulary · 25 Questions · 4 pts each</p>
-      <div class="quiz-meta">
-        <span>📋 <strong>25</strong> questions</span>
-        <span>⏱ Untimed</span>
-        <span>🏆 Pass: <strong>70 pts</strong></span>
-      </div>
+      <p id="quiz-subtitle">Fill in the blanks with the correct word</p>
     </div>
-    <div class="q-progress-wrap" id="q-progress-wrap">
-      <div class="q-progress-label">
-        <span id="q-prog-label">Question 1 of 25</span>
-        <span id="q-prog-pct">0%</span>
-      </div>
-      <div class="q-progress-track"><div class="q-progress-fill" id="q-prog-bar" style="width:0%"></div></div>
-    </div>
-    <div id="q-dots-row" class="q-dots"></div>
-    <div id="q-container" style="margin-top:1.2rem"></div>
-    <div class="quiz-nav" id="quiz-nav">
-      <button class="btn-qnav" id="btn-prev" onclick="quizNav(-1)">← Previous</button>
-      <span id="q-counter" style="font-size:.82rem;color:var(--muted);font-family:'DM Mono',monospace"></span>
-      <button class="btn-qnav" id="btn-next" onclick="quizNav(1)">Next →</button>
-      <button class="btn-submit" id="btn-submit" onclick="submitQuiz()" style="display:none">Submit Quiz ✓</button>
-    </div>
-    <div id="quiz-result" style="display:none"></div>
+    <div id="quiz-questions"></div>
+    <button class="btn-check" id="btn-check" onclick="checkQuizAnswers()">Check Answers ✓</button>
+    <div id="quiz-result-area"></div>
+  </div>
+</div>
+
+<!-- ════════════════════ SELF-ASSESSMENT ════════════════════ -->
+<div id="self-assess-page" class="page">
+  <div class="sa-wrap">
+    <h2 class="page-heading" id="sa-title">Self-Assessment</h2>
+    <p class="page-sub" id="sa-sub">Check the objectives you feel confident about this week.</p>
+    <div class="sa-list" id="sa-list"></div>
+    <div class="sa-progress" id="sa-progress"></div>
+    <div class="sa-bar"><div class="sa-bar-fill" id="sa-bar-fill" style="width:0%"></div></div>
   </div>
 </div>
 
@@ -425,163 +364,215 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
   </div>
 </div>
 
-<!-- ════════════════════ EXTRA ════════════════════ -->
-<div id="extra-page" class="page">
-  <div class="inner-wrap">
-    <h2 class="page-heading" id="extra-title">Extra Support Materials</h2>
-    <p class="page-sub" id="extra-sub"></p>
-    <div class="extra-placeholder">
-      <span>📚</span>
-      <p>Extra support materials for this week will be added by your instructor.<br>
-         Post your questions in the <strong>Forum</strong> in the meantime.</p>
-    </div>
-  </div>
-</div>
-
 <!-- ════════════════════ TEACHER PANEL ════════════════════ -->
 <div id="teacher-page" class="page">
   <div class="teacher-wrap">
     <h2>Teacher Dashboard</h2>
-    <p class="tsub">NEÜ English II · Flipped Classroom · 2024–2025 · Quiz Performance Overview</p>
-
+    <p class="tsub">NEÜ English II · Flipped Classroom · 2025–2026 · Student Progress Overview</p>
     <div class="stats-row" id="stats-row"></div>
-
-    <div class="t-section-title">Average Quiz Score by Week</div>
-    <div class="week-chart" id="week-chart"></div>
-
-    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
-      <div class="t-section-title" style="margin-bottom:0">Student Results</div>
-      <div class="week-tabs" id="week-tabs"></div>
-    </div>
-    <table class="student-table" id="student-table">
-      <thead>
-        <tr>
-          <th>Student</th>
-          <th>ID</th>
-          <th id="th-week">Week 1 Score</th>
-          <th>Status</th>
-          <th>Overall Progress</th>
-        </tr>
-      </thead>
-      <tbody id="student-tbody"></tbody>
-    </table>
+    <div class="t-section-title">Student Progress — Click to expand details</div>
+    <div class="student-cards" id="student-cards"></div>
   </div>
 </div>
 
 <footer id="site-footer" style="display:none">NEÜ English II · Flipped Classroom · All rights reserved</footer>
 
-<!-- ════════════════════ VIDEO MODAL ════════════════════ -->
-<div id="video-modal" onclick="if(event.target.id==='video-modal') closeVideoModal()">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2 id="modal-title">Lesson Video</h2>
-      <button class="modal-close" onclick="closeVideoModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="video-container">
-        <iframe id="video-iframe" title="YouTube video player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
-/* ════════════════════════════════════════════════════════
-   DATA LAYER
-   ════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   ██████   DATA LAYER
+   ════════════════════════════════════════════════════════════════ */
 
-// Demo users
+// ── Demo Users ──
 const USERS = {
   student1:{ pw:'1234', name:'Ayşe Kaya',       role:'student', id:'2021001' },
-  student2:{ pw:'1234', name:'Mehmet Demir',    role:'student', id:'2021002' },
-  student3:{ pw:'1234', name:'Fatma Şahin',     role:'student', id:'2021003' },
-  student4:{ pw:'1234', name:'Ali Yıldız',      role:'student', id:'2021004' },
-  student5:{ pw:'1234', name:'Zeynep Arslan',   role:'student', id:'2021005' },
-  student6:{ pw:'1234', name:'Can Özdemir',     role:'student', id:'2021006' },
-  teacher:  { pw:'admin',name:'Dr. Öğr. Üyesi', role:'teacher', id:'T001'    }
+  student2:{ pw:'1234', name:'Mehmet Demir',     role:'student', id:'2021002' },
+  student3:{ pw:'1234', name:'Fatma Şahin',      role:'student', id:'2021003' },
+  student4:{ pw:'1234', name:'Ali Yıldız',       role:'student', id:'2021004' },
+  student5:{ pw:'1234', name:'Zeynep Arslan',    role:'student', id:'2021005' },
+  student6:{ pw:'1234', name:'Can Özdemir',      role:'student', id:'2021006' },
+  teacher:  { pw:'admin',name:'Dr. Öğr. Üyesi',  role:'teacher', id:'T001'    }
 };
 
-// Week 1 quiz — 25 questions with explanations
+/* ════════════════════════════════════════════════════════════════
+   ██████   B) RESOURCE DOWNLOAD LINKS — PASTE YOUR LINKS HERE
+   ════════════════════════════════════════════════════════════════
+   Instructions:
+   - Replace "PASTE_LINK_HERE" with your actual PDF/file URLs
+   - Each week has its own set of links
+   - Links open in a new tab when clicked
+   ════════════════════════════════════════════════════════════════ */
+const WEEK_RESOURCES = {
+  1: {
+    video:    "https://youtu.be/3fCjRKder7E",           // ← Week 1 YouTube link
+    slides:   "PASTE_LINK_HERE",                         // ← Week 1 Slides PDF link
+    pdf:      "PASTE_LINK_HERE",                         // ← Week 1 Lesson PDF link
+    homework: "PASTE_LINK_HERE",                         // ← Week 1 Homework link
+    extra:    "PASTE_LINK_HERE"                          // ← Week 1 Extra Support link
+  },
+  2: {
+    video:    "PASTE_LINK_HERE",                         // ← Week 2 YouTube link
+    slides:   "PASTE_LINK_HERE",                         // ← Week 2 Slides PDF link
+    pdf:      "PASTE_LINK_HERE",                         // ← Week 2 Lesson PDF link
+    homework: "PASTE_LINK_HERE",                         // ← Week 2 Homework link
+    extra:    "PASTE_LINK_HERE"                          // ← Week 2 Extra Support link
+  },
+  3: {
+    video:    "PASTE_LINK_HERE",                         // ← Week 3 YouTube link
+    slides:   "PASTE_LINK_HERE",
+    pdf:      "PASTE_LINK_HERE",
+    homework: "PASTE_LINK_HERE",
+    extra:    "PASTE_LINK_HERE"
+  },
+  4:  { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  5:  { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  6:  { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  7:  { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  8:  { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  9:  { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  10: { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  11: { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  12: { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  13: { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  14: { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  15: { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" },
+  16: { video:"PASTE_LINK_HERE", slides:"PASTE_LINK_HERE", pdf:"PASTE_LINK_HERE", homework:"PASTE_LINK_HERE", extra:"PASTE_LINK_HERE" }
+};
+
+/* ════════════════════════════════════════════════════════════════
+   ██████   C) FILL-IN-THE-BLANK QUIZZES
+   ════════════════════════════════════════════════════════════════ */
 const QUIZZES = {
   1: {
     topic: 'Simple Present & To Be / Everyday Vocabulary',
     questions: [
-      {
-        q:"She ___ a teacher at our school.",
-        opts:["am","is","are","be"], ans:1,
-        exp:"The verb 'to be' changes depending on the subject. With <strong>she / he / it</strong> (third person singular) we always use <em>is</em>. 'Am' is only for <em>I</em>, and 'are' is for <em>you / we / they</em>.",
-        rule:"To Be: I am · He/She/It is · You/We/They are"
-      },
-      {
-        q:"They ___ from Istanbul.",
-        opts:["is","am","are","was"], ans:2,
-        exp:"<strong>They</strong> is a plural subject, so we use <em>are</em>. 'Is' is for singular third person (he/she/it), 'am' is only for 'I', and 'was' is past tense.",
-        rule:"Plural subjects (they, we, you) → are"
-      }
+      { q: 'She ___ a teacher at our school.',                      ans: 'is',     hint: 'to be (he/she/it)',   exp: 'With she/he/it we use "is". I → am, You/We/They → are.' },
+      { q: 'They ___ from Istanbul.',                               ans: 'are',    hint: 'to be (they)',        exp: 'They is plural → "are". Is = he/she/it, Am = I only.' },
+      { q: 'I ___ English every day.',                              ans: 'study',  hint: 'base verb for I',     exp: 'Simple Present with I/You/We/They → base verb (no -s).' },
+      { q: 'He ___ not like coffee.',                               ans: 'does',   hint: 'auxiliary for he',    exp: 'Negative with he/she/it → does not + base verb.' },
+      { q: 'She speaks English very ___.',                          ans: 'well',   hint: 'adverb form of good', exp: 'After a verb we use an adverb: "well" not "good".' },
+      { q: 'My brother ___ in a hospital.',                         ans: 'works',  hint: 'verb + s for he',     exp: 'He/She/It + verb-s in Simple Present → works.' },
+      { q: '___ you understand the lesson?',                        ans: 'Do',     hint: 'question auxiliary',  exp: 'Questions with you/we/they → Do + base verb.' },
+      { q: 'The correct form of "be" for "I" is: ___.',            ans: 'am',     hint: 'I + ???',             exp: 'To Be: I am, He/She/It is, You/We/They are.' },
+      { q: 'She ___ three languages: Turkish, English and French.', ans: 'speaks', hint: 'verb + s for she',    exp: 'She + verb-s → speaks in Simple Present.' },
+      { q: 'We ___ happy about the exam results.',                  ans: 'are',    hint: 'to be for we',        exp: 'We + are (present tense of to be).' }
     ]
   }
 };
-// Weeks 2-16 placeholder
+// Weeks 2-16 placeholder quizzes
 for(let i=2;i<=16;i++) QUIZZES[i] = {
-  topic:`Week ${i} Grammar & Vocabulary`,
-  questions: Array.from({length:25},(_,j)=>({
-    q:`[Week ${i}] Sample question ${j+1} — to be added by instructor.`,
-    opts:["Option A","Option B","Option C","Option D"], ans:0
-  }))
+  topic: `Week ${i} Grammar & Vocabulary`,
+  questions: [
+    { q:`[Week ${i}] The students ___ in the library.`,     ans:'are',    hint:'to be (plural)', exp:'Plural subject → are.' },
+    { q:`[Week ${i}] She ___ to school every morning.`,     ans:'goes',   hint:'verb+s for she', exp:'She + verb-s → goes.' },
+    { q:`[Week ${i}] ___ he like sports?`,                  ans:'Does',   hint:'auxiliary he',   exp:'Questions he/she/it → Does.' },
+    { q:`[Week ${i}] They ___ not understand the question.`,ans:'do',     hint:'auxiliary they',  exp:'Negative they → do not.' },
+    { q:`[Week ${i}] I ___ very tired today.`,              ans:'am',     hint:'to be for I',    exp:'I + am.' }
+  ]
 };
 
-// Pre-seeded student scores (for demo)
-const SCORES = {
-  student1:{ 1:88, 2:76, 3:92, 4:null, 5:null },
-  student2:{ 1:64, 2:null, 3:72, 4:null },
-  student3:{ 1:100,2:88,  3:96, 4:80   },
-  student4:{ 1:56, 2:60,  3:null },
-  student5:{ 1:72, 2:80,  3:84, 4:68   },
-  student6:{ 1:48, 2:null }
+/* ════════════════════════════════════════════════════════════════
+   ██████   D) SELF-ASSESSMENT OBJECTIVES PER WEEK
+   ════════════════════════════════════════════════════════════════ */
+const SELF_ASSESSMENT = {
+  1: [
+    'I can introduce myself in English',
+    'I can use the verb "to be" correctly (am/is/are)',
+    'I can make simple present positive sentences',
+    'I can make simple present negative sentences',
+    'I can ask yes/no questions in simple present',
+    'I understand basic everyday vocabulary',
+    'I can spell common English words correctly',
+    'I know the difference between adjectives and adverbs'
+  ]
+};
+// Weeks 2-16 placeholder objectives
+for(let i=2;i<=16;i++) SELF_ASSESSMENT[i] = [
+  `I understand the main grammar topic of Week ${i}`,
+  `I can use new vocabulary from Week ${i} in sentences`,
+  `I can complete fill-in-the-blank exercises accurately`,
+  `I can ask and answer questions about Week ${i} topics`,
+  `I have watched the lesson video and taken notes`,
+  `I feel ready for the weekly quiz`
+];
+
+/* ══════════ A) STUDENT PROGRESS DATA (for Teacher Panel) ══════════ */
+const STUDENT_PROGRESS = {
+  student1: {
+    weeks: {
+      1: { completion: 100, quizScore: 88, homework: 'Submitted',     videoWatched: true,  forumPosts: 2 },
+      2: { completion: 85,  quizScore: 76, homework: 'Submitted',     videoWatched: true,  forumPosts: 1 },
+      3: { completion: 95,  quizScore: 92, homework: 'Submitted',     videoWatched: true,  forumPosts: 3 },
+      4: { completion: 30,  quizScore: null, homework: 'Not submitted', videoWatched: true, forumPosts: 0 }
+    }
+  },
+  student2: {
+    weeks: {
+      1: { completion: 70,  quizScore: 64, homework: 'Late',          videoWatched: true,  forumPosts: 0 },
+      2: { completion: 20,  quizScore: null, homework: 'Not submitted', videoWatched: false, forumPosts: 0 },
+      3: { completion: 80,  quizScore: 72, homework: 'Submitted',     videoWatched: true,  forumPosts: 1 }
+    }
+  },
+  student3: {
+    weeks: {
+      1: { completion: 100, quizScore: 100, homework: 'Submitted',    videoWatched: true,  forumPosts: 5 },
+      2: { completion: 100, quizScore: 88,  homework: 'Submitted',    videoWatched: true,  forumPosts: 4 },
+      3: { completion: 100, quizScore: 96,  homework: 'Submitted',    videoWatched: true,  forumPosts: 3 },
+      4: { completion: 90,  quizScore: 80,  homework: 'Submitted',    videoWatched: true,  forumPosts: 2 }
+    }
+  },
+  student4: {
+    weeks: {
+      1: { completion: 60,  quizScore: 56, homework: 'Late',          videoWatched: false, forumPosts: 0 },
+      2: { completion: 55,  quizScore: 60, homework: 'Not submitted', videoWatched: true,  forumPosts: 0 }
+    }
+  },
+  student5: {
+    weeks: {
+      1: { completion: 85,  quizScore: 72, homework: 'Submitted',     videoWatched: true,  forumPosts: 1 },
+      2: { completion: 90,  quizScore: 80, homework: 'Submitted',     videoWatched: true,  forumPosts: 2 },
+      3: { completion: 88,  quizScore: 84, homework: 'Submitted',     videoWatched: true,  forumPosts: 1 },
+      4: { completion: 75,  quizScore: 68, homework: 'Late',          videoWatched: true,  forumPosts: 0 }
+    }
+  },
+  student6: {
+    weeks: {
+      1: { completion: 40,  quizScore: 48, homework: 'Not submitted', videoWatched: false, forumPosts: 0 }
+    }
+  }
 };
 
-// Runtime state
+// ── Runtime State ──
 let currentUser = null;
 let currentWeek = null;
 let forumData   = {};
-let quizState   = { weekNum:null, idx:0, answers:[], submitted:false };
+let saChecked   = {}; // self-assessment checkboxes per week
 
-/* ════════════════════════════════════════════════════════
-   LOGIN
-   ════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   ██████   LOGIN SYSTEM
+   ════════════════════════════════════════════════════════════════ */
 function doLogin(){
   const uid = document.getElementById('login-id').value.trim().toLowerCase();
   const pw  = document.getElementById('login-pw').value;
   const user = USERS[uid];
-  if(!user || user.pw !== pw){
-    alert('Incorrect ID or password. Please try again.');
-    return;
-  }
+  if(!user || user.pw !== pw){ alert('Incorrect ID or password.'); return; }
   currentUser = { ...user, uid };
   document.getElementById('site-header').style.display = '';
   document.getElementById('site-footer').style.display = '';
   renderHeaderUser();
-
-  if(user.role === 'teacher'){
-    showPage('teacher-page');
-    renderTeacherPanel();
-  } else {
-    showPage('home');
-    renderHome();
-  }
+  if(user.role === 'teacher'){ showPage('teacher-page'); renderTeacherPanel(); }
+  else { showPage('home'); renderHome(); }
 }
 
-document.getElementById('login-id').addEventListener('keydown', e=> { if(e.key==='Enter') doLogin(); });
-document.getElementById('login-pw').addEventListener('keydown', e=> { if(e.key==='Enter') doLogin(); });
+document.getElementById('login-id').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('login-pw').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
 
 function renderHeaderUser(){
   const initials = currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
   document.getElementById('header-user-area').innerHTML = `
     <span class="uname">${currentUser.name}</span>
     <div class="avatar">${initials}</div>
-    ${currentUser.role==='teacher' ? `<button class="btn-logout" onclick="showPage('home');renderHome()">Students</button>` : ''}
-    <button class="btn-logout" onclick="logout()">Sign out</button>
-  `;
+    ${currentUser.role==='teacher' ? `<button class="btn-logout" onclick="showPage('teacher-page');renderTeacherPanel()">Dashboard</button>` : ''}
+    <button class="btn-logout" onclick="logout()">Sign out</button>`;
 }
 
 function logout(){
@@ -596,45 +587,12 @@ function logout(){
   lp.classList.add('active'); lp.style.display='flex';
 }
 
-/* ════════════════════════════════════════════════════════
-   HOME
-   ════════════════════════════════════════════════════════ */
-function renderHome(){
-  document.getElementById('home-greeting').textContent =
-    `Welcome, ${currentUser.name.split(' ')[0]}! Choose a week.`;
-  const grid = document.getElementById('weeks-grid');
-  grid.innerHTML = '';
-  for(let i=1;i<=16;i++){
-    const score = getUserScore(i);
-    let badge='', badgeCls='none';
-    if(score!==null){ badge=`${score} pts`; badgeCls = score>=70?'pass':'fail'; }
-    else badge='Not taken';
-    const btn = document.createElement('button');
-    btn.className='week-btn';
-    btn.innerHTML=`
-      <div style="font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem">Week</div>
-      <div class="wk-label">${i}</div>
-      <div class="wk-sub">Tap to open</div>
-      <div><span class="wk-score-badge ${badgeCls}">${badge}</span></div>`;
-    btn.onclick = () => openWeek(i);
-    grid.appendChild(btn);
-  }
-}
-
-function getUserScore(weekNum){
-  if(!currentUser) return null;
-  const s = SCORES[currentUser.uid];
-  if(!s) return null;
-  return s[weekNum] !== undefined ? s[weekNum] : null;
-}
-
-/* ════════════════════════════════════════════════════════
-   NAVIGATION
-   ════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   ██████   NAVIGATION
+   ════════════════════════════════════════════════════════════════ */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>{ p.classList.remove('active'); p.style.display=''; });
-  const el = document.getElementById(id);
-  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
 
@@ -651,41 +609,60 @@ function goHome(){
   if(!currentUser) return;
   currentWeek=null;
   document.getElementById('breadcrumb').classList.remove('show');
-  if(currentUser.role==='teacher'){ showPage('teacher-page'); return; }
+  if(currentUser.role==='teacher'){ showPage('teacher-page'); renderTeacherPanel(); return; }
   showPage('home'); renderHome();
 }
 
-function openWeek(num){
-  currentWeek=num;
-  document.getElementById('wk-title').textContent=`Week ${num}`;
-  setBreadcrumb(`Week ${num}`, null);
-  
-  // Her week için YouTube linklerini ayarla
-  const videoLinks = {
-    1: 'https://youtu.be/3fCjRKder7E',
-    2: '#',
-    3: '#',
-    4: '#',
-    5: '#',
-    6: '#',
-    7: '#',
-    8: '#',
-    9: '#',
-    10: '#',
-    11: '#',
-    12: '#',
-    13: '#',
-    14: '#',
-    15: '#',
-    16: '#'
-  };
-  
-  document.getElementById('link-video').href = videoLinks[num] || '#';
-  document.getElementById('link-slide').href='#';
-  document.getElementById('link-pdf').href='#';
-  document.getElementById('link-hw').href='#';
+/* ════════════════════════════════════════════════════════════════
+   ██████   HOME PAGE
+   ════════════════════════════════════════════════════════════════ */
+function renderHome(){
+  document.getElementById('home-greeting').textContent = `Welcome, ${currentUser.name.split(' ')[0]}! Choose a week.`;
+  const grid = document.getElementById('weeks-grid');
+  grid.innerHTML = '';
+  for(let i=1;i<=16;i++){
+    const prog = STUDENT_PROGRESS[currentUser.uid];
+    const wData = prog && prog.weeks && prog.weeks[i];
+    const score = wData ? wData.quizScore : null;
+    let badge='', badgeCls='none';
+    if(score!==null){ badge=`${score} pts`; badgeCls = score>=70?'pass':'fail'; }
+    else badge='Not taken';
+    const btn = document.createElement('button');
+    btn.className='week-btn';
+    btn.innerHTML=`
+      <div style="font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem">Week</div>
+      <div class="wk-label">${i}</div>
+      <div class="wk-sub">Tap to open</div>
+      <div><span class="wk-score-badge ${badgeCls}">${badge}</span></div>`;
+    btn.onclick = () => openWeek(i);
+    grid.appendChild(btn);
+  }
+}
 
-  const score = getUserScore(num);
+/* ════════════════════════════════════════════════════════════════
+   ██████   WEEK PAGE — Dynamic Resource Links
+   ════════════════════════════════════════════════════════════════ */
+function openWeek(num){
+  currentWeek = num;
+  document.getElementById('wk-title').textContent = `Week ${num}`;
+  setBreadcrumb(`Week ${num}`, null);
+
+  // Set resource links from WEEK_RESOURCES
+  const res = WEEK_RESOURCES[num] || {};
+  const setLink = (id, url) => {
+    const el = document.getElementById(id);
+    el.href = (url && url !== 'PASTE_LINK_HERE') ? url : '#';
+  };
+  setLink('link-video',  res.video);
+  setLink('link-slide',  res.slides);
+  setLink('link-pdf',    res.pdf);
+  setLink('link-hw',     res.homework);
+  setLink('link-extra',  res.extra);
+
+  // Quiz badge
+  const prog = STUDENT_PROGRESS[currentUser.uid];
+  const wData = prog && prog.weeks && prog.weeks[num];
+  const score = wData ? wData.quizScore : null;
   const badge = document.getElementById('quiz-done-badge');
   if(score!==null){
     badge.style.display='inline';
@@ -698,31 +675,145 @@ function openWeek(num){
 
 function handleLink(el, label){
   if(el.getAttribute('href')==='#'){
-    alert(`"${label}" for this week will be available soon!`);
+    alert(`"${label}" for this week will be available soon!\nYour instructor will add the link.`);
     return false;
   }
   return true;
 }
 
-/* ════════════════════════════════════════════════════════
-   FORUM
-   ════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   ██████   C) QUIZ ENGINE — Fill-in-the-Blank
+   ════════════════════════════════════════════════════════════════ */
+function openQuiz(){
+  if(!currentWeek) return false;
+  const qdata = QUIZZES[currentWeek];
+  document.getElementById('quiz-title').textContent = `Week ${currentWeek} Quiz`;
+  document.getElementById('quiz-subtitle').textContent = `${qdata.topic} · Fill in the blanks`;
+  setBreadcrumb(`Week ${currentWeek}`, 'Quiz');
+
+  // Render fill-in-the-blank questions
+  const container = document.getElementById('quiz-questions');
+  container.innerHTML = qdata.questions.map((q, i) => `
+    <div class="q-card" id="qcard-${i}">
+      <div class="q-number">Question ${i+1} of ${qdata.questions.length}</div>
+      <div class="q-text">${q.q.replace('___', '<span style="border-bottom:2px dashed var(--sky);padding:0 .3rem;color:var(--sky);font-weight:700">___</span>')}</div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:.4rem;font-family:'DM Mono',monospace">💡 Hint: ${q.hint}</div>
+      <input type="text" class="q-input" id="q-ans-${i}" placeholder="Type your answer here..." autocomplete="off">
+      <div class="q-feedback" id="q-fb-${i}"></div>
+    </div>`).join('');
+
+  document.getElementById('btn-check').style.display = 'inline-block';
+  document.getElementById('quiz-result-area').innerHTML = '';
+  showPage('quiz-page');
+  return false;
+}
+
+function checkQuizAnswers(){
+  const qdata = QUIZZES[currentWeek];
+  let correct = 0;
+  qdata.questions.forEach((q, i) => {
+    const input = document.getElementById(`q-ans-${i}`);
+    const fb = document.getElementById(`q-fb-${i}`);
+    const userAns = input.value.trim().toLowerCase();
+    const correctAns = q.ans.toLowerCase();
+
+    input.classList.remove('correct','wrong');
+    fb.classList.remove('correct','wrong');
+
+    if(userAns === correctAns){
+      correct++;
+      input.classList.add('correct');
+      fb.className = 'q-feedback show correct';
+      fb.innerHTML = `✅ Correct! ${q.exp}`;
+    } else {
+      input.classList.add('wrong');
+      fb.className = 'q-feedback show wrong';
+      fb.innerHTML = `❌ Wrong. The correct answer is: <strong>${q.ans}</strong>. ${q.exp}`;
+    }
+    input.disabled = true;
+  });
+
+  const total = qdata.questions.length;
+  const pct = Math.round((correct/total)*100);
+  const passed = pct >= 70;
+
+  document.getElementById('btn-check').style.display = 'none';
+  document.getElementById('quiz-result-area').innerHTML = `
+    <div class="quiz-result-summary ${passed?'pass':'fail'}">
+      <div style="font-size:2.5rem;margin-bottom:.5rem">${passed?'🎉':'📌'}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900">${passed?'Congratulations!':'Keep Practicing!'}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;margin:.5rem 0;color:${passed?'var(--sage)':'var(--accent)'}">${correct} / ${total}</div>
+      <p style="font-size:.85rem;color:var(--muted)">${passed
+        ? 'You passed! Great job on this week\'s quiz.'
+        : 'Review the explanations above and try again next time.'}</p>
+      <button class="btn-check" onclick="openWeek(${currentWeek})" style="margin-top:1rem;background:var(--sky)">← Back to Week</button>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ██████   D) SELF-ASSESSMENT
+   ════════════════════════════════════════════════════════════════ */
+function openSelfAssessment(){
+  if(!currentWeek) return false;
+  const objectives = SELF_ASSESSMENT[currentWeek] || [];
+  document.getElementById('sa-title').textContent = `Week ${currentWeek} — Self-Assessment`;
+  document.getElementById('sa-sub').textContent = `Check the objectives you feel confident about for Week ${currentWeek}.`;
+  setBreadcrumb(`Week ${currentWeek}`, 'Self-Assessment');
+
+  if(!saChecked[currentWeek]) saChecked[currentWeek] = {};
+
+  const list = document.getElementById('sa-list');
+  list.innerHTML = objectives.map((obj, i) => {
+    const isChecked = saChecked[currentWeek][i] || false;
+    return `
+    <div class="sa-item ${isChecked?'checked':''}" onclick="toggleSA(${i}, this)">
+      <input type="checkbox" ${isChecked?'checked':''} id="sa-cb-${i}">
+      <label for="sa-cb-${i}">${obj}</label>
+    </div>`;
+  }).join('');
+
+  updateSAProgress();
+  showPage('self-assess-page');
+  return false;
+}
+
+function toggleSA(idx, el){
+  if(!saChecked[currentWeek]) saChecked[currentWeek] = {};
+  saChecked[currentWeek][idx] = !saChecked[currentWeek][idx];
+  const cb = document.getElementById(`sa-cb-${idx}`);
+  cb.checked = saChecked[currentWeek][idx];
+  el.classList.toggle('checked', saChecked[currentWeek][idx]);
+  updateSAProgress();
+}
+
+function updateSAProgress(){
+  const objectives = SELF_ASSESSMENT[currentWeek] || [];
+  const checked = Object.values(saChecked[currentWeek] || {}).filter(Boolean).length;
+  const total = objectives.length;
+  const pct = total ? Math.round((checked/total)*100) : 0;
+  document.getElementById('sa-progress').textContent = `${checked} of ${total} objectives completed (${pct}%)`;
+  document.getElementById('sa-bar-fill').style.width = pct + '%';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ██████   FORUM
+   ════════════════════════════════════════════════════════════════ */
 function openForum(){
   if(!currentWeek) return false;
-  document.getElementById('forum-title').textContent=`Week ${currentWeek} — Discussion Forum`;
-  document.getElementById('forum-sub').textContent=`Ask questions and discuss Week ${currentWeek} topics with your classmates.`;
-  setBreadcrumb(`Week ${currentWeek}`,'Forum');
-  document.getElementById('forum-input').value='';
+  document.getElementById('forum-title').textContent = `Week ${currentWeek} — Discussion Forum`;
+  document.getElementById('forum-sub').textContent = `Ask questions and discuss Week ${currentWeek} topics.`;
+  setBreadcrumb(`Week ${currentWeek}`, 'Forum');
+  document.getElementById('forum-input').value = '';
   renderForum();
   showPage('forum-page');
   return false;
 }
 
 function renderForum(){
-  const thread=document.getElementById('forum-thread');
-  const posts=(forumData[currentWeek]||[]);
-  if(!posts.length){ thread.innerHTML=`<div class="placeholder-notice">No posts yet. Be the first! 🌱</div>`; return; }
-  thread.innerHTML=posts.map(p=>`
+  const thread = document.getElementById('forum-thread');
+  const posts = forumData[currentWeek] || [];
+  if(!posts.length){ thread.innerHTML = `<div class="placeholder-notice">No posts yet. Be the first! 🌱</div>`; return; }
+  thread.innerHTML = posts.map(p => `
     <div class="forum-item">
       <div class="fi-meta">
         <div class="fi-avatar">${p.initials}</div>
@@ -734,143 +825,148 @@ function renderForum(){
 }
 
 function postComment(){
-  const text=document.getElementById('forum-input').value.trim();
+  const text = document.getElementById('forum-input').value.trim();
   if(!text) return;
-  if(!forumData[currentWeek]) forumData[currentWeek]=[];
-  const initials=currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  if(!forumData[currentWeek]) forumData[currentWeek] = [];
+  const initials = currentUser.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
   forumData[currentWeek].push({
-    author:currentUser.name, initials,
-    date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    author: currentUser.name, initials,
+    date: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
     text
   });
-  document.getElementById('forum-input').value='';
+  document.getElementById('forum-input').value = '';
   renderForum();
 }
 
-/* ════════════════════════════════════════════════════════
-   EXTRA
-   ════════════════════════════════════════════════════════ */
-function openExtra(){
-  if(!currentWeek) return false;
-  document.getElementById('extra-title').textContent=`Week ${currentWeek} — Extra Support Materials`;
-  document.getElementById('extra-sub').textContent=`Additional exercises for Week ${currentWeek} — assigned by your instructor.`;
-  setBreadcrumb(`Week ${currentWeek}`,'Extra Support');
-  showPage('extra-page');
-  return false;
+/* ════════════════════════════════════════════════════════════════
+   ██████   A) TEACHER PANEL — Fixed & Enhanced
+   ════════════════════════════════════════════════════════════════ */
+function renderTeacherPanel(){
+  setBreadcrumb('Teacher Dashboard', null);
+  document.getElementById('breadcrumb').classList.add('show');
+  renderTeacherStats();
+  renderStudentCards();
 }
 
-/* ════════════════════════════════════════════════════════
-   QUIZ ENGINE
-   ════════════════════════════════════════════════════════ */
-function openQuiz(){
-  if(!currentWeek) return false;
-  const existingScore = getUserScore(currentWeek);
-  if(existingScore!==null){
-    if(!confirm(`You already scored ${existingScore} pts on this quiz. Retake?`)) return false;
-    if(!SCORES[currentUser.uid]) SCORES[currentUser.uid]={};
-    SCORES[currentUser.uid][currentWeek]=null;
-  }
-  const qdata = QUIZZES[currentWeek];
-  quizState = { weekNum:currentWeek, idx:0, answers:Array(25).fill(null), submitted:false };
-  document.getElementById('quiz-title').textContent=`Week ${currentWeek} Quiz`;
-  document.getElementById('quiz-subtitle').textContent=`${qdata.topic} · 25 Questions · 4 pts each`;
-  setBreadcrumb(`Week ${currentWeek}`,'Quiz');
-  renderQuestion();
-  document.getElementById('quiz-result').style.display='none';
-  showPage('quiz-page');
-  return false;
+function renderTeacherStats(){
+  const studentIds = Object.keys(USERS).filter(u => USERS[u].role === 'student');
+  let totalQuizzes=0, totalPassed=0, allScores=[], totalCompletion=0, completionCount=0;
+
+  studentIds.forEach(uid => {
+    const prog = STUDENT_PROGRESS[uid];
+    if(!prog || !prog.weeks) return;
+    Object.values(prog.weeks).forEach(w => {
+      if(w.quizScore !== null){ totalQuizzes++; allScores.push(w.quizScore); if(w.quizScore >= 70) totalPassed++; }
+      totalCompletion += w.completion; completionCount++;
+    });
+  });
+
+  const avg = allScores.length ? Math.round(allScores.reduce((a,b)=>a+b,0)/allScores.length) : 0;
+  const avgCompletion = completionCount ? Math.round(totalCompletion/completionCount) : 0;
+
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="sval blue">${studentIds.length}</div><div class="slabel">Students</div></div>
+    <div class="stat-card"><div class="sval">${totalQuizzes}</div><div class="slabel">Quizzes Taken</div></div>
+    <div class="stat-card"><div class="sval green">${totalPassed}</div><div class="slabel">Passed (≥70)</div></div>
+    <div class="stat-card"><div class="sval red">${totalQuizzes - totalPassed}</div><div class="slabel">Failed</div></div>
+    <div class="stat-card"><div class="sval ${avg>=70?'green':'red'}">${avg}</div><div class="slabel">Avg Quiz Score</div></div>
+    <div class="stat-card"><div class="sval blue">${avgCompletion}%</div><div class="slabel">Avg Completion</div></div>`;
 }
 
-function renderQuestion(){
-  const {idx,answers,weekNum}=quizState;
-  const total=25;
-  const qs=QUIZZES[weekNum].questions;
-  const q=qs[idx];
+function renderStudentCards(){
+  const studentIds = Object.keys(USERS).filter(u => USERS[u].role === 'student');
+  const container = document.getElementById('student-cards');
 
-  document.getElementById('q-prog-label').textContent=`Question ${idx+1} of ${total}`;
-  const pct=Math.round(((idx+1)/total)*100);
-  document.getElementById('q-prog-pct').textContent=pct+'%';
-  document.getElementById('q-prog-bar').style.width=pct+'%';
-  document.getElementById('q-counter').textContent=`${idx+1} / ${total}`;
+  container.innerHTML = studentIds.map(uid => {
+    const u = USERS[uid];
+    const prog = STUDENT_PROGRESS[uid];
+    const weeks = prog ? prog.weeks : {};
+    const weekNums = Object.keys(weeks).map(Number);
+    const initials = u.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
 
-  document.getElementById('btn-prev').disabled=(idx===0);
-  const isLast=(idx===total-1);
-  document.getElementById('btn-next').style.display=isLast?'none':'inline-block';
-  document.getElementById('btn-submit').style.display=isLast?'inline-block':'none';
+    // Calculate averages
+    const scores = weekNums.map(w => weeks[w].quizScore).filter(s => s !== null);
+    const avgScore = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
+    const avgCompletion = weekNums.length ? Math.round(weekNums.reduce((a,w) => a + weeks[w].completion, 0) / weekNums.length) : 0;
+    const hwCount = weekNums.filter(w => weeks[w].homework === 'Submitted').length;
+    const scoreCls = avgScore >= 70 ? 'pass' : avgScore > 0 ? 'fail' : 'none';
 
-  const container=document.getElementById('q-container');
-  container.innerHTML=`
-    <div class="q-card">
-      <div class="q-number">Question ${idx+1} of ${total} &nbsp;·&nbsp; 4 pts</div>
-      <div class="q-text">${q.q}</div>
-      <div class="q-options">
-        ${q.opts.map((opt,oi)=>`
-          <div class="q-opt ${answers[idx]===oi?'selected':''}" onclick="selectOpt(${oi})">
-            <input type="radio" ${answers[idx]===oi?'checked':''}>
-            <span><strong>${String.fromCharCode(65+oi)}.</strong> ${opt}</span>
-          </div>`).join('')}
+    // Week detail badges
+    const weekBadges = weekNums.map(w => {
+      const wd = weeks[w];
+      const sc = wd.quizScore;
+      const cls = sc === null ? 'background:#e9e5dc;color:var(--muted)' : sc >= 70 ? 'background:#d4edda;color:var(--sage)' : 'background:#f8d7da;color:var(--accent)';
+      return `<span class="stu-wk-badge" style="${cls}">W${w}: ${sc !== null ? sc + 'pts' : '—'}</span>`;
+    }).join('');
+
+    // Week detail rows
+    const weekRows = weekNums.map(w => {
+      const wd = weeks[w];
+      const hwCls = wd.homework === 'Submitted' ? 'color:var(--sage)' : wd.homework === 'Late' ? 'color:var(--warn)' : 'color:var(--accent)';
+      return `
+        <tr>
+          <td style="font-family:'DM Mono',monospace;font-size:.78rem">Week ${w}</td>
+          <td>${wd.completion}%</td>
+          <td>${wd.quizScore !== null ? wd.quizScore + ' pts' : '—'}</td>
+          <td style="${hwCls}">${wd.homework}</td>
+          <td>${wd.videoWatched ? '✅' : '❌'}</td>
+          <td>${wd.forumPosts}</td>
+        </tr>`;
+    }).join('');
+
+    return `
+    <div class="stu-card">
+      <div class="stu-header" onclick="toggleStudent('${uid}')">
+        <div class="stu-avatar">${initials}</div>
+        <div>
+          <div class="stu-name">${u.name}</div>
+          <div class="stu-id">${u.id}</div>
+        </div>
+        <div class="stu-summary">
+          <span class="stu-pill ${scoreCls}">Avg: ${avgScore} pts</span>
+          <span class="stu-pill none">${weekNums.length}/16 weeks</span>
+        </div>
+        <span class="stu-toggle" id="toggle-${uid}">▼</span>
+      </div>
+      <div class="stu-detail" id="detail-${uid}">
+        <div class="stu-detail-grid">
+          <div class="stu-detail-item"><div class="sdv ${avgScore>=70?'green':'red'}" style="color:${avgScore>=70?'var(--sage)':'var(--accent)'}">${avgScore}</div><div class="sdl">Avg Quiz</div></div>
+          <div class="stu-detail-item"><div class="sdv" style="color:var(--sky)">${avgCompletion}%</div><div class="sdl">Avg Completion</div></div>
+          <div class="stu-detail-item"><div class="sdv" style="color:var(--sage)">${hwCount}</div><div class="sdl">HW Submitted</div></div>
+          <div class="stu-detail-item"><div class="sdv">${weekNums.length}</div><div class="sdl">Active Weeks</div></div>
+        </div>
+        <div class="stu-week-row" style="margin-top:.8rem">${weekBadges}</div>
+        <div style="margin-top:1rem;overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:.8rem">
+            <thead>
+              <tr style="background:var(--paper);font-size:.68rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">
+                <th style="padding:.5rem;text-align:left">Week</th>
+                <th style="padding:.5rem;text-align:left">Completion</th>
+                <th style="padding:.5rem;text-align:left">Quiz</th>
+                <th style="padding:.5rem;text-align:left">Homework</th>
+                <th style="padding:.5rem;text-align:left">Video</th>
+                <th style="padding:.5rem;text-align:left">Forum</th>
+              </tr>
+            </thead>
+            <tbody>${weekRows}</tbody>
+          </table>
+        </div>
       </div>
     </div>`;
+  }).join('');
 }
 
-function selectOpt(oi){
-  if(quizState.submitted) return;
-  quizState.answers[quizState.idx]=oi;
-  renderQuestion();
+function toggleStudent(uid){
+  const detail = document.getElementById(`detail-${uid}`);
+  const toggle = document.getElementById(`toggle-${uid}`);
+  detail.classList.toggle('show');
+  toggle.classList.toggle('open');
 }
 
-function quizNav(dir){
-  quizState.idx=Math.max(0,Math.min(24,quizState.idx+dir));
-  renderQuestion();
-}
-
-/* ════════════════════════════════════════════════════════
-   UTILS
-   ════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════
+   ██████   UTILS
+   ════════════════════════════════════════════════════════════════ */
 function esc(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-/* ════════════════════════════════════════════════════════
-   VIDEO MODAL
-   ════════════════════════════════════════════════════════ */
-function extractVideoId(url){
-  // youtu.be/3fCjRKder7E -> 3fCjRKder7E
-  // youtube.com/watch?v=3fCjRKder7E -> 3fCjRKder7E
-  if(!url || url==='#') return '';
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&\n?#]+)/);
-  return match ? match[1] : '';
-}
-
-function openVideoModal(videoUrl, title){
-  if(!videoUrl || videoUrl==='#'){
-    alert('Video for this week will be available soon!');
-    return false;
-  }
-  
-  const videoId = extractVideoId(videoUrl);
-  if(!videoId){
-    alert('Invalid video URL');
-    return false;
-  }
-  
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('video-iframe').src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
-  document.getElementById('video-modal').classList.add('show');
-  document.body.style.overflow = 'hidden';
-  return false;
-}
-
-function closeVideoModal(){
-  document.getElementById('video-modal').classList.remove('show');
-  document.getElementById('video-iframe').src = '';
-  document.body.style.overflow = 'auto';
-}
-
-// ESC tuşu ile kapatma
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape' && document.getElementById('video-modal').classList.contains('show')){
-    closeVideoModal();
-  }
-});
 </script>
 </body>
 </html>
