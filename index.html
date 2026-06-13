@@ -196,6 +196,23 @@ header p{margin-top:.6rem;font-size:.85rem;color:rgba(244,239,230,.5);letter-spa
 .stu-week-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.8rem}
 .stu-wk-badge{padding:.2rem .5rem;border-radius:4px;font-size:.68rem;font-family:'DM Mono',monospace}
 
+
+/* ══════════ EXTRA SUPPORT CONTENT ══════════ */
+.extra-content{padding:2.8rem 2rem 5rem;max-width:760px;margin:0 auto}
+.extra-content h3{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin:1.5rem 0 .6rem;color:var(--ink);border-left:3px solid var(--sky);padding-left:.7rem}
+.extra-content h4{font-size:.92rem;font-weight:600;margin:.9rem 0 .4rem;color:var(--accent)}
+.extra-content p{font-size:.9rem;line-height:1.65;margin-bottom:.7rem}
+.extra-content ul,.extra-content ol{padding-left:1.4rem;margin-bottom:.8rem;font-size:.9rem;line-height:1.65}
+.extra-content li{margin-bottom:.3rem}
+.es-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.85rem}
+.es-table th{background:var(--ink);color:var(--paper);padding:.5rem .8rem;text-align:left;font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.04em}
+.es-table td{padding:.5rem .8rem;border-bottom:1px solid var(--border);vertical-align:top}
+.es-table tr:nth-child(even) td{background:rgba(0,0,0,.02)}
+.extra-content strong{color:var(--accent)}
+
+/* ══════════ HOMEWORK PAGE ══════════ */
+.hw-page-wrap{padding:2.8rem 2rem 5rem;max-width:800px;margin:0 auto}
+
 /* ══════════ FOOTER ══════════ */
 footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);border-top:1px solid var(--border);font-family:'DM Mono',monospace;letter-spacing:.05em}
 
@@ -290,14 +307,14 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
         <div class="minfo"><h3>Lesson Forum</h3><p>Ask questions, discuss, share ideas</p></div>
       </a>
       <!-- Homework -->
-      <a class="mcard" id="link-hw" href="#" target="_blank" onclick="return handleLink(this,'Lesson Homework')">
+      <a class="mcard" href="#" onclick="return openHomework()">
         <div class="mico hw">📝</div>
-        <div class="minfo"><h3>Lesson Homework</h3><p>Complete &amp; submit before next session</p></div>
+        <div class="minfo"><h3>Lesson Homework</h3><p>20 fill-in-the-blank questions · Check your answers</p></div>
       </a>
       <!-- Extra Support -->
-      <a class="mcard" id="link-extra" href="#" target="_blank" onclick="return handleLink(this,'Extra Support Materials')">
+      <a class="mcard" href="#" onclick="return openExtraSupport()">
         <div class="mico extra">📚</div>
-        <div class="minfo"><h3>Extra Support Materials</h3><p>Additional exercises for deeper practice</p></div>
+        <div class="minfo"><h3>Extra Support Materials</h3><p>Grammar notes, explanations &amp; example sentences</p></div>
       </a>
       <!-- Self-Assessment -->
       <a class="mcard" href="#" onclick="return openSelfAssessment()" style="border-color:var(--sage);background:linear-gradient(135deg,#f0faf4,var(--card))">
@@ -320,7 +337,7 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
         <div class="mico quiz">📝</div>
         <div class="minfo">
           <h3>Weekly Quiz <span id="quiz-done-badge" class="quiz-done-badge" style="display:none"></span></h3>
-          <p>Fill-in-the-blank · 5 questions · Check your answers</p>
+          <p>Fill-in-the-blank · 20 questions · Check your answers</p>
         </div>
       </a>
     </div>
@@ -348,6 +365,29 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
     <div class="sa-list" id="sa-list"></div>
     <div class="sa-progress" id="sa-progress"></div>
     <div class="sa-bar"><div class="sa-bar-fill" id="sa-bar-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════ EXTRA SUPPORT PAGE ════════════════════ -->
+<div id="extra-page" class="page">
+  <div class="extra-content" id="extra-content-inner">
+    <h2 id="extra-title" class="page-heading">Extra Support Materials</h2>
+    <p id="extra-sub" class="page-sub">Detailed notes and examples for this week's topics.</p>
+    <div id="extra-body"></div>
+  </div>
+</div>
+
+<!-- ════════════════════ HOMEWORK PAGE ════════════════════ -->
+<div id="hw-page" class="page">
+  <div class="quiz-wrap hw-page-wrap">
+    <div class="quiz-header">
+      <h2 id="hw-title">Week 1 Homework</h2>
+      <p id="hw-subtitle">Fill in the blanks · 20 questions · Submit before the next session</p>
+    </div>
+    <div id="hw-questions"></div>
+    <button class="btn-check" id="btn-check-hw" onclick="checkHomeworkAnswers()">Check Answers ✓</button>
+    <div id="hw-result-area"></div>
   </div>
 </div>
 
@@ -381,6 +421,411 @@ footer{text-align:center;padding:1.3rem;font-size:.72rem;color:var(--muted);bord
 /* ════════════════════════════════════════════════════════════════
    ██████   DATA LAYER
    ════════════════════════════════════════════════════════════════ */
+
+
+const HOMEWORK = {
+  1: {
+    topic: 'Verb "to be" & Greetings',
+    questions: [
+      { q: 'Hi! My name ___ Ali.', ans: 'is', hint: 'to be (he/she/it / my name)', exp: 'My name = singular third person → "is".' },
+      { q: 'Nice to meet you. ___ are you from?', ans: 'Where', hint: 'question word for place', exp: '"Where" asks about a place or country of origin.' },
+      { q: 'I ___ a student at Necmettin Erbakan University.', ans: 'am', hint: 'to be for I', exp: 'I + am (first person singular).' },
+      { q: 'She ___ 20 years old.', ans: 'is', hint: 'to be for she', exp: 'She/He/It + is.' },
+      { q: 'We ___ classmates.', ans: 'are', hint: 'to be for we', exp: 'We/You/They + are.' },
+      { q: '___ your name Ali or Mehmet?', ans: 'Is', hint: 'yes/no question with your name', exp: 'To be question: Is + subject (your name = singular).' },
+      { q: 'A: "How old are you?" B: "I ___ 21."', ans: 'am', hint: 'I + ???', exp: 'I + am for age or state.' },
+      { q: 'My parents ___ from Konya.', ans: 'are', hint: 'to be (plural subject)', exp: 'My parents = plural → are.' },
+      { q: 'Hello! ___ to meet you!', ans: 'Nice', hint: 'greeting expression', exp: '"Nice to meet you!" is a standard greeting phrase.' },
+      { q: 'A: "What is your job?" B: "I ___ a doctor."', ans: 'am', hint: 'I + ???', exp: 'I + am → I am a doctor.' },
+      { q: 'My phone number ___ 555-1234.', ans: 'is', hint: 'singular noun → which "to be"?', exp: 'My phone number = singular third person → is.' },
+      { q: 'They ___ not married.', ans: 'are', hint: 'they + to be', exp: 'They + are → They are not married.' },
+      { q: 'Excuse ___! Can you help me?', ans: 'me', hint: 'object pronoun', exp: '"Excuse me" is a polite expression to get attention.' },
+      { q: 'A: "___ is your email?" B: "It is ali@gmail.com."', ans: 'What', hint: 'asking for information', exp: '"What" is used to ask for specific information.' },
+      { q: 'My nationality ___ Turkish.', ans: 'is', hint: 'singular → which "to be"?', exp: 'My nationality (singular) → is.' },
+      { q: 'She ___ a nurse, ___ a doctor.', ans: 'is, not', hint: 'positive + negative "to be"', exp: 'She is ... not a doctor. Correction: She is a nurse, not a doctor.' },
+      { q: 'How do you ___ your name?', ans: 'spell', hint: 'verb related to letters', exp: '"How do you spell your name?" asks for letter-by-letter pronunciation.' },
+      { q: 'A: "___ are you?" B: "Fine, thanks!"', ans: 'How', hint: 'asking about well-being', exp: '"How are you?" asks about someone\'s health/wellbeing.' },
+      { q: 'I ___ from Turkey. I am Turkish.', ans: 'am', hint: 'I + to be', exp: 'I + am → I am from Turkey.' },
+      { q: 'His first name ___ Kemal and his last name ___ Atatürk.', ans: 'is, is', hint: 'two singular subjects', exp: 'His first name / his last name are both singular → is, is.' }
+    ]
+  },
+  2: {
+    topic: 'Possessive Adjectives & Family',
+    questions: [
+      { q: 'This is ___ mother. Her name is Fatma.', ans: 'my', hint: 'I → ___', exp: '"My" is the possessive adjective for I.' },
+      { q: 'He loves ___ father very much.', ans: 'his', hint: 'he → ___', exp: '"His" is the possessive adjective for he.' },
+      { q: 'She visits ___ grandparents every weekend.', ans: 'her', hint: 'she → ___', exp: '"Her" is the possessive adjective for she.' },
+      { q: 'We do ___ homework together.', ans: 'our', hint: 'we → ___', exp: '"Our" is the possessive adjective for we.' },
+      { q: 'They love ___ children very much.', ans: 'their', hint: 'they → ___', exp: '"Their" is the possessive adjective for they.' },
+      { q: 'This is Ali___ sister, Ayşe.', ans: "'s", hint: 'possessive apostrophe-s', exp: 'Ali\'s sister → possessive \'s shows ownership/relationship.' },
+      { q: 'The dog plays with ___ toys in the garden.', ans: 'its', hint: 'animal/thing → ___', exp: '"Its" is the possessive adjective for things/animals (no apostrophe).' },
+      { q: 'Can you bring ___ book? I forgot it.', ans: 'your', hint: 'you → ___', exp: '"Your" is the possessive adjective for you.' },
+      { q: 'My brother___ wife is a teacher.', ans: "'s", hint: 'possessive apostrophe-s', exp: 'My brother\'s wife → possessive \'s.' },
+      { q: 'She is my ___. We have the same mother and father.', ans: 'sister', hint: 'female sibling', exp: 'A female sibling is called a sister.' },
+      { q: 'He is my ___. He is my father\'s father.', ans: 'grandfather', hint: 'father\'s father', exp: 'Your father\'s father is your grandfather.' },
+      { q: 'My aunt___ son is my ___.', ans: "'s, cousin", hint: 'apostrophe + relationship', exp: 'My aunt\'s son is my cousin (possessive \'s + family vocabulary).' },
+      { q: 'Do you have any brothers or ___?', ans: 'sisters', hint: 'plural of female sibling', exp: 'Brothers and sisters = siblings (male and female).' },
+      { q: 'My parents___ names are Ahmet and Zeynep.', ans: "'", hint: 'plural possessive (no extra s)', exp: 'Plural possessive: parents\' (apostrophe after the s).' },
+      { q: 'This is ___ house. We all live here together.', ans: 'our', hint: 'we → ___', exp: '"Our" shows belonging to us (plural first person).' },
+      { q: 'She has two children. ___ son is 5 and ___ daughter is 8.', ans: 'Her, her', hint: 'she → ___ (twice)', exp: '"Her" is possessive for she — used twice.' },
+      { q: 'His uncle___ name is Mustafa.', ans: "'s", hint: 'apostrophe-s ownership', exp: 'His uncle\'s name → possessive \'s.' },
+      { q: 'We live with ___ grandparents in a big house.', ans: 'our', hint: 'we → ___', exp: '"Our" grandparents = the grandparents belonging to us.' },
+      { q: 'The children play with ___ toys every day.', ans: 'their', hint: 'they → ___', exp: '"Their" is the possessive adjective for they.' },
+      { q: 'My mother___ sister is my ___.', ans: "'s, aunt", hint: 'apostrophe-s + relationship', exp: 'My mother\'s sister is my aunt.' }
+    ]
+  },
+  3: {
+    topic: 'Present Simple & Adverbs of Frequency',
+    questions: [
+      { q: 'She ___ to school every day.', ans: 'goes', hint: 'he/she/it + go', exp: 'He/She/It → verb + s/es. Go → goes.' },
+      { q: 'I ___ coffee in the morning.', ans: 'drink', hint: 'I + verb base', exp: 'I/You/We/They → base verb (no -s).' },
+      { q: 'He ___ always ___ his teeth before bed.', ans: 'always brushes', hint: 'adverb position + he/she/it', exp: 'Always goes before the main verb. He brushes (verb+s).' },
+      { q: 'We ___ never ___ TV on weekdays.', ans: 'never watch', hint: 'adverb + we + base verb', exp: 'Never goes before the main verb. We watch (no -s).' },
+      { q: 'She ___ usually ___ up at 7 a.m.', ans: 'usually wakes', hint: 'adverb position + she', exp: 'Usually before the verb. She wakes (verb+s).' },
+      { q: 'My father ___ the newspaper every morning.', ans: 'reads', hint: 'he/she/it + read', exp: 'My father (he) → reads (verb+s).' },
+      { q: 'They ___ sometimes ___ to the cinema.', ans: 'sometimes go', hint: 'adverb + they + base verb', exp: 'Sometimes before main verb. They go (no -s).' },
+      { q: 'Do you ___ exercise regularly?', ans: 'do', hint: 'do/does question + you', exp: 'Questions with you/we/they → Do + base verb.' },
+      { q: 'She ___ not eat meat. She is vegetarian.', ans: 'does', hint: 'negative auxiliary for she', exp: 'Negative for he/she/it → does not + base verb.' },
+      { q: 'My sister ___ to music while she studies.', ans: 'listens', hint: 'she + listen', exp: 'She → listens (verb+s).' },
+      { q: 'I ___ always late for class!', ans: 'am', hint: 'I + to be + adverb', exp: 'With to be: I am always late (adverb after "am").' },
+      { q: '___ he work on Saturdays?', ans: 'Does', hint: 'question auxiliary for he', exp: 'Questions with he/she/it → Does + base verb.' },
+      { q: 'We ___ often ___ our grandparents at weekends.', ans: 'often visit', hint: 'adverb + we + base verb', exp: 'Often goes before main verb. We visit.' },
+      { q: 'She ___ her homework after dinner.', ans: 'does', hint: 'she + do (homework)', exp: 'She does her homework (irregular: do → does).' },
+      { q: 'They ___ hardly ever ___ fast food.', ans: 'hardly ever eat', hint: 'adverb phrase + they', exp: 'Hardly ever before main verb. They eat.' },
+      { q: 'He ___ always ___ polite to everyone.', ans: 'is always', hint: 'to be + adverb for he', exp: 'With to be: He is always polite (adverb after "is").' },
+      { q: 'My parents ___ dinner at 7 p.m.', ans: 'have', hint: 'they + have', exp: 'My parents (they) → have (no -s for plural).' },
+      { q: 'I ___ usually ___ to bed before midnight.', ans: 'usually go', hint: 'adverb + I + base verb', exp: 'Usually before main verb. I go.' },
+      { q: 'She ___ her teeth twice a day.', ans: 'brushes', hint: 'she + brush', exp: 'She → brushes (verb+es after -sh).' },
+      { q: '___ they live in Istanbul or Ankara?', ans: 'Do', hint: 'question with they', exp: 'Questions with they → Do + base verb.' }
+    ]
+  },
+  4: {
+    topic: 'There is/are & Prepositions of Place',
+    questions: [
+      { q: '___ is a sofa in the living room.', ans: 'There', hint: '"There ___" for existence', exp: '"There is" introduces the existence of something (singular).' },
+      { q: 'There ___ two bedrooms in my house.', ans: 'are', hint: 'plural subject → are', exp: 'Two bedrooms is plural → There are.' },
+      { q: 'The cat is ___ the table. (on top of it)', ans: 'on', hint: 'surface contact', exp: '"On" = surface contact (on top of).' },
+      { q: 'The books are ___ the shelf.', ans: 'on', hint: 'surface', exp: 'Books placed on a surface → "on the shelf".' },
+      { q: 'There ___ not a garden in my flat.', ans: 'is', hint: 'singular → is/are', exp: 'Singular noun (a garden) → There is not.' },
+      { q: 'My keys are ___ the drawer. (inside)', ans: 'in', hint: 'inside something', exp: '"In" = inside a container or enclosed space.' },
+      { q: '___ there a bathroom on the first floor?', ans: 'Is', hint: 'yes/no question singular', exp: 'Question form: Is there (singular)?' },
+      { q: 'The lamp is ___ the table. (above it)', ans: 'above', hint: 'higher position, not touching', exp: '"Above" = higher than, not necessarily touching.' },
+      { q: '___ there any chairs in the kitchen?', ans: 'Are', hint: 'yes/no question plural', exp: 'Are there (plural) → asking about multiple items.' },
+      { q: 'The dog is ___ the sofa. (lower position)', ans: 'under', hint: 'lower than', exp: '"Under" = below / beneath something.' },
+      { q: 'There ___ a mirror in the bathroom.', ans: 'is', hint: 'singular mirror', exp: 'A mirror is singular → There is a mirror.' },
+      { q: 'The school is ___ the park and the library.', ans: 'between', hint: 'two things on each side', exp: '"Between" = in the middle of two things.' },
+      { q: 'There are ___ flowers in the garden.', ans: 'some', hint: 'affirmative plural → some/any', exp: 'In affirmative sentences use "some" for uncountable/plural nouns.' },
+      { q: 'There ___ any chairs in the room.', ans: "aren't", hint: 'negative plural → are/aren\'t', exp: 'Negative: There aren\'t any chairs.' },
+      { q: 'The picture is ___ the wall.', ans: 'on', hint: 'attached to a surface', exp: 'Pictures hang "on" walls (surface contact).' },
+      { q: 'My house is ___ the supermarket. (close distance)', ans: 'near', hint: 'close to', exp: '"Near" = close to, not far from.' },
+      { q: 'The wardrobe is ___ the bedroom.', ans: 'in', hint: 'inside the room', exp: 'Furniture is placed "in" a room.' },
+      { q: 'There ___ a lot of furniture in the living room.', ans: 'is', hint: 'furniture = uncountable → is/are', exp: '"Furniture" is uncountable → There is a lot of furniture.' },
+      { q: 'The chair is ___ the desk.', ans: 'next to', hint: 'beside / alongside', exp: '"Next to" = beside, immediately adjacent.' },
+      { q: 'There is ___ a supermarket near my house.', ans: 'not', hint: 'negative form of there is', exp: 'Negative: There is not a supermarket (or: There isn\'t).' }
+    ]
+  },
+  5: {
+    topic: 'Countable/Uncountable & some/any/much/many',
+    questions: [
+      { q: 'There is ___ milk in the fridge.', ans: 'some', hint: 'affirmative + uncountable', exp: '"Some" in positive statements with uncountable nouns.' },
+      { q: 'Is there ___ sugar in this tea?', ans: 'any', hint: 'question + uncountable', exp: '"Any" in questions and negatives.' },
+      { q: 'How ___ apples do you want?', ans: 'many', hint: 'countable → much or many?', exp: '"Many" for countable nouns (apples = countable).' },
+      { q: 'She doesn\'t eat ___ meat.', ans: 'much', hint: 'negative + uncountable', exp: '"Much" for uncountable nouns in negatives/questions.' },
+      { q: 'We need ___ bread for the sandwiches.', ans: 'some', hint: 'affirmative + uncountable', exp: '"Some" in affirmative sentences with uncountable nouns.' },
+      { q: 'There aren\'t ___ oranges left.', ans: 'any', hint: 'negative + countable plural', exp: '"Any" in negative sentences.' },
+      { q: 'Can I have ___ water, please?', ans: 'some', hint: 'polite request', exp: 'In polite requests/offers, we use "some" even in questions.' },
+      { q: 'How ___ coffee do you drink a day?', ans: 'much', hint: 'uncountable → much or many?', exp: '"Much" for uncountable nouns (coffee = uncountable).' },
+      { q: 'I have ___ of friends in this city.', ans: 'a lot', hint: 'large quantity (neutral)', exp: '"A lot of" = large quantity, used in positive sentences.' },
+      { q: 'There is ___ rice but no bread.', ans: 'some', hint: 'affirmative + uncountable', exp: '"Some" for uncountable in positive sentences.' },
+      { q: 'Do we have ___ eggs?', ans: 'any', hint: 'question + countable', exp: '"Any" in questions.' },
+      { q: 'She drinks ___ water every day — about 2 litres.', ans: 'a lot of', hint: 'large quantity', exp: '"A lot of" works with both countable and uncountable.' },
+      { q: 'There is ___ food in the house. We need to shop.', ans: 'no', hint: 'zero quantity', exp: '"No" = not any. There is no food = There isn\'t any food.' },
+      { q: 'Would you like ___ tea or coffee?', ans: 'some', hint: 'polite offer', exp: 'In offers we use "some" even in question form.' },
+      { q: 'I don\'t have ___ money right now.', ans: 'any', hint: 'negative + uncountable', exp: '"Any" in negative sentences with uncountable nouns.' },
+      { q: 'How ___ glasses of water did you drink?', ans: 'many', hint: 'countable glasses', exp: '"Glasses" is countable → "many".' },
+      { q: 'There are ___ vegetables in this soup.', ans: 'a lot of', hint: 'large quantity, positive', exp: '"A lot of" in positive sentences (countable or uncountable).' },
+      { q: '___ salt is bad for your health.', ans: 'Too much', hint: 'excessive amount uncountable', exp: '"Too much" + uncountable noun = excessive, unhealthy amount.' },
+      { q: 'There are ___ children in the park today.', ans: 'many', hint: 'large number of countable noun', exp: '"Many" in positive/question sentences with countable nouns.' },
+      { q: 'I need ___ information about the course.', ans: 'some', hint: 'affirmative + uncountable noun', exp: 'Information is uncountable → "some information".' }
+    ]
+  },
+  6: {
+    topic: 'Comparative & Superlative Adjectives',
+    questions: [
+      { q: 'Istanbul is ___ than Ankara. (big)', ans: 'bigger', hint: 'big → comparative', exp: 'Big → bigger (double the last consonant for short adjectives).' },
+      { q: 'She is the ___ student in the class. (smart)', ans: 'smartest', hint: 'smart → superlative', exp: 'Smart → smartest (add -est).' },
+      { q: 'This road is ___ than the other one. (long)', ans: 'longer', hint: 'long → comparative', exp: 'Long → longer (add -er).' },
+      { q: 'He is ___ than his brother. (tall)', ans: 'taller', hint: 'tall → comparative', exp: 'Tall → taller (add -er).' },
+      { q: 'This is the ___ film I have ever seen. (bad)', ans: 'worst', hint: 'bad → superlative (irregular)', exp: 'Bad → worse (comparative) → worst (superlative, irregular).' },
+      { q: 'My English is ___ than it was last year. (good)', ans: 'better', hint: 'good → comparative (irregular)', exp: 'Good → better (comparative, irregular).' },
+      { q: 'She is the ___ girl in the room. (beautiful)', ans: 'most beautiful', hint: 'long adjective → most ___', exp: 'Long adjectives (3+ syllables) → most + adjective.' },
+      { q: 'This bag is ___ than that one. (expensive)', ans: 'more expensive', hint: 'long adjective → more ___', exp: 'Expensive (3 syllables) → more expensive.' },
+      { q: 'He is the ___ player on the team. (fast)', ans: 'fastest', hint: 'fast → superlative', exp: 'Fast → fastest (add -est).' },
+      { q: 'This city is ___ ___ London. (not as big)', ans: 'not as big as', hint: 'equal comparison negative', exp: '"Not as big as" = smaller than; negative equal comparison.' },
+      { q: 'Today is ___ than yesterday. (cold)', ans: 'colder', hint: 'cold → comparative', exp: 'Cold → colder (add -er).' },
+      { q: 'This is the ___ cake I have ever eaten. (delicious)', ans: 'most delicious', hint: 'long adjective → superlative', exp: 'Delicious (3 syllables) → most delicious.' },
+      { q: 'My sister is ___ than me. (young)', ans: 'younger', hint: 'young → comparative', exp: 'Young → younger (add -er).' },
+      { q: 'He speaks English ___ ___ his teacher. (not as well)', ans: 'not as well as', hint: 'negative equal comparison adverb', exp: '"Not as well as" = worse than; equal comparison for adverbs.' },
+      { q: 'She is ___ student in the school. (clever → superlative)', ans: 'the cleverest', hint: 'short adjective superlative with "the"', exp: 'Clever → cleverest. Superlatives need "the".' },
+      { q: 'Mount Everest is the ___ mountain in the world. (high)', ans: 'highest', hint: 'high → superlative', exp: 'High → highest. The highest (superlative + "the").' },
+      { q: 'This problem is ___ than I thought. (difficult)', ans: 'more difficult', hint: 'long adjective → more ___', exp: 'Difficult (3 syllables) → more difficult.' },
+      { q: 'She runs ___ than all her classmates. (fast)', ans: 'faster', hint: 'adverb comparative', exp: 'Fast → faster (comparative form for adverbs too).' },
+      { q: 'The test was ___ than we expected. (easy)', ans: 'easier', hint: 'easy → comparative (y → i)', exp: 'Easy → easier (change y to i, add -er).' },
+      { q: 'He is the ___ person I know. (kind)', ans: 'kindest', hint: 'kind → superlative', exp: 'Kind → kindest (add -est).' }
+    ]
+  },
+  7: {
+    topic: 'Imperatives & Prepositions of Movement',
+    questions: [
+      { q: '___ left at the traffic lights.', ans: 'Turn', hint: 'imperative direction verb', exp: '"Turn left/right" is the standard direction instruction.' },
+      { q: '___ straight on until you reach the park.', ans: 'Go', hint: 'imperative movement verb', exp: '"Go straight on" means continue without turning.' },
+      { q: 'The bank is ___ the post office. (on the other side)', ans: 'opposite', hint: 'directly facing', exp: '"Opposite" = directly across from.' },
+      { q: 'Please ___ down the stairs carefully.', ans: 'go', hint: 'movement imperative', exp: '"Go down" = move in a downward direction.' },
+      { q: '___ the bridge and then turn right.', ans: 'Cross', hint: 'go over a bridge', exp: '"Cross" = go over/across (a road, bridge, river).' },
+      { q: 'Walk ___ the park to get to the library.', ans: 'through', hint: 'movement inside/across', exp: '"Through" = movement from one side to the other inside something.' },
+      { q: 'The museum is ___ the station. (next to)', ans: 'next to', hint: 'beside', exp: '"Next to" = beside, immediately adjacent.' },
+      { q: 'The cat jumped ___ the fence.', ans: 'over', hint: 'movement to the other side above', exp: '"Over" = movement above and to the other side.' },
+      { q: '___ the roundabout and take the second exit.', ans: 'Go around', hint: 'movement around a circle', exp: '"Go around" = move in a circle around something.' },
+      { q: 'Please ___ your phone during the exam.', ans: "don't use", hint: 'negative imperative', exp: 'Negative imperative: Don\'t + base verb.' },
+      { q: 'The café is ___ the cinema and the bookshop.', ans: 'between', hint: 'two things on each side', exp: '"Between" = in the middle of two places.' },
+      { q: 'Walk ___ the bridge to cross the river.', ans: 'across', hint: 'from one side to other', exp: '"Across" = from one side to another (crossing something).' },
+      { q: '___ quiet in the library, please.', ans: 'Be', hint: 'to be → imperative', exp: '"Be quiet" = imperative of "to be".' },
+      { q: 'The school is ___ the street from the hospital.', ans: 'across', hint: 'other side of the road', exp: '"Across the street" = on the other side of the road.' },
+      { q: '___ run in the corridors!', ans: "Don't", hint: 'negative imperative start', exp: 'Negative imperative: Don\'t + verb.' },
+      { q: 'Go ___ the tunnel to save time.', ans: 'through', hint: 'movement inside a tunnel', exp: '"Through" = entering one side and exiting the other.' },
+      { q: 'The pharmacy is ___ the right side of the street.', ans: 'on', hint: 'side of the street', exp: '"On the right/left side" = location on a side.' },
+      { q: 'Take the stairs and go ___ to the third floor.', ans: 'up', hint: 'upward movement', exp: '"Go up" = move upward (stairs, elevator etc.).' },
+      { q: '___ the second street on the left.', ans: 'Take', hint: 'direction instruction verb', exp: '"Take the second left" = turn into the second street on the left.' },
+      { q: 'Go ___ the supermarket and you\'ll see the bank.', ans: 'past', hint: 'pass without stopping', exp: '"Go past" = pass by without stopping.' }
+    ]
+  },
+  8: {
+    topic: 'Going to, Can, Must, Need to — Travel',
+    questions: [
+      { q: 'She ___ ___ visit Paris next summer.', ans: 'is going to', hint: 'future plan (she)', exp: '"Going to" for future plans: She is going to visit.' },
+      { q: 'I ___ ___ buy train tickets tomorrow.', ans: 'am going to', hint: 'future plan (I)', exp: '"Going to" for future plans: I am going to buy.' },
+      { q: 'They ___ not speak French.', ans: 'cannot', hint: 'inability (they)', exp: '"Cannot/Can\'t" for inability.' },
+      { q: 'You ___ show your passport at the border.', ans: 'must', hint: 'obligation (strong)', exp: '"Must" = strong obligation/necessity.' },
+      { q: 'Passengers ___ smoke on the plane.', ans: 'must not', hint: 'prohibition (strong negative)', exp: '"Must not" = prohibition (you are not allowed to).' },
+      { q: '___ you swim?', ans: 'Can', hint: 'ability question', exp: '"Can + you" to ask about ability.' },
+      { q: 'We ___ ___ book the hotel in advance.', ans: 'need to', hint: 'necessity / requirement', exp: '"Need to" = it is necessary.' },
+      { q: 'They ___ ___ take a taxi from the airport.', ans: 'are going to', hint: 'future plan (they)', exp: '"Going to" for future plans: They are going to take.' },
+      { q: 'She ___ ___ swim very well.', ans: 'can', hint: 'ability (she)', exp: '"Can" + base verb for ability.' },
+      { q: 'You ___ arrive late — the train won\'t wait!', ans: "mustn't", hint: 'strong prohibition', exp: '"Mustn\'t" = must not — strong prohibition.' },
+      { q: 'We ___ buy a new suitcase for the trip.', ans: 'need to', hint: 'necessity', exp: '"Need to" = it is necessary/required.' },
+      { q: 'He ___ ___ travel by plane — he\'s afraid of flying.', ans: "can't", hint: 'inability or unwillingness', exp: '"Can\'t" for inability.' },
+      { q: 'You ___ check in two hours before departure.', ans: 'must', hint: 'airport regulation = obligation', exp: '"Must" for rules and obligations.' },
+      { q: 'She ___ ___ visit her sister in Berlin next month.', ans: 'is going to', hint: 'future plan (she)', exp: 'She is going to visit.' },
+      { q: 'We ___ show our boarding passes at the gate.', ans: 'need to', hint: 'requirement', exp: '"Need to" = necessity.' },
+      { q: '___ I take photos here?', ans: 'Can', hint: 'asking permission', exp: '"Can I" = asking for permission.' },
+      { q: 'He ___ ___ take a bus or the metro.', ans: 'can', hint: 'option/choice ability', exp: '"Can" for options and possibilities.' },
+      { q: 'They ___ hurry or they\'ll miss the flight.', ans: 'must', hint: 'urgent obligation', exp: '"Must" for urgent necessity.' },
+      { q: 'I ___ not drive — I don\'t have a licence.', ans: 'cannot', hint: 'inability (I)', exp: '"Cannot" = inability (no licence = physically/legally unable).' },
+      { q: 'We ___ ___ visit Rome, Florence, and Venice.', ans: 'are going to', hint: 'future travel plan (we)', exp: 'We are going to visit (future plan).' }
+    ]
+  },
+  9: {
+    topic: 'Should/Shouldn\'t — Health & Body',
+    questions: [
+      { q: 'You ___ drink more water every day.', ans: 'should', hint: 'positive advice', exp: '"Should" = advice or recommendation (positive).' },
+      { q: 'She ___ eat so much sugar. It\'s bad for her.', ans: "shouldn't", hint: 'negative advice', exp: '"Shouldn\'t" = advice against something.' },
+      { q: 'My head ___. I need some medicine.', ans: 'hurts', hint: 'body pain verb (head)', exp: '"My head hurts/aches" = I have a headache.' },
+      { q: 'He has a cold. He ___ stay at home and rest.', ans: 'should', hint: 'advice for illness', exp: '"Should" recommends the right action.' },
+      { q: 'You ___ go to bed late before an exam.', ans: "shouldn't", hint: 'negative advice', exp: '"Shouldn\'t" = it is not recommended.' },
+      { q: 'I have a sore ___. It hurts when I swallow.', ans: 'throat', hint: 'body part you swallow with', exp: 'A "sore throat" = pain in the throat when swallowing.' },
+      { q: 'The doctor says I ___ take this medicine twice a day.', ans: 'should', hint: 'doctor\'s advice', exp: '"Should" for doctor\'s recommendations.' },
+      { q: 'We ___ exercise at least three times a week.', ans: 'should', hint: 'health advice', exp: '"Should" for health recommendations.' },
+      { q: 'She has a ___. Her temperature is 39°C.', ans: 'fever', hint: 'high temperature', exp: 'A "fever" = high body temperature caused by illness.' },
+      { q: 'He ___ smoke — it\'s very dangerous.', ans: "shouldn't", hint: 'negative health advice', exp: '"Shouldn\'t" for unhealthy habits.' },
+      { q: 'I have a ___. I sneeze and my nose runs.', ans: 'cold', hint: 'common illness with sneezing', exp: 'A "cold" = common illness with runny nose and sneezing.' },
+      { q: 'You ___ skip meals. Eat regularly!', ans: "shouldn't", hint: 'negative advice (skipping meals)', exp: '"Shouldn\'t skip" = it is not recommended to skip meals.' },
+      { q: 'She ___ see a doctor if her pain continues.', ans: 'should', hint: 'recommendation (pain)', exp: '"Should" = I recommend you do this.' },
+      { q: 'My ___ hurts. I ate too much at dinner!', ans: 'stomach', hint: 'digestion organ', exp: '"Stomach" = the organ that processes food.' },
+      { q: 'You ___ wear sunscreen in summer.', ans: 'should', hint: 'health/skin advice', exp: '"Should" for positive advice and recommendations.' },
+      { q: 'He has a ___. His lower back is in pain.', ans: 'backache', hint: 'back + ache', exp: 'Backache (or back pain) = pain in the back.' },
+      { q: 'She ___ drink cold water when she has a sore throat.', ans: "shouldn't", hint: 'negative health advice', exp: '"Shouldn\'t" = not recommended.' },
+      { q: 'Children ___ eat more fruit and vegetables.', ans: 'should', hint: 'general health advice', exp: '"Should" for general health recommendations.' },
+      { q: 'He ___ go to work if he has a high fever.', ans: "shouldn't", hint: 'negative advice (working when sick)', exp: '"Shouldn\'t" = it is better not to.' },
+      { q: 'You ___ wash your hands regularly to avoid illness.', ans: 'should', hint: 'hygiene advice', exp: '"Should" = it is a good idea to.' }
+    ]
+  },
+  10: {
+    topic: 'Present Continuous & Weather',
+    questions: [
+      { q: 'Look! It ___ ___! (rain)', ans: 'is raining', hint: 'present continuous (it)', exp: '"It is raining" = action happening right now (present continuous).' },
+      { q: 'She ___ ___ a book at the moment. (read)', ans: 'is reading', hint: 'present continuous (she)', exp: 'She is reading (present continuous for now).' },
+      { q: 'They ___ ___ football in the park. (play)', ans: 'are playing', hint: 'present continuous (they)', exp: 'They are playing (present continuous, plural subject).' },
+      { q: 'What ___ you ___ right now? (do)', ans: 'are, doing', hint: 'question form present continuous', exp: '"What are you doing?" = present continuous question.' },
+      { q: 'I ___ ___ lunch right now. (have)', ans: 'am having', hint: 'present continuous (I)', exp: '"I am having lunch" = action in progress.' },
+      { q: 'The sun ___ ___. It\'s a beautiful day. (shine)', ans: 'is shining', hint: 'present continuous (it/the sun)', exp: 'The sun is shining = happening now.' },
+      { q: 'He ___ ___ his homework at the moment. (not do)', ans: 'is not doing', hint: 'negative present continuous (he)', exp: '"He is not doing" = negative present continuous.' },
+      { q: '___ it ___ outside? (snow)', ans: 'Is, snowing', hint: 'yes/no question present continuous (it)', exp: '"Is it snowing?" = yes/no question in present continuous.' },
+      { q: 'The weather ___ ___ colder this week. (get)', ans: 'is getting', hint: 'gradual change now', exp: '"Is getting" = gradual change happening now or this period.' },
+      { q: 'We ___ ___ a great time at the beach! (have)', ans: 'are having', hint: 'present continuous (we)', exp: '"We are having" = happening now.' },
+      { q: 'It\'s very ___ today. You need a coat!', ans: 'cold', hint: 'low temperature adjective', exp: '"Cold" = low temperature weather.' },
+      { q: 'The children ___ ___ in the garden. (run)', ans: 'are running', hint: 'present continuous (they)', exp: '"Are running" = action in progress.' },
+      { q: 'The temperature ___ ___ at the moment. (rise)', ans: 'is rising', hint: 'it (temperature) + present continuous', exp: '"Is rising" = gradual increase happening now.' },
+      { q: 'Why ___ she ___? (cry)', ans: 'is, crying', hint: 'question + she present continuous', exp: '"Why is she crying?" = present continuous question.' },
+      { q: 'It\'s ___ and warm — perfect for a picnic!', ans: 'sunny', hint: 'sun is out adjective', exp: '"Sunny" = full of sunshine, bright weather.' },
+      { q: 'He ___ ___ his car at the moment. (wash)', ans: 'is washing', hint: 'he + present continuous', exp: '"He is washing" = happening right now.' },
+      { q: 'Don\'t go out! A ___ is coming. (strong wind storm)', ans: 'storm', hint: 'extreme weather event', exp: 'A "storm" = violent weather with strong wind and rain.' },
+      { q: 'She ___ ___ to music right now. (listen)', ans: 'is listening', hint: 'she + present continuous', exp: '"She is listening" = action in progress.' },
+      { q: 'The sky is very ___. It will rain soon.', ans: 'cloudy', hint: 'covered with clouds adjective', exp: '"Cloudy" = sky covered with clouds.' },
+      { q: 'They ___ ___ for the bus. (wait)', ans: 'are waiting', hint: 'they + present continuous', exp: '"They are waiting" = action happening right now.' }
+    ]
+  },
+  11: {
+    topic: 'Verb Patterns: like/love/hate + -ing & Hobbies',
+    questions: [
+      { q: 'She loves ___ (swim) in the sea.', ans: 'swimming', hint: 'love + verb-ing', exp: '"Love + verb-ing": She loves swimming.' },
+      { q: 'He hates ___ (get up) early in the morning.', ans: 'getting up', hint: 'hate + verb-ing', exp: '"Hate + verb-ing": He hates getting up.' },
+      { q: 'I enjoy ___ (play) basketball after school.', ans: 'playing', hint: 'enjoy + verb-ing', exp: '"Enjoy + verb-ing": I enjoy playing.' },
+      { q: 'They don\'t like ___ (study) at night.', ans: 'studying', hint: 'like + verb-ing', exp: '"Like + verb-ing": They don\'t like studying.' },
+      { q: 'My sister is good at ___ (dance).', ans: 'dancing', hint: 'good at + verb-ing', exp: '"Good at + verb-ing": She is good at dancing.' },
+      { q: 'Do you mind ___ (wait) for me?', ans: 'waiting', hint: 'mind + verb-ing', exp: '"Mind + verb-ing": Do you mind waiting?' },
+      { q: 'He can\'t stand ___ (watch) horror films.', ans: 'watching', hint: 'can\'t stand + verb-ing', exp: '"Can\'t stand + verb-ing": He can\'t stand watching.' },
+      { q: 'She is interested in ___ (learn) languages.', ans: 'learning', hint: 'interested in + verb-ing', exp: '"Interested in + verb-ing": She is interested in learning.' },
+      { q: 'They love ___ (cook) Italian food.', ans: 'cooking', hint: 'love + verb-ing', exp: '"Love + verb-ing": They love cooking.' },
+      { q: 'I prefer ___ (read) to ___ (watch) TV.', ans: 'reading, watching', hint: 'prefer + verb-ing to + verb-ing', exp: '"Prefer + verb-ing to + verb-ing": I prefer reading to watching.' },
+      { q: 'She is a good ___. She draws beautifully.', ans: 'artist', hint: 'person who draws/paints', exp: 'An "artist" is someone who creates art (drawing, painting, etc.).' },
+      { q: 'He enjoys ___ (take) photographs in nature.', ans: 'taking', hint: 'enjoy + verb-ing', exp: '"Enjoy + verb-ing": He enjoys taking photographs.' },
+      { q: 'Playing ___ is my favourite hobby.', ans: 'chess', hint: 'board game with kings and queens', exp: 'Chess is a strategic board game, a popular hobby.' },
+      { q: 'She ___ cycling in the park every Sunday.', ans: 'goes', hint: 'go + sport/activity', exp: '"Go + verb-ing" for sports/activities: She goes cycling.' },
+      { q: 'Do you like ___ (listen) to classical music?', ans: 'listening', hint: 'like + verb-ing', exp: '"Like + verb-ing": Do you like listening?' },
+      { q: 'He ___ jogging every morning before work.', ans: 'goes', hint: 'go + verb-ing activity', exp: '"Go jogging" = he goes jogging (routine activity).' },
+      { q: 'She hates ___ (iron) clothes.', ans: 'ironing', hint: 'hate + verb-ing', exp: '"Hate + verb-ing": She hates ironing.' },
+      { q: 'They enjoy ___ (camp) in the mountains in summer.', ans: 'camping', hint: 'enjoy + verb-ing', exp: '"Enjoy + verb-ing": They enjoy camping.' },
+      { q: 'I don\'t mind ___ (help) you with your homework.', ans: 'helping', hint: 'don\'t mind + verb-ing', exp: '"Don\'t mind + verb-ing": I don\'t mind helping.' },
+      { q: 'She is passionate about ___ (paint).', ans: 'painting', hint: 'passionate about + verb-ing', exp: '"Passionate about + verb-ing": She is passionate about painting.' }
+    ]
+  },
+  12: {
+    topic: 'Going to vs. Will & Future Time Expressions',
+    questions: [
+      { q: 'I think it ___ rain tomorrow.', ans: 'will', hint: 'prediction (no evidence)', exp: '"Will" for predictions without current evidence.' },
+      { q: 'Look at those clouds! It ___ ___ rain.', ans: 'is going to', hint: 'prediction with evidence', exp: '"Going to" for predictions based on current evidence (clouds = evidence).' },
+      { q: 'She ___ ___ visit her grandmother next weekend. (plan)', ans: 'is going to', hint: 'pre-made plan', exp: '"Going to" for pre-made plans.' },
+      { q: 'A: "I\'m cold." B: "I ___ get you a blanket." (spontaneous)', ans: 'will', hint: 'spontaneous decision', exp: '"Will" for spontaneous decisions made at the moment of speaking.' },
+      { q: 'They ___ ___ move to Ankara next year. (plan)', ans: 'are going to', hint: 'future plan (they)', exp: '"Going to" for future plans: They are going to move.' },
+      { q: 'I think the bus ___ be late tonight.', ans: 'will', hint: 'prediction', exp: '"Will" for predictions and opinions about the future.' },
+      { q: 'He ___ ___ study medicine at university. (already decided)', ans: 'is going to', hint: 'prior decision', exp: '"Going to" for decisions already made before speaking.' },
+      { q: 'A: "Who wants to help?" B: "I ___!" (volunteer)', ans: "I'll", hint: 'spontaneous offer/decision', exp: '"Will" (I\'ll) for spontaneous offers or volunteering.' },
+      { q: '___ they come to the party ___ Friday?', ans: 'Are, next', hint: '"going to" question form + time expression', exp: '"Are they going to come next Friday?" = future arrangement question.' },
+      { q: 'I ___ ___ buy a new laptop soon. (plan)', ans: 'am going to', hint: 'I + future plan', exp: '"I am going to buy" = pre-planned future action.' },
+      { q: 'The exam is ___ week. I need to study hard!', ans: 'next', hint: 'future time expression', exp: '"Next week" = the week after this one.' },
+      { q: 'He ___ probably win the competition.', ans: 'will', hint: 'prediction with probably', exp: '"Will + probably" for uncertain predictions.' },
+      { q: 'We ___ ___ have a picnic if the weather is nice. (plan)', ans: 'are going to', hint: 'conditional plan', exp: '"Going to" for plans (even if conditional).' },
+      { q: 'She ___ be a great teacher ___ day.', ans: 'will, one', hint: 'prediction + "one day" expression', exp: '"Will" for future prediction; "one day" = at some point in the future.' },
+      { q: 'They ___ ___ travel to Europe ___ summer.', ans: 'are going to, next', hint: 'plan + time expression', exp: '"Going to" plan + "next summer".' },
+      { q: 'I ___ call you back in five minutes. (promise)', ans: "I'll", hint: 'promise / spontaneous decision', exp: '"I\'ll call" = promise or spontaneous decision.' },
+      { q: 'He says he ___ ___ become a pilot. (lifelong dream/plan)', ans: 'is going to', hint: 'strong plan/intention', exp: '"Going to" for strong plans and intentions.' },
+      { q: 'Look! The baby ___! (is about to fall)', ans: 'is going to fall', hint: 'immediate prediction with evidence', exp: '"Going to" for immediate future predictions with visible evidence.' },
+      { q: 'We ___ be there ___ time. Don\'t worry.', ans: 'will, on', hint: 'reassurance + "on time"', exp: '"Will" for reassurances about the future; "on time" = punctually.' },
+      { q: 'She ___ ___ join the drama club next semester.', ans: 'is going to', hint: 'decided plan', exp: '"Going to" for plans already decided.' }
+    ]
+  },
+  13: {
+    topic: 'Past Simple Tense',
+    questions: [
+      { q: 'She ___ (go) to school yesterday.', ans: 'went', hint: 'go → past simple (irregular)', exp: 'Go → went (irregular past simple).' },
+      { q: 'They ___ (watch) a film last night.', ans: 'watched', hint: 'watch → past simple (regular)', exp: 'Watch → watched (regular: add -ed).' },
+      { q: 'He ___ (not come) to the party.', ans: "didn't come", hint: 'negative past simple', exp: 'Negative past simple: didn\'t + base verb (not come).' },
+      { q: '___ you ___ (enjoy) the concert?', ans: 'Did, enjoy', hint: 'yes/no question past simple', exp: '"Did you enjoy?" = past simple question.' },
+      { q: 'I ___ (wake up) at 7 o\'clock this morning.', ans: 'woke up', hint: 'wake up → past (irregular)', exp: 'Wake up → woke up (irregular past simple).' },
+      { q: 'She ___ (study) all night for the exam.', ans: 'studied', hint: 'study → past (y → ied)', exp: 'Study → studied (y → ied for regular verbs ending in y).' },
+      { q: 'We ___ (visit) Cappadocia two years ago.', ans: 'visited', hint: 'visit → past simple (regular)', exp: 'Visit → visited (regular: add -ed).' },
+      { q: 'He ___ (not eat) breakfast this morning.', ans: "didn't eat", hint: 'negative past simple', exp: 'Negative: didn\'t + base verb (eat, not ate).' },
+      { q: '___ she ___ (like) the present?', ans: 'Did, like', hint: 'yes/no question (she) past simple', exp: '"Did she like?" = past simple question.' },
+      { q: 'I ___ (meet) my best friend at university.', ans: 'met', hint: 'meet → past (irregular)', exp: 'Meet → met (irregular past simple).' },
+      { q: 'They ___ (buy) a new car last month.', ans: 'bought', hint: 'buy → past (irregular)', exp: 'Buy → bought (irregular past simple).' },
+      { q: 'She ___ (write) a letter to her pen pal.', ans: 'wrote', hint: 'write → past (irregular)', exp: 'Write → wrote (irregular past simple).' },
+      { q: 'He ___ (not know) the answer.', ans: "didn't know", hint: 'negative past simple', exp: 'Negative: didn\'t + base verb (know, not knew).' },
+      { q: 'We ___ (have) a great time in İzmir.', ans: 'had', hint: 'have → past (irregular)', exp: 'Have → had (irregular past simple).' },
+      { q: '___ they ___ (arrive) on time?', ans: 'Did, arrive', hint: 'question form past simple', exp: '"Did they arrive?" = past simple question.' },
+      { q: 'I ___ (take) many photos during the trip.', ans: 'took', hint: 'take → past (irregular)', exp: 'Take → took (irregular past simple).' },
+      { q: 'The lesson ___ (start) at 9 a.m.', ans: 'started', hint: 'start → past simple (regular)', exp: 'Start → started (regular: add -ed).' },
+      { q: 'She ___ (not finish) her homework in time.', ans: "didn't finish", hint: 'negative past simple', exp: 'Negative: didn\'t + base verb (finish).' },
+      { q: 'He ___ (say) he was tired after work.', ans: 'said', hint: 'say → past (irregular)', exp: 'Say → said (irregular past simple).' },
+      { q: 'We ___ (see) a shooting star last night.', ans: 'saw', hint: 'see → past (irregular)', exp: 'See → saw (irregular past simple).' }
+    ]
+  },
+  14: {
+    topic: 'Suggestions & Social Events',
+    questions: [
+      { q: '___ go to the cinema tonight!', ans: "Let's", hint: 'suggestion with \'Let\'s\'', exp: '"Let\'s + base verb" = suggestion to do something together.' },
+      { q: '___ about having a picnic this weekend?', ans: 'How', hint: '"How about ___?" suggestion form', exp: '"How about + verb-ing" or noun for suggestions.' },
+      { q: 'Why ___ we visit the new art gallery?', ans: "don't", hint: '"Why don\'t we ___?" suggestion', exp: '"Why don\'t we + base verb?" = polite suggestion.' },
+      { q: 'How about ___ (go) to the beach?', ans: 'going', hint: '"How about" + verb-ing', exp: '"How about + verb-ing?" = suggestion.' },
+      { q: 'Let\'s not ___ (be) late for the party.', ans: 'be', hint: '"Let\'s not" + base verb', exp: '"Let\'s not + base verb" = negative suggestion.' },
+      { q: '___ we play cards this evening?', ans: 'Shall', hint: '"Shall we ___?" suggestion', exp: '"Shall we + base verb?" = offering a suggestion.' },
+      { q: 'A: "What shall we do tonight?" B: "___ ___ we watch a film?"', ans: 'Why, don\'t', hint: 'suggestion with "why don\'t we"', exp: '"Why don\'t we watch a film?" = suggestion.' },
+      { q: 'I\'d like to ___ you to my birthday party.', ans: 'invite', hint: 'invite + object', exp: '"Invite someone to an event" = ask them to come.' },
+      { q: 'A: "Let\'s go dancing!" B: "That sounds ___!"', ans: 'great', hint: 'positive response to suggestion', exp: '"That sounds great!" = enthusiastic agreement.' },
+      { q: 'Why don\'t we ___ (order) pizza instead of cooking?', ans: 'order', hint: '"Why don\'t we" + base verb', exp: '"Why don\'t we order?" = suggestion.' },
+      { q: 'Let\'s ___ (meet) at 7 o\'clock.', ans: 'meet', hint: '"Let\'s" + base verb', exp: '"Let\'s meet" = suggestion for meeting.' },
+      { q: 'I\'m ___ a party next Saturday. Can you come?', ans: 'having', hint: 'present continuous for future plan', exp: '"I\'m having a party" = planned future event.' },
+      { q: 'How about ___ (try) that new Turkish restaurant?', ans: 'trying', hint: '"How about" + verb-ing', exp: '"How about trying?" = suggestion.' },
+      { q: 'A: "I\'m bored." B: "___ read a book?"', ans: 'Why not', hint: 'suggestion without subject', exp: '"Why not + base verb?" = simple suggestion without subject.' },
+      { q: 'Shall we ___ (have) dinner at 8?', ans: 'have', hint: '"Shall we" + base verb', exp: '"Shall we have dinner?" = suggestion.' },
+      { q: 'Let\'s ___ (go) somewhere quiet.', ans: 'go', hint: '"Let\'s" + base verb', exp: '"Let\'s go" = suggestion to go somewhere.' },
+      { q: 'A: "What about coffee?" B: "___, I love coffee!"', ans: 'Great idea', hint: 'enthusiastic agreement', exp: '"Great idea!" = enthusiastic agreement with a suggestion.' },
+      { q: 'Why don\'t we ___ (play) board games at home?', ans: 'play', hint: '"Why don\'t we" + base verb', exp: '"Why don\'t we play?" = suggestion.' },
+      { q: 'He ___ me to his graduation ceremony.', ans: 'invited', hint: 'invite → past simple (regular)', exp: 'Invite → invited (regular past simple).' },
+      { q: 'How about ___ (stay) in tonight and watching a film?', ans: 'staying', hint: '"How about" + verb-ing', exp: '"How about staying in?" = suggestion.' }
+    ]
+  },
+  15: {
+    topic: 'Can/Can\'t & Have to/Don\'t have to — Jobs',
+    questions: [
+      { q: 'She ___ speak three languages.', ans: 'can', hint: 'ability', exp: '"Can" = ability (she is able to speak three languages).' },
+      { q: 'He ___ drive a car. He\'s only 15.', ans: "can't", hint: 'inability / not allowed', exp: '"Can\'t" = inability or not permitted.' },
+      { q: 'Nurses ___ work night shifts.', ans: 'have to', hint: 'obligation (job requirement)', exp: '"Have to" = obligation or necessary requirement.' },
+      { q: 'Teachers ___ wear a uniform at our school.', ans: "don't have to", hint: 'no obligation', exp: '"Don\'t have to" = no obligation (it\'s not required).' },
+      { q: '___ you use a computer well?', ans: 'Can', hint: 'ability question', exp: '"Can + you" to ask about ability.' },
+      { q: 'Doctors ___ keep patient information private.', ans: 'have to', hint: 'professional obligation', exp: '"Have to" for professional/legal obligations.' },
+      { q: 'We ___ come in on Saturdays — it\'s optional.', ans: "don't have to", hint: 'no obligation', exp: '"Don\'t have to" = it\'s not necessary, but you can if you want.' },
+      { q: 'A pilot ___ have perfect eyesight.', ans: 'has to', hint: 'job requirement (he/she/it)', exp: '"Has to" = obligation for he/she/it.' },
+      { q: 'She ___ type very fast — 80 words per minute!', ans: 'can', hint: 'skill/ability', exp: '"Can" for skills and abilities.' },
+      { q: 'Firefighters ___ be very brave and strong.', ans: 'have to', hint: 'job requirement', exp: '"Have to" for requirements of a job.' },
+      { q: 'I ___ cook at all. That\'s why I eat out every day.', ans: "can't", hint: 'inability to cook', exp: '"Can\'t" = I am unable to cook.' },
+      { q: 'You ___ pay for parking here — it\'s free!', ans: "don't have to", hint: 'no necessity', exp: '"Don\'t have to" = not necessary (no obligation).' },
+      { q: '___ she speak English at work?', ans: 'Does she have to', hint: '"have to" question (she)', exp: '"Does she have to speak?" = question about obligation.' },
+      { q: 'A chef ___ cook excellent food.', ans: 'has to', hint: 'job requirement (he/she/it)', exp: '"Has to" for third person obligation.' },
+      { q: 'He ___ use the computer — he prefers to write by hand.', ans: "doesn't have to", hint: 'no obligation (he)', exp: '"Doesn\'t have to" = it\'s not required for him.' },
+      { q: 'What ___ a lawyer do?', ans: 'does, have to', hint: '"have to" question (what)', exp: '"What does a lawyer have to do?" = job requirement question.' },
+      { q: 'She ___ lift heavy boxes at her new job.', ans: 'has to', hint: 'job requirement (she)', exp: '"Has to" = she is required to do this.' },
+      { q: 'I ___ speak in front of large groups — I get too nervous.', ans: "can't", hint: 'inability', exp: '"Can\'t" = I am unable to do something.' },
+      { q: 'You ___ be on time for the interview.', ans: 'have to', hint: 'obligation / important requirement', exp: '"Have to" = it is necessary and important.' },
+      { q: 'An accountant ___ be good with numbers.', ans: 'has to', hint: 'job requirement (he/she/it)', exp: '"Has to" for professional requirement (singular subject).' }
+    ]
+  },
+  16: {
+    topic: 'Present Perfect Tense',
+    questions: [
+      { q: 'She ___ ___ (visit) Paris three times.', ans: 'has visited', hint: 'present perfect (she)', exp: '"Has + past participle": She has visited.' },
+      { q: 'I ___ ___ (not finish) my homework yet.', ans: "haven't finished", hint: 'negative present perfect (I)', exp: '"Haven\'t + past participle": I haven\'t finished.' },
+      { q: '___ you ___ (ever try) sushi?', ans: 'Have, ever tried', hint: '"Have you ever ___?" experience question', exp: '"Have you ever + past participle?" = asking about life experience.' },
+      { q: 'He ___ ___ (live) in London for five years.', ans: 'has lived', hint: 'present perfect duration (he)', exp: '"Has lived" = started in past, still true now.' },
+      { q: 'They ___ ___ (already eat) dinner.', ans: 'have already eaten', hint: '"already" + present perfect', exp: '"Already" = before now/earlier than expected.' },
+      { q: 'She ___ ___ (just arrive) home.', ans: 'has just arrived', hint: '"just" + present perfect (she)', exp: '"Just" = very recently.' },
+      { q: 'I ___ ___ (see) that film before.', ans: 'have seen', hint: 'experience with "before"', exp: '"Have seen before" = experience in your life.' },
+      { q: 'He ___ ___ (not call) me ___ .', ans: 'hasn\'t called, yet', hint: '"yet" negative present perfect (he)', exp: '"Yet" in negative = not at any point up to now.' },
+      { q: 'We ___ ___ (study) English since 2020.', ans: 'have studied', hint: '"since" + present perfect (we)', exp: '"Since" = from a specific point in the past until now.' },
+      { q: '___ she ___ (finish) the report ___?', ans: 'Has, finished, yet', hint: 'question + "yet" present perfect', exp: '"Yet" in questions = has it happened by now?' },
+      { q: 'I ___ ___ (win) a competition before.', ans: 'have never won', hint: '"never" + present perfect', exp: '"Never" = at no point in my life.' },
+      { q: 'They ___ ___ (travel) to over 20 countries!', ans: 'have travelled', hint: 'life experience present perfect', exp: '"Have travelled" = in their life experience (no specific time given).' },
+      { q: 'She ___ ___ (be) a teacher ___ fifteen years.', ans: 'has been, for', hint: '"for" + duration present perfect', exp: '"For" = length of time (for 15 years = the duration).' },
+      { q: 'Have you ___ (read) any Shakespeare plays?', ans: 'ever read', hint: '"ever" + experience question', exp: '"Have you ever read?" = at any time in your life.' },
+      { q: 'He ___ ___ (just finish) his university degree.', ans: 'has just finished', hint: '"just" + present perfect (he)', exp: '"Just" = very recently completed.' },
+      { q: 'I ___ ___ (already book) my ticket.', ans: 'have already booked', hint: '"already" + present perfect (I)', exp: '"Already" = done before now, before expected.' },
+      { q: 'She ___ ___ (work) here ___ she was 25.', ans: 'has worked, since', hint: '"since" + age/specific time', exp: '"Since" + point in time → has worked since she was 25.' },
+      { q: 'We ___ ___ (not decide) where to go ___?', ans: "haven't decided, yet", hint: '"yet" negative present perfect', exp: '"Haven\'t decided yet" = the decision hasn\'t happened up to now.' },
+      { q: '___ he ___ (ever live) abroad?', ans: 'Has, ever lived', hint: '"ever" experience question (he)', exp: '"Has he ever lived abroad?" = at any point in his life.' },
+      { q: 'They ___ ___ (recently move) to a new flat.', ans: 'have recently moved', hint: '"recently" + present perfect', exp: '"Recently" = in the near past, used with present perfect.' }
+    ]
+  }
+};
+
 
 // ── Demo Users ──
 const USERS = {
@@ -441,59 +886,1259 @@ const WEEK_RESOURCES = {
 /* ════════════════════════════════════════════════════════════════
    ██████   C) FILL-IN-THE-BLANK QUIZZES
    ════════════════════════════════════════════════════════════════ */
+// Weekly Quiz data (20 questions each)
 const QUIZZES = {
   1: {
-    topic: 'Simple Present & To Be / Everyday Vocabulary',
+    topic: 'Verb "to be" & Personal Information',
     questions: [
-      { q: 'She ___ a teacher at our school.',                      ans: 'is',     hint: 'to be (he/she/it)',   exp: 'With she/he/it we use "is". I → am, You/We/They → are.' },
-      { q: 'They ___ from Istanbul.',                               ans: 'are',    hint: 'to be (they)',        exp: 'They is plural → "are". Is = he/she/it, Am = I only.' },
-      { q: 'I ___ English every day.',                              ans: 'study',  hint: 'base verb for I',     exp: 'Simple Present with I/You/We/They → base verb (no -s).' },
-      { q: 'He ___ not like coffee.',                               ans: 'does',   hint: 'auxiliary for he',    exp: 'Negative with he/she/it → does not + base verb.' },
-      { q: 'She speaks English very ___.',                          ans: 'well',   hint: 'adverb form of good', exp: 'After a verb we use an adverb: "well" not "good".' },
-      { q: 'My brother ___ in a hospital.',                         ans: 'works',  hint: 'verb + s for he',     exp: 'He/She/It + verb-s in Simple Present → works.' },
-      { q: '___ you understand the lesson?',                        ans: 'Do',     hint: 'question auxiliary',  exp: 'Questions with you/we/they → Do + base verb.' },
-      { q: 'The correct form of "be" for "I" is: ___.',            ans: 'am',     hint: 'I + ???',             exp: 'To Be: I am, He/She/It is, You/We/They are.' },
-      { q: 'She ___ three languages: Turkish, English and French.', ans: 'speaks', hint: 'verb + s for she',    exp: 'She + verb-s → speaks in Simple Present.' },
-      { q: 'We ___ happy about the exam results.',                  ans: 'are',    hint: 'to be for we',        exp: 'We + are (present tense of to be).' }
+      { q:'My name ___ Ali. Nice to meet you!', ans:'is', hint:'to be (my name)', exp:'My name (singular) → is.' },
+      { q:'I ___ a first-year student at university.', ans:'am', hint:'I + to be', exp:'I + am.' },
+      { q:'They ___ from Ankara.', ans:'are', hint:'to be (they)', exp:'They + are.' },
+      { q:'She ___ not married.', ans:'is', hint:'to be (she) + not', exp:'She is not married.' },
+      { q:'___ you a student or a teacher?', ans:'Are', hint:'yes/no question (you)', exp:'"Are you...?" = question with you.' },
+      { q:'What ___ your phone number?', ans:'is', hint:'singular question', exp:'"What is your phone number?" (singular).' },
+      { q:'He ___ 22 years old.', ans:'is', hint:'to be (he)', exp:'He/She/It + is.' },
+      { q:'Where ___ you from?', ans:'are', hint:'question with you', exp:'"Where are you from?" (you + are).' },
+      { q:'My email address ___ ali@gmail.com.', ans:'is', hint:'singular → is', exp:'Singular subject → is.' },
+      { q:'We ___ classmates. We study together.', ans:'are', hint:'we + to be', exp:'We + are.' },
+      { q:'___ your name Mehmet or Ali?', ans:'Is', hint:'yes/no question (your name)', exp:'"Is your name...?" (singular).' },
+      { q:'I ___ Turkish. My nationality is Turkish.', ans:'am', hint:'I + to be', exp:'I + am.' },
+      { q:'Her first name ___ Zeynep.', ans:'is', hint:'her name → singular', exp:'Her first name (singular) → is.' },
+      { q:'How ___ you? Fine, thanks!', ans:'are', hint:'greeting question', exp:'"How are you?" standard greeting.' },
+      { q:'___ he a doctor or an engineer?', ans:'Is', hint:'yes/no question (he)', exp:'"Is he...?" = question with he/she/it.' },
+      { q:'My parents ___ from Konya.', ans:'are', hint:'plural subject', exp:'My parents (plural) → are.' },
+      { q:'Nice to ___ you! I\'m Ayşe.', ans:'meet', hint:'greeting phrase', exp:'"Nice to meet you!" standard greeting.' },
+      { q:'The students ___ in the classroom.', ans:'are', hint:'plural → are', exp:'The students (plural) → are.' },
+      { q:'I ___ not from Istanbul. I\'m from Konya.', ans:'am', hint:'I + to be + not', exp:'I am not → I am from Konya.' },
+      { q:'___ is your favourite subject?', ans:'What', hint:'question word (subject)', exp:'"What is your favourite subject?" = asking for information.' }
+    ]
+  },
+  2: {
+    topic: 'Possessive Adjectives & Family',
+    questions: [
+      { q:'This is ___ brother. His name is Kemal.', ans:'my', hint:'I → ___', exp:'"My" = possessive for I.' },
+      { q:'She loves ___ grandmother.', ans:'her', hint:'she → ___', exp:'"Her" = possessive for she.' },
+      { q:'We visit ___ parents every weekend.', ans:'our', hint:'we → ___', exp:'"Our" = possessive for we.' },
+      { q:'The cat drinks ___ milk from the bowl.', ans:'its', hint:'animal → ___', exp:'"Its" = possessive for animals/things (no apostrophe).' },
+      { q:'Ali___ mother is a nurse.', ans:"'s", hint:'possessive apostrophe', exp:'Ali\'s mother → possessive \'s.' },
+      { q:'Can you show me ___ homework?', ans:'your', hint:'you → ___', exp:'"Your" = possessive for you.' },
+      { q:'He is my ___. We have the same father but different mothers.', ans:'half-brother', hint:'same father different mother', exp:'A "half-brother" shares one parent.' },
+      { q:'My father___ brother is my ___.', ans:"'s, uncle", hint:'apostrophe-s + family term', exp:'My father\'s brother is my uncle.' },
+      { q:'They love ___ children very much.', ans:'their', hint:'they → ___', exp:'"Their" = possessive for they.' },
+      { q:'She is my ___.  We have the same parents.', ans:'sister', hint:'female sibling', exp:'A sister = female sibling (same parents).' },
+      { q:'My mother___ parents are my ___.', ans:"'s, grandparents", hint:'apostrophe-s + family', exp:'My mother\'s parents are my grandparents.' },
+      { q:'He has ___ own room.', ans:'his', hint:'he → ___', exp:'"His" = possessive for he.' },
+      { q:'Our parents___ names are Ahmet and Fatma.', ans:"'", hint:'plural possessive (apostrophe only)', exp:'Parents\' (plural possessive = apostrophe after s).' },
+      { q:'She is ___ aunt. She is my mother\'s sister.', ans:'my', hint:'I → ___', exp:'"My aunt" (possessive for I).' },
+      { q:'My ___ son is my nephew.', ans:'brother\'s', hint:'brother + possessive \'s', exp:'My brother\'s son = my nephew.' },
+      { q:'Do you have any brothers or ___?', ans:'sisters', hint:'plural female sibling', exp:'Brothers and sisters = siblings.' },
+      { q:'He is my cousin. His father is ___ uncle.', ans:'my', hint:'I → ___', exp:'His father is my uncle (from my perspective).' },
+      { q:'She lives with ___ husband and two children.', ans:'her', hint:'she → ___', exp:'"Her husband" = possessive for she.' },
+      { q:'We bought ___ parents a gift.', ans:'our', hint:'we → ___', exp:'"Our parents" = parents belonging to us.' },
+      { q:'My sister___ children are adorable.', ans:"'s", hint:'apostrophe-s after name/noun', exp:'My sister\'s children → possessive \'s.' }
+    ]
+  },
+  3: {
+    topic: 'Present Simple & Adverbs of Frequency',
+    questions: [
+      { q:'She ___ up at 7 a.m. every day.', ans:'wakes', hint:'she + wake', exp:'She/He/It + verb-s → wakes.' },
+      { q:'I ___ always ___ breakfast before school.', ans:'always eat', hint:'I + adverb + base verb', exp:'"Always" before main verb. I eat (no -s).' },
+      { q:'He ___ never ___ late.', ans:'is never', hint:'to be + never (he)', exp:'"He is never late" — adverb after "is" with to be.' },
+      { q:'___ she work on Sundays?', ans:'Does', hint:'question auxiliary (she)', exp:'"Does she work?" = question with he/she/it.' },
+      { q:'They ___ sometimes ___ to the library.', ans:'sometimes go', hint:'adverb + they + base verb', exp:'"Sometimes" before main verb. They go.' },
+      { q:'My father ___ the car every Sunday.', ans:'washes', hint:'he + wash', exp:'My father (he) → washes (verb+es after -sh).' },
+      { q:'We ___ not have classes on Saturdays.', ans:'do', hint:'negative auxiliary (we)', exp:'"We do not have" = negative present simple.' },
+      { q:'She ___ usually ___ TV in the evenings.', ans:'usually watches', hint:'adverb + she + verb-s', exp:'"Usually" before verb. She watches (verb+s).' },
+      { q:'He ___ coffee in the morning.', ans:'drinks', hint:'he + drink', exp:'He → drinks (verb+s).' },
+      { q:'___ they live near the university?', ans:'Do', hint:'question auxiliary (they)', exp:'"Do they live?" = question with they/you/we/I.' },
+      { q:'I ___ often ___ in the evenings.', ans:'often read', hint:'I + adverb + base verb', exp:'"Often" before main verb. I read.' },
+      { q:'She ___ not like horror films.', ans:'does', hint:'negative auxiliary (she)', exp:'"She does not like" = negative for he/she/it.' },
+      { q:'My sister ___ to music every day.', ans:'listens', hint:'she + listen', exp:'She → listens (verb+s).' },
+      { q:'We ___ homework after dinner.', ans:'do', hint:'we + do (homework)', exp:'"Do homework" (irregular: do → do for we).' },
+      { q:'He is ___ late — it\'s a bad habit.', ans:'always', hint:'100% frequency adverb', exp:'"Always" = 100% of the time.' },
+      { q:'They ___ hardly ever ___ fast food.', ans:'hardly ever eat', hint:'adverb phrase + they', exp:'"Hardly ever" before main verb. They eat.' },
+      { q:'She ___ her teeth twice a day.', ans:'brushes', hint:'she + brush (dental hygiene)', exp:'She → brushes (verb+es).' },
+      { q:'I ___ not smoke. It\'s bad for health.', ans:'do', hint:'negative auxiliary (I)', exp:'"I do not smoke" = negative present simple.' },
+      { q:'What time ___ he ___ to work?', ans:'does, go', hint:'question with he + base verb', exp:'"What time does he go to work?" = question.' },
+      { q:'She is ___ punctual. She\'s never late.', ans:'always', hint:'100% positive adverb', exp:'"Always" before verb "to be": She is always punctual.' }
+    ]
+  },
+  4: {
+    topic: 'There is/are & Prepositions of Place',
+    questions: [
+      { q:'___ is a kitchen in our flat.', ans:'There', hint:'"There ___" for existence', exp:'"There is" introduces a singular existing thing.' },
+      { q:'There ___ four rooms in my house.', ans:'are', hint:'plural → are', exp:'Four rooms (plural) → There are.' },
+      { q:'The sofa is ___ the living room.', ans:'in', hint:'inside a room', exp:'"In" = inside an enclosed space.' },
+      { q:'The picture is ___ the wall.', ans:'on', hint:'attached to a surface', exp:'"On" = surface contact.' },
+      { q:'___ there a garage?', ans:'Is', hint:'yes/no question singular', exp:'"Is there" = question about singular thing.' },
+      { q:'There ___ not a balcony in my flat.', ans:'is', hint:'singular negative', exp:'"There is not" = singular negative.' },
+      { q:'My keys are ___ the drawer.', ans:'in', hint:'inside a container', exp:'"In" = inside something.' },
+      { q:'The lamp is ___ the table. (hanging above)', ans:'above', hint:'higher position, not touching', exp:'"Above" = higher than, not touching.' },
+      { q:'There are ___ books on the shelf.', ans:'some', hint:'affirmative + countable plural', exp:'"Some" in affirmative sentences.' },
+      { q:'___ there any chairs in the room?', ans:'Are', hint:'yes/no question plural', exp:'"Are there" = question about plural things.' },
+      { q:'The cat is ___ the sofa. (lower position)', ans:'under', hint:'below something', exp:'"Under" = beneath/below.' },
+      { q:'There ___ a lot of furniture in the living room.', ans:'is', hint:'furniture is uncountable', exp:'"Furniture" is uncountable → There is.' },
+      { q:'The post office is ___ the bank and the supermarket.', ans:'between', hint:'two things on each side', exp:'"Between" = in the middle of two.' },
+      { q:'There ___ not any windows in the basement.', ans:'are', hint:'plural negative', exp:'"There are not any" = plural negative.' },
+      { q:'The hospital is ___ the school. (close by)', ans:'near', hint:'close to', exp:'"Near" = not far from.' },
+      { q:'He is standing ___ the door.', ans:'next to', hint:'beside the door', exp:'"Next to" = immediately beside.' },
+      { q:'There ___ a nice view from the balcony.', ans:'is', hint:'singular view', exp:'"A nice view" (singular) → There is.' },
+      { q:'The children are ___ the garden.', ans:'in', hint:'inside an area', exp:'"In" the garden = inside the garden area.' },
+      { q:'Put the vase ___ the table.', ans:'on', hint:'surface instruction', exp:'"On" = placed on a surface.' },
+      { q:'There ___ any noise at night in this neighbourhood.', ans:"isn't", hint:'negative singular contraction', exp:'"There isn\'t any noise" = negative (singular).' }
+    ]
+  },
+  5: {
+    topic: 'Countable/Uncountable & some/any/much/many',
+    questions: [
+      { q:'There is ___ cheese in the fridge.', ans:'some', hint:'affirmative + uncountable', exp:'"Some" in positive statements.' },
+      { q:'Is there ___ juice left?', ans:'any', hint:'question + uncountable', exp:'"Any" in questions.' },
+      { q:'How ___ eggs do we need?', ans:'many', hint:'countable noun → much/many', exp:'"Many" for countable nouns.' },
+      { q:'She doesn\'t drink ___ coffee.', ans:'much', hint:'negative + uncountable', exp:'"Much" for uncountable nouns in negatives.' },
+      { q:'We bought ___ bread and butter.', ans:'some', hint:'affirmative + uncountable', exp:'"Some" in affirmative sentences.' },
+      { q:'Are there ___ grapes in the bowl?', ans:'any', hint:'question + countable plural', exp:'"Any" in questions.' },
+      { q:'Would you like ___ more tea?', ans:'some', hint:'polite offer', exp:'"Some" in polite offers.' },
+      { q:'How ___ sugar do you take?', ans:'much', hint:'uncountable → much/many', exp:'"Much" for uncountable nouns.' },
+      { q:'I don\'t have ___ time today.', ans:'much', hint:'negative + uncountable (time)', exp:'"Much" for uncountable nouns in negatives.' },
+      { q:'There are ___ of vegetables in this salad.', ans:'a lot', hint:'large quantity', exp:'"A lot of" = large quantity.' },
+      { q:'Can I have ___ water, please?', ans:'some', hint:'polite request', exp:'"Some" in polite requests.' },
+      { q:'How ___ glasses of water do you drink?', ans:'many', hint:'countable glasses', exp:'"Many" for countable nouns (glasses).' },
+      { q:'There is ___ food in the house — we need to shop.', ans:'no', hint:'zero quantity', exp:'"No" = none at all.' },
+      { q:'She doesn\'t have ___ friends here.', ans:'many', hint:'negative + countable plural', exp:'"Many" in negative sentences with countable nouns.' },
+      { q:'He drinks ___ water — at least 3 litres a day!', ans:'a lot of', hint:'large amount uncountable', exp:'"A lot of" + uncountable noun.' },
+      { q:'There aren\'t ___ tomatoes left.', ans:'any', hint:'negative + countable plural', exp:'"Any" in negative sentences.' },
+      { q:'___ salt is unhealthy.', ans:'Too much', hint:'excessive uncountable noun', exp:'"Too much" + uncountable noun.' },
+      { q:'I have ___ homework tonight.', ans:'a lot of', hint:'large amount uncountable', exp:'"A lot of" with uncountable nouns.' },
+      { q:'Do you want ___ help?', ans:'any', hint:'question form (help)', exp:'"Any" in questions (help is uncountable).' },
+      { q:'She ate ___ rice at dinner.', ans:'some', hint:'affirmative + uncountable', exp:'"Some" rice in positive statement.' }
+    ]
+  },
+  6: {
+    topic: 'Comparative & Superlative Adjectives',
+    questions: [
+      { q:'Ankara is ___ than Izmir. (cold)', ans:'colder', hint:'cold → comparative', exp:'Cold → colder (add -er).' },
+      { q:'She is the ___ girl in the class. (tall)', ans:'tallest', hint:'tall → superlative', exp:'Tall → tallest (add -est).' },
+      { q:'This car is ___ ___ that one. (expensive)', ans:'more expensive', hint:'long adjective → more ___', exp:'Expensive (3 syllables) → more expensive.' },
+      { q:'He is the ___ player on the team. (good)', ans:'best', hint:'good → superlative (irregular)', exp:'Good → better → best (irregular).' },
+      { q:'Today is ___ than yesterday. (hot)', ans:'hotter', hint:'hot → comparative (double consonant)', exp:'Hot → hotter (double the t).' },
+      { q:'This book is ___ than that one. (interesting)', ans:'more interesting', hint:'long adjective → more ___', exp:'"More" for 3+ syllable adjectives.' },
+      { q:'She is ___ than her sister. (young)', ans:'younger', hint:'young → comparative', exp:'Young → younger.' },
+      { q:'He runs ___ than me. (fast)', ans:'faster', hint:'fast → comparative', exp:'Fast → faster.' },
+      { q:'This is the ___ restaurant in town! (bad)', ans:'worst', hint:'bad → superlative (irregular)', exp:'Bad → worse → worst (irregular).' },
+      { q:'My flat is not ___ ___ yours. (big)', ans:'as big as', hint:'equal comparison', exp:'"As big as" = same size.' },
+      { q:'She is the ___ person I know. (generous)', ans:'most generous', hint:'long adjective → most ___', exp:'"Most" + 3-syllable adjective.' },
+      { q:'His mark is ___ than mine. (high)', ans:'higher', hint:'high → comparative', exp:'High → higher.' },
+      { q:'This route is ___ than the other. (short)', ans:'shorter', hint:'short → comparative', exp:'Short → shorter.' },
+      { q:'He is ___ ___ his father. (not as tall)', ans:'not as tall as', hint:'negative equal comparison', exp:'"Not as tall as" = shorter than.' },
+      { q:'Mount Everest is the ___ mountain. (high → superlative)', ans:'highest', hint:'high → superlative', exp:'High → highest.' },
+      { q:'The test was ___ than I expected. (difficult)', ans:'more difficult', hint:'long adjective comparative', exp:'"More difficult" (3 syllables).' },
+      { q:'She is the ___ student in school. (hard-working)', ans:'most hard-working', hint:'compound adj → most ___', exp:'"Most hard-working" for long/compound adjectives.' },
+      { q:'This city is ___ than that one. (noisy)', ans:'noisier', hint:'noisy → comparative (y→ier)', exp:'Noisy → noisier (y → ier).' },
+      { q:'He is the ___ speaker in the debate. (confident)', ans:'most confident', hint:'long adjective → most ___', exp:'"Most confident" (3 syllables).' },
+      { q:'My exam result was ___ than last time. (good)', ans:'better', hint:'good → comparative (irregular)', exp:'Good → better (irregular).' }
+    ]
+  },
+  7: {
+    topic: 'Imperatives & Prepositions of Movement',
+    questions: [
+      { q:'___ right at the traffic lights.', ans:'Turn', hint:'direction imperative', exp:'"Turn right/left" = change direction.' },
+      { q:'___ straight on until the end.', ans:'Go', hint:'movement imperative', exp:'"Go straight on" = continue without turning.' },
+      { q:'___ your phone in class!', ans:"Don't use", hint:'negative imperative', exp:'"Don\'t + base verb" = negative instruction.' },
+      { q:'Walk ___ the park to reach the library.', ans:'through', hint:'inside → other side', exp:'"Through" = movement inside from one side to the other.' },
+      { q:'The cinema is ___ the café.', ans:'opposite', hint:'facing each other', exp:'"Opposite" = directly across from.' },
+      { q:'Go ___ the bridge and turn left.', ans:'over', hint:'above and across', exp:'"Over" = above and to the other side.' },
+      { q:'___ quiet in the museum.', ans:'Be', hint:'to be → imperative', exp:'"Be quiet" = imperative of be.' },
+      { q:'The park is ___ the school. (close by)', ans:'near', hint:'close to', exp:'"Near" = close to.' },
+      { q:'___ the second exit on the roundabout.', ans:'Take', hint:'direction instruction', exp:'"Take the second exit" = instruction.' },
+      { q:'Go ___ the supermarket — the bank is just there.', ans:'past', hint:'pass without stopping', exp:'"Go past" = pass by.' },
+      { q:'Walk ___ the street carefully.', ans:'across', hint:'from one side to other', exp:'"Across" = from one side to the other.' },
+      { q:'___ run in the corridors!', ans:"Don't", hint:'negative imperative start', exp:'"Don\'t" begins a negative imperative.' },
+      { q:'The café is ___ the bank and the post office.', ans:'between', hint:'two places on each side', exp:'"Between" = in the middle of two places.' },
+      { q:'Go ___ the stairs to the second floor.', ans:'up', hint:'upward movement', exp:'"Go up" = move upward.' },
+      { q:'The hospital is ___ the left side of the road.', ans:'on', hint:'side of road location', exp:'"On the left/right side".' },
+      { q:'___ the tunnel and you\'ll see the exit.', ans:'Go through', hint:'movement inside a tunnel', exp:'"Go through" = enter and exit.' },
+      { q:'Please ___ (park) here — it\'s not allowed.', ans:"don't park", hint:'negative imperative (parking)', exp:'"Don\'t + base verb" = prohibition.' },
+      { q:'The cat jumped ___ the wall.', ans:'over', hint:'above and to the other side', exp:'"Over" = across the top.' },
+      { q:'___ down the street and you\'ll find the school on your right.', ans:'Walk', hint:'movement imperative', exp:'"Walk down the street" = instruction.' },
+      { q:'The pharmacy is ___ to the bookshop.', ans:'next', hint:'"next ___" beside', exp:'"Next to" = immediately beside.' }
+    ]
+  },
+  8: {
+    topic: 'Going to, Can, Must, Need to — Travel',
+    questions: [
+      { q:'She ___ ___ fly to London next week.', ans:'is going to', hint:'future plan (she)', exp:'"Going to" for future plans.' },
+      { q:'___ you drive?', ans:'Can', hint:'ability question', exp:'"Can you...?" = ability question.' },
+      { q:'You ___ show your passport at immigration.', ans:'must', hint:'strong obligation', exp:'"Must" for rules and obligations.' },
+      { q:'We ___ ___ book a hotel in advance.', ans:'need to', hint:'necessity', exp:'"Need to" = necessary.' },
+      { q:'They ___ smoke on the plane.', ans:'must not', hint:'prohibition', exp:'"Must not" = prohibition.' },
+      { q:'I ___ ___ pack my suitcase tonight.', ans:'am going to', hint:'future plan (I)', exp:'"I am going to" for future plans.' },
+      { q:'She ___ ___ speak Spanish — she studied it for years.', ans:'can', hint:'ability (she)', exp:'"Can" for ability.' },
+      { q:'You ___ ___ buy your ticket online.', ans:'need to', hint:'requirement', exp:'"Need to" = necessary requirement.' },
+      { q:'___ they visit Rome next summer?', ans:'Are they going to', hint:'"going to" question', exp:'"Are they going to visit?" = future question.' },
+      { q:'He ___ arrive at the airport two hours early.', ans:'must', hint:'airport rule', exp:'"Must" for rules at the airport.' },
+      { q:'She ___ ___ swim — she never learned.', ans:"can't", hint:'inability', exp:'"Can\'t" = unable to.' },
+      { q:'We ___ ___ visit three cities in one week.', ans:'are going to', hint:'future plan (we)', exp:'"Going to" for plans.' },
+      { q:'You ___ ___ carry more than 20kg of luggage.', ans:'must not', hint:'weight restriction', exp:'"Must not" = not allowed.' },
+      { q:'___ I take photos here?', ans:'Can', hint:'asking permission', exp:'"Can I...?" = asking permission.' },
+      { q:'They ___ ___ take the night bus to save money.', ans:'are going to', hint:'decision/plan', exp:'"Going to" for decisions.' },
+      { q:'He ___ not drive — he\'s too tired.', ans:'should', hint:'advice against', exp:'"Shouldn\'t drive" or "should not drive" (advice).' },
+      { q:'I ___ not find my passport!', ans:'cannot', hint:'inability (I)', exp:'"Cannot" = not able to.' },
+      { q:'She ___ ___ travel abroad for the first time.', ans:'is going to', hint:'future first experience (she)', exp:'"Is going to" for future plan.' },
+      { q:'You ___ fasten your seatbelt during take-off.', ans:'must', hint:'safety rule', exp:'"Must" for rules.' },
+      { q:'We ___ ___ rent a car when we arrive.', ans:'need to', hint:'necessity (we)', exp:'"Need to" = it is necessary.' }
+    ]
+  },
+  9: {
+    topic: 'Should/Shouldn\'t — Health & Body',
+    questions: [
+      { q:'You ___ drink at least 8 glasses of water a day.', ans:'should', hint:'health advice', exp:'"Should" = positive health recommendation.' },
+      { q:'She ___ eat so much junk food.', ans:"shouldn't", hint:'negative health advice', exp:'"Shouldn\'t" = not recommended.' },
+      { q:'My back ___. I need to see a physiotherapist.', ans:'hurts', hint:'pain verb (back)', exp:'"My back hurts" = I have back pain.' },
+      { q:'He has a ___. His temperature is very high.', ans:'fever', hint:'high temperature illness', exp:'"Fever" = high body temperature.' },
+      { q:'You ___ go to bed early the night before an exam.', ans:'should', hint:'study advice', exp:'"Should" = it is a good idea.' },
+      { q:'She has a sore ___. It hurts when she speaks.', ans:'throat', hint:'speaking organ', exp:'"Sore throat" = pain in the throat.' },
+      { q:'We ___ skip meals — it\'s bad for our metabolism.', ans:"shouldn't", hint:'negative health advice', exp:'"Shouldn\'t skip" = not recommended.' },
+      { q:'He ___ take these tablets twice a day.', ans:'should', hint:'medical advice', exp:'"Should" for medical advice.' },
+      { q:'I have a ___. I can\'t stop sneezing!', ans:'cold', hint:'illness with sneezing', exp:'"A cold" = common illness with sneezing and runny nose.' },
+      { q:'You ___ smoke — it causes cancer.', ans:"shouldn't", hint:'strong negative advice', exp:'"Shouldn\'t" = strongly not recommended.' },
+      { q:'She ___ see a specialist for her knee pain.', ans:'should', hint:'recommendation', exp:'"Should" = I recommend this.' },
+      { q:'Children ___ play outside and get fresh air.', ans:'should', hint:'advice for children', exp:'"Should" = it is beneficial.' },
+      { q:'My ___ aches. I need a painkiller.', ans:'head', hint:'top of body', exp:'"My head aches" = I have a headache.' },
+      { q:'He ___ exercise more — he sits all day.', ans:'should', hint:'lifestyle advice', exp:'"Should" = recommendation.' },
+      { q:'You ___ take medicine without a doctor\'s advice.', ans:"shouldn't", hint:'medical caution', exp:'"Shouldn\'t" = not advisable.' },
+      { q:'I have a ___. My lower back is killing me!', ans:'backache', hint:'lower back pain', exp:'"Backache" = pain in the back.' },
+      { q:'She ___ rest if she has a fever.', ans:'should', hint:'rest recommendation', exp:'"Should rest" = good advice when sick.' },
+      { q:'He has a ___. He\'s been coughing all night.', ans:'cough', hint:'coughing symptom', exp:'"A cough" = repeated coughing.' },
+      { q:'You ___ wear comfortable shoes to avoid back pain.', ans:'should', hint:'posture/comfort advice', exp:'"Should" = health recommendation.' },
+      { q:'We ___ sit for too many hours. Take breaks!', ans:"shouldn't", hint:'negative lifestyle advice', exp:'"Shouldn\'t sit for too long" = health warning.' }
+    ]
+  },
+  10: {
+    topic: 'Present Continuous & Weather',
+    questions: [
+      { q:'Look! It ___ ___! (rain)', ans:'is raining', hint:'present continuous (it)', exp:'"It is raining" = happening right now.' },
+      { q:'She ___ ___ a book at the moment. (read)', ans:'is reading', hint:'present continuous (she)', exp:'"She is reading" = in progress now.' },
+      { q:'___ he ___ now? (work)', ans:'Is, working', hint:'yes/no question present continuous (he)', exp:'"Is he working?" = present continuous question.' },
+      { q:'They ___ ___ dinner. (not cook)', ans:'are not cooking', hint:'negative present continuous (they)', exp:'"They are not cooking" = not in progress.' },
+      { q:'What ___ you ___ right now? (do)', ans:'are, doing', hint:'question form (you)', exp:'"What are you doing?" = present continuous question.' },
+      { q:'It\'s ___ and we can\'t see the sun at all.', ans:'cloudy', hint:'cloud-covered sky', exp:'"Cloudy" = covered with clouds.' },
+      { q:'The wind ___ ___ very hard today. (blow)', ans:'is blowing', hint:'it + present continuous', exp:'"The wind is blowing" = happening now.' },
+      { q:'I ___ ___ my homework at the moment. (do)', ans:'am doing', hint:'I + present continuous', exp:'"I am doing" = action in progress.' },
+      { q:'There is a ___ coming — everyone stay inside!', ans:'storm', hint:'violent weather', exp:'"Storm" = violent weather event.' },
+      { q:'She ___ ___ to the library right now. (walk)', ans:'is walking', hint:'she + present continuous', exp:'"She is walking" = happening now.' },
+      { q:'It\'s very ___ today — about 38 degrees!', ans:'hot', hint:'high temperature adjective', exp:'"Hot" = high temperature.' },
+      { q:'We ___ ___ a great time at the party! (have)', ans:'are having', hint:'we + present continuous', exp:'"Are having" = happening now.' },
+      { q:'___ it ___ in İstanbul right now? (snow)', ans:'Is, snowing', hint:'yes/no question (it) present continuous', exp:'"Is it snowing?" = present continuous question.' },
+      { q:'The temperature ___ ___ this week. (fall)', ans:'is falling', hint:'gradual change (it)', exp:'"Is falling" = gradual change happening now.' },
+      { q:'He ___ ___ his phone — maybe he\'s busy. (not answer)', ans:'is not answering', hint:'negative present continuous (he)', exp:'"He is not answering" = not happening now.' },
+      { q:'The children ___ ___ in the playground. (play)', ans:'are playing', hint:'they + present continuous', exp:'"Are playing" = happening now.' },
+      { q:'It\'s ___! Grab your umbrella!', ans:'raining', hint:'present participle (rain)', exp:'"It\'s raining" — the -ing form.' },
+      { q:'Why ___ she ___? (cry)', ans:'is, crying', hint:'question + she (why)', exp:'"Why is she crying?" = present continuous question.' },
+      { q:'The sun ___ ___. It\'s a beautiful day! (shine)', ans:'is shining', hint:'it + present continuous', exp:'"The sun is shining" = happening now.' },
+      { q:'I ___ ___ now — call me later! (study)', ans:'am studying', hint:'I + present continuous', exp:'"I am studying" = in progress.' }
+    ]
+  },
+  11: {
+    topic: 'Verb Patterns: like/love/hate + -ing',
+    questions: [
+      { q:'She loves ___ (swim) in the sea.', ans:'swimming', hint:'love + verb-ing', exp:'"Love + verb-ing": swimming.' },
+      { q:'He hates ___ (wait) in long queues.', ans:'waiting', hint:'hate + verb-ing', exp:'"Hate + verb-ing": waiting.' },
+      { q:'I enjoy ___ (read) novels in my free time.', ans:'reading', hint:'enjoy + verb-ing', exp:'"Enjoy + verb-ing": reading.' },
+      { q:'They don\'t mind ___ (work) overtime occasionally.', ans:'working', hint:"don't mind + verb-ing", exp:'"Don\'t mind + verb-ing": working.' },
+      { q:'She\'s good at ___ (cook) Turkish food.', ans:'cooking', hint:'good at + verb-ing', exp:'"Good at + verb-ing": cooking.' },
+      { q:'He can\'t stand ___ (listen) to loud music.', ans:'listening', hint:"can't stand + verb-ing", exp:'"Can\'t stand + verb-ing": listening.' },
+      { q:'Do you like ___ (travel) by train?', ans:'travelling', hint:'like + verb-ing', exp:'"Like + verb-ing": travelling.' },
+      { q:'She is passionate about ___ (photograph) nature.', ans:'photographing', hint:'passionate about + verb-ing', exp:'"Passionate about + verb-ing": photographing.' },
+      { q:'He ___ jogging every morning.', ans:'goes', hint:'go + sport activity', exp:'"Go jogging" = he does jogging regularly.' },
+      { q:'I prefer ___ (walk) to ___ (take) the bus.', ans:'walking, taking', hint:'prefer + verb-ing to + verb-ing', exp:'"Prefer walking to taking" = I like walking more.' },
+      { q:'We love ___ (camp) by the lake in summer.', ans:'camping', hint:'love + verb-ing', exp:'"Love + verb-ing": camping.' },
+      { q:'She is interested in ___ (learn) sign language.', ans:'learning', hint:'interested in + verb-ing', exp:'"Interested in + verb-ing": learning.' },
+      { q:'Do you mind ___ (open) the window?', ans:'opening', hint:'mind + verb-ing', exp:'"Mind + verb-ing": opening.' },
+      { q:'He doesn\'t enjoy ___ (clean) the house.', ans:'cleaning', hint:"doesn't enjoy + verb-ing", exp:'"Doesn\'t enjoy + verb-ing": cleaning.' },
+      { q:'She ___ cycling to work every day.', ans:'goes', hint:'go + activity', exp:'"She goes cycling" = regular activity.' },
+      { q:'They hate ___ (get up) early.', ans:'getting up', hint:'hate + verb-ing', exp:'"Hate + verb-ing": getting up.' },
+      { q:'He is talented at ___ (draw) portraits.', ans:'drawing', hint:'talented at + verb-ing', exp:'"Talented at + verb-ing": drawing.' },
+      { q:'I can\'t stand ___ (be) stuck in traffic.', ans:'being', hint:"can't stand + verb-ing", exp:'"Can\'t stand + verb-ing": being.' },
+      { q:'She enjoys ___ (paint) watercolours.', ans:'painting', hint:'enjoy + verb-ing', exp:'"Enjoy + verb-ing": painting.' },
+      { q:'We go ___ in the mountains every winter.', ans:'skiing', hint:'go + winter sport', exp:'"We go skiing" = we ski in the mountains.' }
+    ]
+  },
+  12: {
+    topic: 'Going to vs. Will & Future Expressions',
+    questions: [
+      { q:'I think it ___ rain tomorrow.', ans:'will', hint:'prediction (no evidence)', exp:'"Will" for predictions without evidence.' },
+      { q:'Look at those dark clouds! It ___ ___ rain.', ans:'is going to', hint:'evidence-based prediction', exp:'"Going to" with visible evidence.' },
+      { q:'She ___ ___ study medicine at university.', ans:'is going to', hint:'pre-made plan', exp:'"Going to" for pre-decided plans.' },
+      { q:'A: "I\'m thirsty." B: "I ___ get you some water."', ans:"I'll", hint:'spontaneous decision', exp:'"I\'ll" for spontaneous decisions.' },
+      { q:'They ___ ___ get married next spring.', ans:'are going to', hint:'plan (they)', exp:'"Going to" for future plans.' },
+      { q:'He probably ___ pass the exam.', ans:"won't", hint:'negative prediction (probably)', exp:'"Won\'t" = negative prediction.' },
+      { q:'I\'m sure she ___ be a great doctor.', ans:'will', hint:'positive prediction', exp:'"Will" for confident predictions.' },
+      { q:'___ you ___ come to the meeting tomorrow?', ans:'Are, going to', hint:'"going to" question (you)', exp:'"Are you going to come?" = question about plan.' },
+      { q:'A: "Can someone help?" B: "___ do it!"', ans:"I'll", hint:'volunteer spontaneously', exp:'"I\'ll do it" = spontaneous offer.' },
+      { q:'We ___ ___ visit our relatives this holiday.', ans:'are going to', hint:'plan (we)', exp:'"Going to" for plans.' },
+      { q:'The exam is ___ week — I need to study!', ans:'next', hint:'future time expression', exp:'"Next week" = coming week.' },
+      { q:'She says she ___ ___ quit her job.', ans:'is going to', hint:'reported plan', exp:'"Going to" for intention.' },
+      { q:'I ___ be there on time, I promise.', ans:"I'll", hint:'promise', exp:'"I\'ll" for promises.' },
+      { q:'They ___ ___ move house ___ year.', ans:'are going to, next', hint:'plan + time expression', exp:'"Going to" + next year.' },
+      { q:'In 50 years, robots ___ do most jobs.', ans:'will', hint:'distant future prediction', exp:'"Will" for future predictions.' },
+      { q:'She ___ probably win — she\'s the best.', ans:'will', hint:'prediction with probably', exp:'"Will probably" = uncertain prediction.' },
+      { q:'Look! The baby ___ ___ fall!', ans:'is going to', hint:'immediate prediction (evidence)', exp:'"Going to" with clear current evidence.' },
+      { q:'A: "No milk left." B: "I ___ go buy some."', ans:"I'll", hint:'spontaneous decision in reaction', exp:'"I\'ll" for spontaneous decisions.' },
+      { q:'He ___ ___ start a new job ___ month.', ans:'is going to, next', hint:'plan + time expression', exp:'"Going to" + next month.' },
+      { q:'We ___ be late if we don\'t hurry.', ans:'will', hint:'conditional prediction', exp:'"Will" in conditional predictions.' }
+    ]
+  },
+  13: {
+    topic: 'Past Simple Tense',
+    questions: [
+      { q:'She ___ (go) to the market yesterday.', ans:'went', hint:'go → past simple (irregular)', exp:'Go → went.' },
+      { q:'They ___ (watch) a documentary last night.', ans:'watched', hint:'watch → past simple (regular)', exp:'Watch → watched.' },
+      { q:'I ___ (not see) him at the party.', ans:"didn't see", hint:'negative past simple', exp:'"Didn\'t + base verb": didn\'t see.' },
+      { q:'___ you ___ (enjoy) the holiday?', ans:'Did, enjoy', hint:'yes/no question past simple', exp:'"Did you enjoy?" = question.' },
+      { q:'He ___ (wake up) early this morning.', ans:'woke up', hint:'wake up → past (irregular)', exp:'Wake up → woke up.' },
+      { q:'She ___ (not finish) her meal.', ans:"didn't finish", hint:'negative past simple', exp:'"Didn\'t finish" = negative.' },
+      { q:'We ___ (travel) to Cappadocia last summer.', ans:'travelled', hint:'travel → past simple (regular)', exp:'Travel → travelled.' },
+      { q:'___ they ___ (arrive) on time?', ans:'Did, arrive', hint:'question past simple', exp:'"Did they arrive?" = question.' },
+      { q:'I ___ (meet) my best friend at the café.', ans:'met', hint:'meet → past (irregular)', exp:'Meet → met.' },
+      { q:'She ___ (write) a letter to her friend.', ans:'wrote', hint:'write → past (irregular)', exp:'Write → wrote.' },
+      { q:'He ___ (not like) the food at all.', ans:"didn't like", hint:'negative past simple', exp:'"Didn\'t like" = negative.' },
+      { q:'They ___ (buy) a new laptop last week.', ans:'bought', hint:'buy → past (irregular)', exp:'Buy → bought.' },
+      { q:'We ___ (have) a wonderful time in Trabzon.', ans:'had', hint:'have → past (irregular)', exp:'Have → had.' },
+      { q:'He ___ (say) he was very happy.', ans:'said', hint:'say → past (irregular)', exp:'Say → said.' },
+      { q:'___ she ___ (call) you?', ans:'Did, call', hint:'question past simple (she)', exp:'"Did she call?" = question.' },
+      { q:'I ___ (take) many photos at the festival.', ans:'took', hint:'take → past (irregular)', exp:'Take → took.' },
+      { q:'She ___ (study) very hard for the test.', ans:'studied', hint:'study → past (y→ied)', exp:'Study → studied.' },
+      { q:'He ___ (not come) to work yesterday.', ans:"didn't come", hint:'negative past simple', exp:'"Didn\'t come" = negative.' },
+      { q:'We ___ (see) a wonderful sunset on the beach.', ans:'saw', hint:'see → past (irregular)', exp:'See → saw.' },
+      { q:'The film ___ (start) at 8 o\'clock.', ans:'started', hint:'start → past simple (regular)', exp:'Start → started.' }
+    ]
+  },
+  14: {
+    topic: 'Suggestions & Social Invitations',
+    questions: [
+      { q:'___ go to the park this afternoon!', ans:"Let's", hint:"Let's + base verb", exp:'"Let\'s + base verb" = suggestion together.' },
+      { q:'___ about having a barbecue this weekend?', ans:'How', hint:'"How about ___?" suggestion', exp:'"How about + verb-ing/noun?" = suggestion.' },
+      { q:'Why ___ we visit the science museum?', ans:"don't", hint:'"Why don\'t we ___?"', exp:'"Why don\'t we + base verb?" = suggestion.' },
+      { q:'How about ___ (try) the new Italian restaurant?', ans:'trying', hint:'"How about" + verb-ing', exp:'"How about trying?" = suggestion.' },
+      { q:'Shall we ___ a walk in the park?', ans:'take', hint:'"Shall we" + base verb', exp:'"Shall we take a walk?" = suggestion.' },
+      { q:'Let\'s ___ late. The film starts at 8.', ans:"not be", hint:'"Let\'s not be ___"', exp:'"Let\'s not + base verb" = negative suggestion.' },
+      { q:'A: "What shall we do?" B: "___ ___ we play tennis?"', ans:"Why, don't", hint:'"Why don\'t we ___?"', exp:'"Why don\'t we play tennis?" = suggestion.' },
+      { q:'She ___ me to her engagement party.', ans:'invited', hint:'invite → past simple', exp:'Invite → invited (regular past simple).' },
+      { q:'A: "Let\'s get coffee!" B: "That ___ ___!"', ans:'sounds great', hint:'positive response', exp:'"That sounds great!" = enthusiastic agreement.' },
+      { q:'Why don\'t we ___ (watch) a film tonight?', ans:'watch', hint:'"Why don\'t we" + base verb', exp:'"Why don\'t we watch?" = suggestion.' },
+      { q:'I\'m ___ a dinner party next Saturday.', ans:'having', hint:'present continuous (future plan)', exp:'"I\'m having" = planned future event.' },
+      { q:'How about ___ (go) bowling?', ans:'going', hint:'"How about" + verb-ing', exp:'"How about going bowling?" = suggestion.' },
+      { q:'___ not stay up too late tonight.', ans:"Let's", hint:'"Let\'s not ___"', exp:'"Let\'s not + verb" = negative suggestion.' },
+      { q:'Shall ___ order some pizza?', ans:'we', hint:'"Shall ___ ___?"', exp:'"Shall we order?" = suggestion.' },
+      { q:'A: "I\'m bored." B: "___ read a book?"', ans:'Why not', hint:'suggestion without subject', exp:'"Why not + base verb?" = simple suggestion.' },
+      { q:'They are ___ a graduation party for their daughter.', ans:'organising', hint:'present continuous (arranging)', exp:'"Organising a party" = arranging/planning.' },
+      { q:'A: "How about coffee?" B: "___ ___!"', ans:'Great idea', hint:'enthusiastic agreement', exp:'"Great idea!" = agreement with suggestion.' },
+      { q:'Why don\'t we ___ (meet) at the café at 6?', ans:'meet', hint:'"Why don\'t we" + base verb', exp:'"Why don\'t we meet?" = suggestion.' },
+      { q:'She ___ him to the concert but he couldn\'t come.', ans:'invited', hint:'invite → past simple', exp:'Invited = past simple of invite.' },
+      { q:'Let\'s ___ (celebrate) your birthday tonight!', ans:'celebrate', hint:'"Let\'s" + base verb', exp:'"Let\'s celebrate!" = suggestion together.' }
+    ]
+  },
+  15: {
+    topic: 'Can/Can\'t & Have to/Don\'t have to — Jobs',
+    questions: [
+      { q:'She ___ speak four languages fluently.', ans:'can', hint:'ability (she)', exp:'"Can" = ability.' },
+      { q:'He ___ drive — he doesn\'t have a licence yet.', ans:"can't", hint:'inability', exp:'"Can\'t" = not able to.' },
+      { q:'Police officers ___ wear a uniform.', ans:'have to', hint:'job requirement', exp:'"Have to" = obligation/requirement.' },
+      { q:'You ___ ___ come in on Sundays — it\'s a day off.', ans:"don't have to", hint:'no obligation', exp:'"Don\'t have to" = not required.' },
+      { q:'___ you use graphic design software?', ans:'Can', hint:'ability question', exp:'"Can you...?" = ability question.' },
+      { q:'Doctors ___ keep medical records.', ans:'have to', hint:'professional obligation', exp:'"Have to" = professional requirement.' },
+      { q:'She ___ ___ attend all the meetings.', ans:"doesn't have to", hint:'no obligation (she)', exp:'"Doesn\'t have to" = not required for her.' },
+      { q:'A pilot ___ have very good eyesight.', ans:'has to', hint:'job requirement (he/she/it)', exp:'"Has to" for singular obligation.' },
+      { q:'I ___ type quickly — 100 words per minute!', ans:'can', hint:'skill/ability (I)', exp:'"Can" for skills.' },
+      { q:'Paramedics ___ work under pressure.', ans:'have to', hint:'job requirement', exp:'"Have to" for requirements.' },
+      { q:'She ___ cook at all — she orders food every day.', ans:"can't", hint:'inability to cook', exp:'"Can\'t" = unable to.' },
+      { q:'You ___ pay — the event is completely free.', ans:"don't have to", hint:'no cost = no obligation', exp:'"Don\'t have to" = not necessary.' },
+      { q:'___ he work on weekends?', ans:'Does he have to', hint:'"have to" question (he)', exp:'"Does he have to work?" = obligation question.' },
+      { q:'An architect ___ create accurate technical drawings.', ans:'has to', hint:'professional requirement (he/she/it)', exp:'"Has to" for singular professional.' },
+      { q:'Students ___ ___ wear uniforms at university.', ans:"don't have to", hint:'no requirement at university', exp:'"Don\'t have to" = not required.' },
+      { q:'She ___ present very well — everyone loves her talks.', ans:'can', hint:'skill/ability', exp:'"Can" for ability/skill.' },
+      { q:'They ___ submit the report by Friday.', ans:'have to', hint:'deadline = obligation', exp:'"Have to" = required by deadline.' },
+      { q:'I ___ lift heavy boxes — I have a bad back.', ans:"can't", hint:'inability due to injury', exp:'"Can\'t" = unable (due to health).' },
+      { q:'You ___ sign the contract before you start.', ans:'have to', hint:'legal/job requirement', exp:'"Have to" = necessary requirement.' },
+      { q:'A translator ___ be fluent in at least two languages.', ans:'has to', hint:'job requirement (singular)', exp:'"Has to" = required for the job.' }
+    ]
+  },
+  16: {
+    topic: 'Present Perfect Tense',
+    questions: [
+      { q:'She ___ ___ (visit) Japan twice.', ans:'has visited', hint:'present perfect (she)', exp:'"Has + past participle": has visited.' },
+      { q:'I ___ ___ (not eat) breakfast yet.', ans:"haven't eaten", hint:'negative present perfect (I)', exp:'"Haven\'t + past participle": haven\'t eaten.' },
+      { q:'___ you ___ (ever be) to London?', ans:'Have, ever been', hint:'"Have you ever ___?" experience', exp:'"Have you ever been?" = life experience question.' },
+      { q:'He ___ ___ (work) here for ten years.', ans:'has worked', hint:'present perfect + for (he)', exp:'"Has worked for" = duration from past to now.' },
+      { q:'They ___ ___ (already leave).', ans:'have already left', hint:'"already" + present perfect', exp:'"Already" = before now.' },
+      { q:'She ___ ___ (just finish) her exams.', ans:'has just finished', hint:'"just" + present perfect (she)', exp:'"Just" = very recently.' },
+      { q:'I ___ ___ (see) that film before.', ans:'have seen', hint:'experience with "before"', exp:'"Have seen before" = life experience.' },
+      { q:'He ___ ___ (not call) yet.', ans:"hasn't called", hint:'"yet" + negative present perfect (he)', exp:'"Yet" in negatives = not happened up to now.' },
+      { q:'We ___ ___ (study) together ___ 2022.', ans:'have studied, since', hint:'"since" + point in time', exp:'"Since" = from a specific time until now.' },
+      { q:'___ she ___ (finish) the project?', ans:'Has, finished', hint:'yes/no question present perfect (she)', exp:'"Has she finished?" = present perfect question.' },
+      { q:'I ___ ___ (travel) to Africa.', ans:'have never travelled', hint:'"never" + present perfect', exp:'"Never" = at no point in my life.' },
+      { q:'They ___ ___ (win) the championship three times!', ans:'have won', hint:'life achievement present perfect', exp:'"Have won" = life experience.' },
+      { q:'She ___ ___ (be) a doctor ___ 20 years.', ans:'has been, for', hint:'"for" + duration (she)', exp:'"Has been for" = duration from past to now.' },
+      { q:'Have you ___ (read) this novel before?', ans:'ever read', hint:'"ever" experience question', exp:'"Have you ever read?" = experience.' },
+      { q:'He ___ ___ (just get) his driving licence.', ans:'has just got', hint:'"just" + present perfect (he)', exp:'"Just" = very recently.' },
+      { q:'I ___ ___ (already pay) the bill.', ans:'have already paid', hint:'"already" + present perfect (I)', exp:'"Already" = done before now.' },
+      { q:'She ___ ___ (live) in this city ___ she was born.', ans:'has lived, since', hint:'"since" + event in the past', exp:'"Since she was born" = from birth until now.' },
+      { q:'We ___ ___ (not decide) yet.', ans:"haven't decided", hint:'negative present perfect + yet', exp:'"Haven\'t decided yet" = not happened up to now.' },
+      { q:'___ he ___ (ever work) abroad?', ans:'Has, ever worked', hint:'"ever" experience (he)', exp:'"Has he ever worked abroad?" = experience.' },
+      { q:'They ___ ___ (recently move) to a bigger flat.', ans:'have recently moved', hint:'"recently" + present perfect', exp:'"Recently" = in the near past.' }
     ]
   }
 };
-// Weeks 2-16 placeholder quizzes
-for(let i=2;i<=16;i++) QUIZZES[i] = {
-  topic: `Week ${i} Grammar & Vocabulary`,
-  questions: [
-    { q:`[Week ${i}] The students ___ in the library.`,     ans:'are',    hint:'to be (plural)', exp:'Plural subject → are.' },
-    { q:`[Week ${i}] She ___ to school every morning.`,     ans:'goes',   hint:'verb+s for she', exp:'She + verb-s → goes.' },
-    { q:`[Week ${i}] ___ he like sports?`,                  ans:'Does',   hint:'auxiliary he',   exp:'Questions he/she/it → Does.' },
-    { q:`[Week ${i}] They ___ not understand the question.`,ans:'do',     hint:'auxiliary they',  exp:'Negative they → do not.' },
-    { q:`[Week ${i}] I ___ very tired today.`,              ans:'am',     hint:'to be for I',    exp:'I + am.' }
-  ]
-};
+
 
 /* ════════════════════════════════════════════════════════════════
    ██████   D) SELF-ASSESSMENT OBJECTIVES PER WEEK
    ════════════════════════════════════════════════════════════════ */
+// Self-Assessment objectives (10 per week) + Extra Support content
 const SELF_ASSESSMENT = {
   1: [
-    'I can introduce myself in English',
-    'I can use the verb "to be" correctly (am/is/are)',
-    'I can make simple present positive sentences',
-    'I can make simple present negative sentences',
-    'I can ask yes/no questions in simple present',
-    'I understand basic everyday vocabulary',
-    'I can spell common English words correctly',
-    'I know the difference between adjectives and adverbs'
+    'I can greet people and introduce myself in English (Hello, My name is...)',
+    'I can use the verb "to be" correctly: I am, You are, He/She/It is',
+    'I can ask and answer "What is your name / job / nationality?"',
+    'I can say and ask about age: "How old are you? I am ___."',
+    'I can spell my name, email address, and phone number in English',
+    'I know at least 15 greeting and personal information vocabulary words',
+    'I can write a short paragraph introducing myself (5–6 sentences)',
+    'I understand the difference between positive and negative "to be"',
+    'I can make yes/no questions with "to be": Is she a teacher?',
+    'I feel confident using am / is / are in the correct context'
+  ],
+  2: [
+    'I can name at least 15 family members in English (mother, uncle, nephew...)',
+    'I can use possessive adjectives: my, your, his, her, its, our, their',
+    'I can use possessive \'s to show relationships: Ali\'s sister',
+    'I can describe my family (size, names, relationships)',
+    'I can ask and answer: "Do you have any brothers or sisters?"',
+    'I understand the difference between sister/brother and nephew/niece',
+    'I can write a short paragraph about my family (6–8 sentences)',
+    'I know the difference between "his" and "its" (no apostrophe for its)',
+    'I can identify the correct possessive adjective for each pronoun',
+    'I feel confident talking and writing about family and relationships'
+  ],
+  3: [
+    'I can form affirmative Present Simple sentences (He works / They study)',
+    'I can form negative Present Simple sentences (She doesn\'t like / I don\'t go)',
+    'I can form yes/no questions in Present Simple (Do you? / Does she?)',
+    'I can use adverbs of frequency: always, usually, often, sometimes, rarely, never',
+    'I know where to place adverbs of frequency (before main verb, after "to be")',
+    'I can describe my daily routine using Present Simple',
+    'I know at least 20 daily routine verbs (wake up, brush, commute...)',
+    'I can tell the time in English and use it in sentences',
+    'I can write a paragraph about my typical day (7–10 sentences)',
+    'I feel confident using Present Simple with correct form (verb+s for he/she/it)'
+  ],
+  4: [
+    'I can use "There is" (singular) and "There are" (plural) correctly',
+    'I can make questions: "Is there a...? / Are there any...?"',
+    'I can make negatives: "There isn\'t a... / There aren\'t any..."',
+    'I know at least 20 words for rooms, furniture, and household objects',
+    'I can use prepositions of place: in, on, under, next to, between, above, opposite',
+    'I can describe where things are in a room using prepositions',
+    'I can describe my home (rooms, furniture, location)',
+    'I understand when to use "some" vs "any" with there is/are',
+    'I can write a paragraph describing my house or bedroom',
+    'I feel confident describing living spaces using there is/are and prepositions'
+  ],
+  5: [
+    'I know the difference between countable and uncountable nouns',
+    'I can use "some" in affirmative sentences and "any" in questions/negatives',
+    'I can use "much" with uncountable nouns and "many" with countable nouns',
+    'I can use "a lot of" with both countable and uncountable nouns',
+    'I know at least 25 food and drink vocabulary items',
+    'I can order food and drinks in a restaurant in English',
+    'I can read and understand a simple restaurant menu',
+    'I know expressions for meals: breakfast, lunch, dinner, snack',
+    'I can write a short description of my eating habits',
+    'I feel confident using quantifiers (some, any, much, many, a lot of) correctly'
+  ],
+  6: [
+    'I can form comparative adjectives: -er, more + adjective (and exceptions)',
+    'I can form superlative adjectives: -est, most + adjective (and exceptions)',
+    'I know irregular comparatives: good/better/best, bad/worse/worst',
+    'I can use "as ... as" for equal comparisons and "not as ... as" for unequal',
+    'I know at least 20 descriptive adjectives and their comparative/superlative forms',
+    'I can compare people, places, and objects using comparatives',
+    'I can use superlatives to say something is the extreme: "the tallest building"',
+    'I can write sentences comparing two things accurately',
+    'I understand when to double consonants (big → bigger) or change y → ier (easy → easier)',
+    'I feel confident using comparatives and superlatives in context'
+  ],
+  7: [
+    'I can give and follow directions in English (Turn left, Go straight, Take the second right)',
+    'I can use imperatives to give instructions (Go, Turn, Cross, Take)',
+    'I know prepositions of movement: through, over, past, across, around',
+    'I know prepositions of location: next to, between, opposite, near, on the corner of',
+    'I know at least 20 places in town (bakery, pharmacy, roundabout, traffic lights...)',
+    'I can understand and give directions from a map',
+    'I can use negative imperatives: Don\'t run / Don\'t park here',
+    'I can ask for directions politely: "Excuse me, how do I get to...?"',
+    'I can write a set of directions from one place to another',
+    'I feel confident with directions, imperatives, and prepositions of movement'
+  ],
+  8: [
+    'I can use "going to" for future plans and intentions',
+    'I can use "can" for ability and "can\'t" for inability',
+    'I can use "must/must not" for strong obligation and prohibition',
+    'I can use "need to" for necessity and requirements',
+    'I know at least 25 travel and transport vocabulary words',
+    'I can talk about travel plans using "going to"',
+    'I understand the difference between "must not" (prohibition) and "don\'t have to" (no obligation)',
+    'I can ask for and give information about transport (When does the bus leave?)',
+    'I can write a paragraph about a future travel plan',
+    'I feel confident using can, must, need to, and going to in travel contexts'
+  ],
+  9: [
+    'I can use "should" to give positive advice and recommendations',
+    'I can use "shouldn\'t" to advise against something',
+    'I know at least 20 body parts in English',
+    'I know at least 10 common illnesses and symptoms (headache, fever, cold, backache...)',
+    'I can describe a health problem: "My head hurts / I have a sore throat"',
+    'I can give and receive health advice using should/shouldn\'t',
+    'I can understand and respond to "What\'s wrong?" or "How do you feel?"',
+    'I know expressions for doctor visits (I\'d like an appointment / I have a pain in...)',
+    'I can write a short advice paragraph about staying healthy',
+    'I feel confident discussing health, illnesses, and giving advice in English'
+  ],
+  10: [
+    'I can form Present Continuous affirmatives: I am working / She is reading',
+    'I can form Present Continuous negatives: He is not sleeping / They aren\'t studying',
+    'I can form Present Continuous questions: Is she cooking? / What are they doing?',
+    'I know when to use Present Continuous (actions happening now, temporary situations)',
+    'I know at least 20 weather vocabulary words (sunny, cloudy, storm, humid...)',
+    'I can describe what is happening in a picture using Present Continuous',
+    'I can talk about current weather conditions using Present Continuous',
+    'I know the difference between Present Simple (habits) and Present Continuous (now)',
+    'I can add -ing to verbs correctly (run → running, swim → swimming)',
+    'I feel confident using Present Continuous for ongoing and temporary actions'
+  ],
+  11: [
+    'I can use like, enjoy, love, hate + verb-ing correctly',
+    'I can use "don\'t mind", "can\'t stand", and "prefer + verb-ing" correctly',
+    'I can use "good/bad at + verb-ing" and "interested in + verb-ing"',
+    'I know at least 20 sports, hobbies, and leisure activity words',
+    'I can use "go + verb-ing" for sporting activities (go swimming, go cycling)',
+    'I can use adverbs of manner: quickly, slowly, carefully, loudly, quietly',
+    'I can ask and answer questions about hobbies: "What do you enjoy doing?"',
+    'I can describe my hobbies and free time activities in detail',
+    'I know how to add -ing to verbs (including spelling changes: swim → swimming)',
+    'I feel confident discussing hobbies using verb patterns with -ing'
+  ],
+  12: [
+    'I can use "going to" for pre-planned future intentions',
+    'I can use "will" for predictions, spontaneous decisions, promises, and offers',
+    'I understand the difference between "going to" and "will" in context',
+    'I know at least 15 future time expressions (next week, soon, in two days, by Friday)',
+    'I can make predictions about the future using will + probably/definitely',
+    'I can describe future plans in conversation and writing',
+    'I can form questions about the future: "Will you...? / Are you going to...?"',
+    'I can use "going to" based on visible evidence (Look! It\'s going to rain.)',
+    'I can respond to offers and make spontaneous decisions with "I\'ll"',
+    'I feel confident distinguishing and using "going to" and "will" accurately'
+  ],
+  13: [
+    'I can form regular Past Simple verbs: +ed (watched, visited, started)',
+    'I know at least 20 common irregular Past Simple verbs (go→went, buy→bought...)',
+    'I can form negative past simple: didn\'t + base verb',
+    'I can form yes/no questions in Past Simple: Did you go? / Did she enjoy?',
+    'I know past time expressions: yesterday, last night, two days ago, in 2020',
+    'I can tell a story about a past experience using Past Simple',
+    'I can ask about past experiences: "What did you do last weekend?"',
+    'I know the difference between regular and irregular Past Simple forms',
+    'I can write a diary entry or short story about a past event',
+    'I feel confident using Past Simple in positive, negative, and question forms'
+  ],
+  14: [
+    'I can use "Let\'s + base verb" to make suggestions',
+    'I can use "How about + verb-ing?" to make suggestions',
+    'I can use "Why don\'t we + base verb?" to make suggestions',
+    'I can use "Shall we + base verb?" for formal suggestions',
+    'I can accept suggestions: "That sounds great! / Good idea! / I\'d love to!"',
+    'I can decline suggestions politely: "I\'m afraid I can\'t / Maybe another time"',
+    'I know at least 15 social event vocabulary words (party, barbecue, ceremony...)',
+    'I can invite someone to an event: "Would you like to come to...?"',
+    'I can write a dialogue involving making and responding to suggestions',
+    'I feel confident making, accepting, and declining suggestions in English'
+  ],
+  15: [
+    'I can use "can" for ability and "can\'t" for inability',
+    'I can use "have to" for obligation and "don\'t have to" for no obligation',
+    'I can use "has to / doesn\'t have to" for third person (he/she/it)',
+    'I understand the difference between "must not" (forbidden) and "don\'t have to" (not required)',
+    'I know at least 20 job-related vocabulary words (accountant, mechanic, surgeon...)',
+    'I can describe what abilities are needed for different jobs',
+    'I can describe job obligations and requirements using have to',
+    'I can discuss practical problems and solutions using can/can\'t, have to',
+    'I can write a paragraph about my dream job using the target grammar',
+    'I feel confident using can/can\'t and have to/don\'t have to in job contexts'
+  ],
+  16: [
+    'I can form Present Perfect: have/has + past participle',
+    'I can use "ever" and "never" with Present Perfect for life experiences',
+    'I can use "just", "already", and "yet" with Present Perfect',
+    'I can use "for" and "since" with Present Perfect for duration',
+    'I know at least 20 common past participles (seen, gone, visited, eaten...)',
+    'I can ask and answer about life experiences: "Have you ever...? Yes, I have."',
+    'I understand when to use Present Perfect vs. Past Simple',
+    'I can talk about my personal achievements and life experiences',
+    'I can use Present Perfect in context: "I have already finished / She hasn\'t arrived yet"',
+    'I feel confident using Present Perfect to talk about experiences and achievements'
   ]
 };
-// Weeks 2-16 placeholder objectives
-for(let i=2;i<=16;i++) SELF_ASSESSMENT[i] = [
-  `I understand the main grammar topic of Week ${i}`,
-  `I can use new vocabulary from Week ${i} in sentences`,
-  `I can complete fill-in-the-blank exercises accurately`,
-  `I can ask and answer questions about Week ${i} topics`,
-  `I have watched the lesson video and taken notes`,
-  `I feel ready for the weekly quiz`
-];
+
+
+const EXTRA_SUPPORT = {
+  1: {
+    title: 'Unit 1: Greetings & Verb "To Be"',
+    content: `
+<h3>📖 Grammar: Verb "To Be" (am / is / are)</h3>
+<p>The verb <strong>"to be"</strong> has three forms in the present tense:</p>
+<table class="es-table">
+  <tr><th>Subject</th><th>To Be</th><th>Example</th></tr>
+  <tr><td>I</td><td><strong>am</strong></td><td>I <strong>am</strong> a student.</td></tr>
+  <tr><td>You</td><td><strong>are</strong></td><td>You <strong>are</strong> from Turkey.</td></tr>
+  <tr><td>He / She / It</td><td><strong>is</strong></td><td>She <strong>is</strong> a teacher.</td></tr>
+  <tr><td>We / They</td><td><strong>are</strong></td><td>They <strong>are</strong> classmates.</td></tr>
+</table>
+
+<h3>📌 Negative Forms</h3>
+<ul>
+  <li>I am <strong>not</strong> → I'm not</li>
+  <li>He/She/It is <strong>not</strong> → isn't</li>
+  <li>You/We/They are <strong>not</strong> → aren't</li>
+</ul>
+
+<h3>📌 Question Forms</h3>
+<ul>
+  <li><strong>Am</strong> I late?</li>
+  <li><strong>Is</strong> she a doctor?</li>
+  <li><strong>Are</strong> you from Konya?</li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>Hi! My name <strong>is</strong> Ayşe. I <strong>am</strong> from Konya.</li>
+  <li>This <strong>is</strong> my friend Ali. He <strong>is</strong> 22 years old.</li>
+  <li>We <strong>are</strong> students at Necmettin Erbakan University.</li>
+  <li>She <strong>is not</strong> a nurse — she <strong>is</strong> a doctor.</li>
+  <li><strong>Are</strong> you from Istanbul? — No, I <strong>am</strong> from Ankara.</li>
+  <li>My email address <strong>is</strong> ayse@gmail.com.</li>
+  <li>They <strong>are</strong> not married. They <strong>are</strong> just friends.</li>
+  <li>Nice to meet you! I <strong>am</strong> Mehmet.</li>
+  <li>What <strong>is</strong> your phone number?</li>
+  <li>Our teacher <strong>is</strong> very helpful.</li>
+  <li>I <strong>am</strong> 20 years old and I <strong>am</strong> a first-year student.</li>
+  <li>He <strong>is</strong> not Turkish — he <strong>is</strong> German.</li>
+</ol>
+
+<h3>🌟 Vocabulary: Greetings & Personal Information</h3>
+<ul>
+  <li><strong>Hello / Hi</strong> — informal greeting</li>
+  <li><strong>Good morning / afternoon / evening</strong> — formal greetings</li>
+  <li><strong>Nice to meet you</strong> — first meeting</li>
+  <li><strong>How are you? / Fine, thanks</strong> — polite question & answer</li>
+  <li><strong>Excuse me</strong> — getting attention</li>
+  <li><strong>What is your name / nationality / job?</strong> — personal info questions</li>
+  <li><strong>Where are you from?</strong> — origin question</li>
+  <li><strong>How old are you?</strong> — age question</li>
+  <li><strong>Nationality:</strong> Turkish, English, German, French, Spanish</li>
+  <li><strong>Job:</strong> student, teacher, doctor, engineer, nurse</li>
+</ul>`
+  },
+  2: {
+    title: 'Unit 2: Family & Possessive Adjectives',
+    content: `
+<h3>📖 Grammar: Possessive Adjectives</h3>
+<table class="es-table">
+  <tr><th>Subject Pronoun</th><th>Possessive Adjective</th><th>Example</th></tr>
+  <tr><td>I</td><td><strong>my</strong></td><td><strong>My</strong> sister is kind.</td></tr>
+  <tr><td>You</td><td><strong>your</strong></td><td><strong>Your</strong> brother is tall.</td></tr>
+  <tr><td>He</td><td><strong>his</strong></td><td><strong>His</strong> mother is a nurse.</td></tr>
+  <tr><td>She</td><td><strong>her</strong></td><td><strong>Her</strong> father is an engineer.</td></tr>
+  <tr><td>It</td><td><strong>its</strong></td><td>The dog wags <strong>its</strong> tail.</td></tr>
+  <tr><td>We</td><td><strong>our</strong></td><td><strong>Our</strong> grandparents are kind.</td></tr>
+  <tr><td>They</td><td><strong>their</strong></td><td><strong>Their</strong> children are young.</td></tr>
+</table>
+
+<h3>📌 Possessive 's</h3>
+<p>Add <strong>'s</strong> to a name or noun to show possession or relationship:</p>
+<ul>
+  <li>Ali<strong>'s</strong> sister → Ali's sister (Ali's female sibling)</li>
+  <li>My mother<strong>'s</strong> brother → my uncle</li>
+  <li>The children<strong>'s</strong> room → the room of the children</li>
+  <li>My parents<strong>'</strong> house → house of my parents (plural → apostrophe only)</li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>This is <strong>my</strong> mother. <strong>Her</strong> name is Fatma.</li>
+  <li>He loves <strong>his</strong> father very much.</li>
+  <li>Ali<strong>'s</strong> brother is a lawyer.</li>
+  <li>We visit <strong>our</strong> grandparents every Sunday.</li>
+  <li>They bring <strong>their</strong> children to school by car.</li>
+  <li>The cat drinks <strong>its</strong> milk from a bowl.</li>
+  <li>My sister<strong>'s</strong> husband is from İzmir.</li>
+  <li>Can I borrow <strong>your</strong> pen?</li>
+  <li>My aunt<strong>'s</strong> son is <strong>my</strong> cousin.</li>
+  <li>She lives with <strong>her</strong> parents and grandparents.</li>
+  <li><strong>Our</strong> parents<strong>'</strong> names are Ahmet and Zeynep.</li>
+  <li>He is <strong>my</strong> uncle — <strong>my</strong> mother<strong>'s</strong> brother.</li>
+</ol>
+
+<h3>🌟 Vocabulary: Family Members</h3>
+<ul>
+  <li><strong>Parents:</strong> mother/mum, father/dad</li>
+  <li><strong>Siblings:</strong> brother, sister</li>
+  <li><strong>Grandparents:</strong> grandmother, grandfather</li>
+  <li><strong>Extended family:</strong> aunt, uncle, cousin, nephew, niece</li>
+  <li><strong>In-laws:</strong> mother-in-law, father-in-law, sister-in-law</li>
+  <li><strong>Spouse:</strong> husband, wife, partner</li>
+  <li><strong>Children:</strong> son, daughter, twins</li>
+  <li><strong>Other:</strong> only child, half-brother, step-sister, godfather</li>
+</ul>`
+  },
+  3: {
+    title: 'Unit 3: Present Simple & Adverbs of Frequency',
+    content: `
+<h3>📖 Grammar: Present Simple</h3>
+<p>Use the Present Simple for: <strong>habits, routines, general truths, and facts</strong>.</p>
+
+<h4>Positive:</h4>
+<ul>
+  <li>I/You/We/They → <strong>base verb</strong>: I <strong>study</strong> English every day.</li>
+  <li>He/She/It → <strong>verb + s/es</strong>: She <strong>studies</strong> English every day.</li>
+  <li>Spelling: watch → watch<strong>es</strong>, go → go<strong>es</strong>, study → studi<strong>es</strong></li>
+</ul>
+
+<h4>Negative:</h4>
+<ul>
+  <li>I/You/We/They → <strong>don't + base verb</strong>: I <strong>don't eat</strong> meat.</li>
+  <li>He/She/It → <strong>doesn't + base verb</strong>: He <strong>doesn't eat</strong> meat.</li>
+</ul>
+
+<h4>Question:</h4>
+<ul>
+  <li><strong>Do</strong> you/we/they + base verb? → <strong>Do</strong> you play tennis?</li>
+  <li><strong>Does</strong> he/she/it + base verb? → <strong>Does</strong> she work here?</li>
+</ul>
+
+<h3>📌 Adverbs of Frequency</h3>
+<table class="es-table">
+  <tr><th>Adverb</th><th>Frequency</th><th>Example</th></tr>
+  <tr><td><strong>always</strong></td><td>100%</td><td>She is <strong>always</strong> on time.</td></tr>
+  <tr><td><strong>usually</strong></td><td>~80%</td><td>I <strong>usually</strong> walk to school.</td></tr>
+  <tr><td><strong>often</strong></td><td>~60%</td><td>He <strong>often</strong> reads at night.</td></tr>
+  <tr><td><strong>sometimes</strong></td><td>~40%</td><td>We <strong>sometimes</strong> eat out.</td></tr>
+  <tr><td><strong>rarely / seldom</strong></td><td>~20%</td><td>She <strong>rarely</strong> watches TV.</td></tr>
+  <tr><td><strong>never</strong></td><td>0%</td><td>I <strong>never</strong> drink alcohol.</td></tr>
+</table>
+<p>📍 <strong>Position:</strong> Adverbs go <strong>before the main verb</strong> but <strong>after "to be"</strong>.</p>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>She <strong>wakes up</strong> at 7 a.m. every morning.</li>
+  <li>I <strong>don't drink</strong> coffee — I prefer tea.</li>
+  <li>He <strong>always brushes</strong> his teeth before bed.</li>
+  <li><strong>Does</strong> she work on weekends? — No, she <strong>doesn't</strong>.</li>
+  <li>They <strong>sometimes go</strong> to the cinema on Fridays.</li>
+  <li>My father <strong>reads</strong> the newspaper every morning.</li>
+  <li>We <strong>never eat</strong> fast food.</li>
+  <li>She <strong>is usually</strong> the first to arrive.</li>
+  <li>He <strong>often plays</strong> basketball after school.</li>
+  <li>What time <strong>do</strong> you <strong>go</strong> to bed?</li>
+</ol>`
+  },
+  4: {
+    title: 'Unit 4: There is/are & Prepositions of Place',
+    content: `
+<h3>📖 Grammar: There is / There are</h3>
+<table class="es-table">
+  <tr><th>Form</th><th>Example</th></tr>
+  <tr><td><strong>There is</strong> (singular)</td><td><strong>There is</strong> a sofa in the living room.</td></tr>
+  <tr><td><strong>There are</strong> (plural)</td><td><strong>There are</strong> two bedrooms.</td></tr>
+  <tr><td><strong>There isn't</strong> (neg. sing.)</td><td><strong>There isn't</strong> a garage.</td></tr>
+  <tr><td><strong>There aren't</strong> (neg. plur.)</td><td><strong>There aren't</strong> any windows.</td></tr>
+  <tr><td><strong>Is there?</strong> (question sing.)</td><td><strong>Is there</strong> a bathroom upstairs?</td></tr>
+  <tr><td><strong>Are there?</strong> (question plur.)</td><td><strong>Are there</strong> any chairs?</td></tr>
+</table>
+
+<h3>📌 Prepositions of Place</h3>
+<table class="es-table">
+  <tr><th>Preposition</th><th>Meaning</th><th>Example</th></tr>
+  <tr><td><strong>in</strong></td><td>inside</td><td>The cat is <strong>in</strong> the box.</td></tr>
+  <tr><td><strong>on</strong></td><td>on a surface</td><td>The book is <strong>on</strong> the table.</td></tr>
+  <tr><td><strong>under</strong></td><td>below</td><td>The shoes are <strong>under</strong> the bed.</td></tr>
+  <tr><td><strong>above</strong></td><td>higher, not touching</td><td>The lamp is <strong>above</strong> the desk.</td></tr>
+  <tr><td><strong>next to</strong></td><td>beside</td><td>The chair is <strong>next to</strong> the window.</td></tr>
+  <tr><td><strong>between</strong></td><td>in the middle of two</td><td>The café is <strong>between</strong> the bank and the park.</td></tr>
+  <tr><td><strong>opposite</strong></td><td>directly across</td><td>The school is <strong>opposite</strong> the hospital.</td></tr>
+  <tr><td><strong>near</strong></td><td>close to</td><td>My house is <strong>near</strong> the market.</td></tr>
+</table>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li><strong>There is</strong> a big kitchen in our house.</li>
+  <li><strong>There are</strong> three bedrooms and one bathroom.</li>
+  <li>The remote control is <strong>on</strong> the sofa.</li>
+  <li>My clothes are <strong>in</strong> the wardrobe.</li>
+  <li>The dog is sleeping <strong>under</strong> the table.</li>
+  <li><strong>Is there</strong> a garden? — Yes, there is a small one.</li>
+  <li><strong>Are there</strong> any shelves? — No, there aren't any.</li>
+  <li>The lamp is <strong>above</strong> the dining table.</li>
+  <li>My bedroom is <strong>next to</strong> the bathroom.</li>
+  <li>The pharmacy is <strong>between</strong> the supermarket and the bakery.</li>
+</ol>`
+  },
+  5: {
+    title: 'Unit 5: Countable/Uncountable & Quantifiers',
+    content: `
+<h3>📖 Grammar: Countable vs. Uncountable Nouns</h3>
+<p><strong>Countable nouns</strong> can be counted and have a plural form:</p>
+<ul><li>apple → apples, egg → eggs, glass → glasses</li></ul>
+<p><strong>Uncountable nouns</strong> cannot be counted and have NO plural:</p>
+<ul><li>water, rice, bread, milk, sugar, coffee, money, information</li></ul>
+
+<h3>📌 Quantifiers</h3>
+<table class="es-table">
+  <tr><th>Quantifier</th><th>Use with</th><th>Sentence type</th><th>Example</th></tr>
+  <tr><td><strong>some</strong></td><td>both</td><td>affirmative / polite questions</td><td>I have <strong>some</strong> milk. / Can I have <strong>some</strong> water?</td></tr>
+  <tr><td><strong>any</strong></td><td>both</td><td>questions / negatives</td><td><strong>Any</strong> eggs? / I don't have <strong>any</strong> eggs.</td></tr>
+  <tr><td><strong>much</strong></td><td>uncountable</td><td>questions / negatives</td><td>How <strong>much</strong> sugar? / Not <strong>much</strong> time.</td></tr>
+  <tr><td><strong>many</strong></td><td>countable</td><td>questions / negatives</td><td>How <strong>many</strong> apples? / Not <strong>many</strong> people.</td></tr>
+  <tr><td><strong>a lot of</strong></td><td>both</td><td>affirmative</td><td>I drink <strong>a lot of</strong> water.</td></tr>
+  <tr><td><strong>too much/many</strong></td><td>uncountable/countable</td><td>negative sense</td><td><strong>Too much</strong> salt is unhealthy.</td></tr>
+</table>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>There is <strong>some</strong> milk in the fridge.</li>
+  <li>Is there <strong>any</strong> bread?</li>
+  <li>We don't have <strong>any</strong> eggs.</li>
+  <li>How <strong>much</strong> water do you drink a day?</li>
+  <li>How <strong>many</strong> cups of tea did you have?</li>
+  <li>She eats <strong>a lot of</strong> vegetables.</li>
+  <li>There is <strong>no</strong> sugar in my coffee.</li>
+  <li>Would you like <strong>some</strong> more tea?</li>
+  <li><strong>Too much</strong> coffee can cause insomnia.</li>
+  <li>I don't have <strong>much</strong> money this week.</li>
+</ol>`
+  },
+  6: {
+    title: 'Unit 6: Comparative & Superlative Adjectives',
+    content: `
+<h3>📖 Grammar: Forming Comparatives and Superlatives</h3>
+<table class="es-table">
+  <tr><th>Adjective Type</th><th>Comparative</th><th>Superlative</th><th>Example</th></tr>
+  <tr><td>Short (1 syllable)</td><td>+ er</td><td>+ est</td><td>tall → tall<strong>er</strong> → the tall<strong>est</strong></td></tr>
+  <tr><td>Ends in -e</td><td>+ r</td><td>+ st</td><td>nice → nic<strong>er</strong> → the nic<strong>est</strong></td></tr>
+  <tr><td>CVC ending</td><td>double + er</td><td>double + est</td><td>big → big<strong>ger</strong> → the big<strong>gest</strong></td></tr>
+  <tr><td>Ends in -y</td><td>y → ier</td><td>y → iest</td><td>easy → eas<strong>ier</strong> → the eas<strong>iest</strong></td></tr>
+  <tr><td>Long (2+ syllables)</td><td>more + adj</td><td>the most + adj</td><td>beautiful → <strong>more</strong> beautiful → <strong>the most</strong> beautiful</td></tr>
+</table>
+<h4>Irregular forms:</h4>
+<ul>
+  <li>good → <strong>better</strong> → <strong>the best</strong></li>
+  <li>bad → <strong>worse</strong> → <strong>the worst</strong></li>
+  <li>far → <strong>farther/further</strong> → <strong>the farthest/furthest</strong></li>
+</ul>
+<h4>Equal comparison:</h4>
+<ul>
+  <li><strong>as ... as</strong>: She is <strong>as tall as</strong> her brother.</li>
+  <li><strong>not as ... as</strong>: He is <strong>not as fast as</strong> his friend.</li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>Istanbul is <strong>bigger than</strong> Ankara.</li>
+  <li>She is the <strong>smartest</strong> student in the class.</li>
+  <li>This film is <strong>more interesting than</strong> the last one.</li>
+  <li>He is the <strong>best</strong> player on the team.</li>
+  <li>My bag is <strong>heavier than</strong> yours.</li>
+  <li>Today is the <strong>hottest</strong> day of the year!</li>
+  <li>She speaks English <strong>more fluently than</strong> her sister.</li>
+  <li>This exam was <strong>easier than</strong> I expected.</li>
+  <li>He runs <strong>as fast as</strong> a professional athlete.</li>
+  <li>This is <strong>the most beautiful</strong> view I have ever seen.</li>
+</ol>`
+  },
+  7: {
+    title: 'Unit 7: Directions, Imperatives & Prepositions of Movement',
+    content: `
+<h3>📖 Grammar: Imperatives</h3>
+<p>Imperatives use the <strong>base form of the verb</strong> (no subject):</p>
+<ul>
+  <li><strong>Positive:</strong> Turn left. Go straight on. Cross the bridge.</li>
+  <li><strong>Negative:</strong> Don't run. Don't park here. Don't be late.</li>
+</ul>
+
+<h3>📌 Prepositions of Movement</h3>
+<table class="es-table">
+  <tr><th>Preposition</th><th>Meaning</th><th>Example</th></tr>
+  <tr><td><strong>through</strong></td><td>entering and exiting</td><td>Walk <strong>through</strong> the park.</td></tr>
+  <tr><td><strong>over</strong></td><td>above and to the other side</td><td>Jump <strong>over</strong> the fence.</td></tr>
+  <tr><td><strong>past</strong></td><td>passing without stopping</td><td>Go <strong>past</strong> the bakery.</td></tr>
+  <tr><td><strong>across</strong></td><td>from one side to other</td><td>Cross <strong>across</strong> the street.</td></tr>
+  <tr><td><strong>around</strong></td><td>in a circle</td><td>Go <strong>around</strong> the roundabout.</td></tr>
+  <tr><td><strong>up / down</strong></td><td>vertical movement</td><td>Go <strong>up</strong> the stairs.</td></tr>
+  <tr><td><strong>along</strong></td><td>following a path</td><td>Walk <strong>along</strong> the river.</td></tr>
+</table>
+
+<h3>💬 Example Sentences — Giving Directions</h3>
+<ol>
+  <li><strong>Turn</strong> left at the traffic lights, then <strong>go</strong> straight on.</li>
+  <li><strong>Cross</strong> the bridge and the museum is on your right.</li>
+  <li><strong>Go</strong> past the post office and <strong>take</strong> the first left.</li>
+  <li>The café is <strong>opposite</strong> the cinema.</li>
+  <li><strong>Don't</strong> take the motorway — take the ring road instead.</li>
+  <li>Walk <strong>through</strong> the park and you'll see the fountain.</li>
+  <li>The hospital is <strong>next to</strong> the pharmacy.</li>
+  <li><strong>Be</strong> careful crossing the road!</li>
+  <li>The school is <strong>between</strong> the library and the supermarket.</li>
+  <li><strong>Go around</strong> the roundabout and take the third exit.</li>
+</ol>`
+  },
+  8: {
+    title: 'Unit 8: Going to, Can, Must & Need to — Travel',
+    content: `
+<h3>📖 Grammar: Going to (Future Plans)</h3>
+<ul>
+  <li>Form: subject + <strong>am/is/are + going to</strong> + base verb</li>
+  <li>I <strong>am going to</strong> fly to Antalya next week.</li>
+  <li>She <strong>is going to</strong> book a hotel online.</li>
+  <li>They <strong>are going to</strong> travel by train.</li>
+</ul>
+
+<h3>📌 Modal Verbs: can / must / need to</h3>
+<table class="es-table">
+  <tr><th>Modal</th><th>Use</th><th>Example</th></tr>
+  <tr><td><strong>can</strong></td><td>ability</td><td>She <strong>can</strong> speak French.</td></tr>
+  <tr><td><strong>can't</strong></td><td>inability</td><td>He <strong>can't</strong> swim.</td></tr>
+  <tr><td><strong>must</strong></td><td>strong obligation</td><td>You <strong>must</strong> show your passport.</td></tr>
+  <tr><td><strong>must not/mustn't</strong></td><td>prohibition</td><td>You <strong>mustn't</strong> smoke on the plane.</td></tr>
+  <tr><td><strong>need to</strong></td><td>necessity</td><td>We <strong>need to</strong> buy tickets in advance.</td></tr>
+</table>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>We <strong>are going to</strong> visit Rome next month.</li>
+  <li>You <strong>must</strong> arrive at the airport two hours early.</li>
+  <li>She <strong>can</strong> speak Italian and Spanish.</li>
+  <li>Passengers <strong>mustn't</strong> use their phones during take-off.</li>
+  <li>I <strong>need to</strong> renew my passport before the trip.</li>
+  <li>He <strong>can't</strong> travel — he lost his passport!</li>
+  <li>They <strong>are going to</strong> take the overnight bus to save money.</li>
+  <li><strong>Can</strong> I take photos here? — Yes, you can.</li>
+  <li>We <strong>need to</strong> exchange currency before we leave.</li>
+  <li>You <strong>must</strong> fasten your seatbelt throughout the flight.</li>
+</ol>`
+  },
+  9: {
+    title: 'Unit 9: Should/Shouldn\'t — Health & The Body',
+    content: `
+<h3>📖 Grammar: Should / Shouldn't</h3>
+<p>Use <strong>should</strong> for advice, recommendations, and suggestions.</p>
+<ul>
+  <li>Form: subject + <strong>should / shouldn't</strong> + base verb</li>
+  <li>You <strong>should</strong> drink more water. (positive advice)</li>
+  <li>She <strong>shouldn't</strong> eat so much sugar. (negative advice)</li>
+  <li><strong>Should</strong> I see a doctor? (question)</li>
+</ul>
+
+<h3>📌 Vocabulary: Body Parts & Common Illnesses</h3>
+<table class="es-table">
+  <tr><th>Body Parts</th><th>Illnesses/Symptoms</th></tr>
+  <tr><td>head, neck, shoulder, arm, elbow</td><td>headache, sore throat, fever, cold</td></tr>
+  <tr><td>wrist, hand, finger, chest, back</td><td>backache, cough, flu, stomachache</td></tr>
+  <tr><td>stomach, hip, knee, ankle, foot</td><td>toothache, earache, rash, allergy</td></tr>
+</table>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>You <strong>should</strong> drink at least 8 glasses of water every day.</li>
+  <li>She <strong>shouldn't</strong> smoke — it's very bad for her lungs.</li>
+  <li>My <strong>throat</strong> hurts. I think I have a cold.</li>
+  <li>He has a <strong>fever</strong>. He <strong>should</strong> stay in bed and rest.</li>
+  <li>You <strong>should</strong> exercise at least three times a week.</li>
+  <li>Children <strong>shouldn't</strong> eat too much sugar.</li>
+  <li>I have a terrible <strong>headache</strong>. <strong>Should</strong> I take a painkiller?</li>
+  <li>She <strong>should</strong> see a doctor about her knee pain.</li>
+  <li>We <strong>shouldn't</strong> skip meals — it slows our metabolism.</li>
+  <li>He has a <strong>stomachache</strong>. He <strong>shouldn't</strong> eat anything heavy.</li>
+</ol>`
+  },
+  10: {
+    title: 'Unit 10: Present Continuous & Weather',
+    content: `
+<h3>📖 Grammar: Present Continuous</h3>
+<p>Use Present Continuous for <strong>actions happening right now</strong> or <strong>temporary situations</strong>.</p>
+<ul>
+  <li>Form: subject + <strong>am/is/are + verb-ing</strong></li>
+  <li>I <strong>am studying</strong> English right now.</li>
+  <li>She <strong>is not working</strong> today — she's on holiday.</li>
+  <li><strong>Are</strong> they <strong>coming</strong> to the party?</li>
+</ul>
+<h4>Spelling rules for -ing:</h4>
+<ul>
+  <li>Most verbs: + ing → work<strong>ing</strong>, read<strong>ing</strong></li>
+  <li>Silent e: drop e + ing → danc<strong>ing</strong>, writ<strong>ing</strong></li>
+  <li>Short vowel + consonant: double → swim<strong>ming</strong>, run<strong>ning</strong></li>
+</ul>
+
+<h3>📌 Vocabulary: Weather</h3>
+<ul>
+  <li><strong>Sunny, cloudy, rainy, snowy, windy, foggy, stormy, humid</strong></li>
+  <li><strong>Hot, warm, cool, cold, freezing</strong></li>
+  <li><strong>Thunder and lightning, hail, drought, flood</strong></li>
+  <li><strong>Seasons:</strong> spring, summer, autumn/fall, winter</li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>Look! It <strong>is raining</strong> heavily outside!</li>
+  <li>She <strong>is reading</strong> a novel in the garden.</li>
+  <li>What <strong>are</strong> you <strong>doing</strong> right now?</li>
+  <li>The temperature <strong>is rising</strong> this week due to the heatwave.</li>
+  <li>They <strong>are not watching</strong> TV — they're playing chess.</li>
+  <li>It <strong>is snowing</strong> in Erzurum today.</li>
+  <li>He <strong>is wearing</strong> a coat because it's cold.</li>
+  <li><strong>Is</strong> it <strong>raining</strong> in Istanbul? — No, it's sunny there.</li>
+  <li>The children <strong>are playing</strong> outside in the garden.</li>
+  <li>A storm <strong>is coming</strong> — we should stay indoors.</li>
+</ol>`
+  },
+  11: {
+    title: 'Unit 11: Verb Patterns — like/enjoy/love/hate + -ing',
+    content: `
+<h3>📖 Grammar: Verb + -ing Pattern</h3>
+<p>After these verbs, use <strong>verb + -ing</strong> (gerund):</p>
+<ul>
+  <li><strong>like, love, enjoy, hate, prefer, don't mind, can't stand, avoid, miss, finish</strong></li>
+</ul>
+<table class="es-table">
+  <tr><th>Verb</th><th>+ -ing</th><th>Example</th></tr>
+  <tr><td>love</td><td>swimming</td><td>She <strong>loves swimming</strong> in the sea.</td></tr>
+  <tr><td>enjoy</td><td>cooking</td><td>He <strong>enjoys cooking</strong> Italian food.</td></tr>
+  <tr><td>hate</td><td>waiting</td><td>I <strong>hate waiting</strong> in queues.</td></tr>
+  <tr><td>can't stand</td><td>being late</td><td>She <strong>can't stand being</strong> late.</td></tr>
+  <tr><td>don't mind</td><td>helping</td><td>I <strong>don't mind helping</strong> you.</td></tr>
+  <tr><td>prefer</td><td>walking to driving</td><td>I <strong>prefer walking to driving</strong>.</td></tr>
+</table>
+
+<h4>Preposition + -ing:</h4>
+<ul>
+  <li>good/bad <strong>at</strong> + -ing: She's good <strong>at singing</strong>.</li>
+  <li>interested <strong>in</strong> + -ing: He's interested <strong>in learning</strong> Arabic.</li>
+  <li>passionate <strong>about</strong> + -ing: They're passionate <strong>about painting</strong>.</li>
+</ul>
+
+<h4>Go + -ing (sporting activities):</h4>
+<ul>
+  <li>go <strong>swimming, cycling, skiing, jogging, camping, dancing</strong></li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>I <strong>love reading</strong> historical novels.</li>
+  <li>She <strong>enjoys painting</strong> landscapes in her free time.</li>
+  <li>He <strong>hates getting up</strong> early on weekdays.</li>
+  <li>They <strong>don't mind working</strong> overtime occasionally.</li>
+  <li>She is <strong>good at playing</strong> the piano.</li>
+  <li>He <strong>goes jogging</strong> every morning before breakfast.</li>
+  <li>I <strong>prefer cooking</strong> at home <strong>to eating</strong> out.</li>
+  <li>She's <strong>interested in learning</strong> sign language.</li>
+  <li>We <strong>love camping</strong> in the mountains in summer.</li>
+  <li>I <strong>can't stand listening</strong> to very loud music.</li>
+</ol>`
+  },
+  12: {
+    title: 'Unit 12: Going to vs. Will — Future Plans & Predictions',
+    content: `
+<h3>📖 Grammar: Going to vs. Will</h3>
+<table class="es-table">
+  <tr><th>Form</th><th>Use</th><th>Example</th></tr>
+  <tr><td><strong>going to</strong></td><td>Pre-planned intentions and decisions</td><td>I <strong>am going to</strong> study medicine.</td></tr>
+  <tr><td><strong>going to</strong></td><td>Predictions with visible evidence</td><td>Look at those clouds! It <strong>is going to</strong> rain.</td></tr>
+  <tr><td><strong>will</strong></td><td>Predictions (opinions, beliefs)</td><td>I think she <strong>will</strong> pass the exam.</td></tr>
+  <tr><td><strong>will</strong></td><td>Spontaneous decisions</td><td>A: "I'm cold." B: "I'<strong>ll</strong> get you a blanket."</td></tr>
+  <tr><td><strong>will</strong></td><td>Promises and offers</td><td>I <strong>will</strong> call you back, I promise.</td></tr>
+</table>
+
+<h3>📌 Future Time Expressions</h3>
+<ul>
+  <li><strong>tomorrow, next week/month/year, soon, in two days</strong></li>
+  <li><strong>this weekend, this evening, by Friday, in the future</strong></li>
+  <li><strong>one day, eventually, shortly, at some point</strong></li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>I <strong>am going to</strong> visit my grandparents next weekend.</li>
+  <li>She <strong>is going to</strong> start a new job next month.</li>
+  <li>Look! He <strong>is going to</strong> fall off his bike!</li>
+  <li>A: "The phone's ringing!" B: "I'<strong>ll</strong> get it!"</li>
+  <li>I think it <strong>will</strong> be a great year.</li>
+  <li>She <strong>will</strong> probably win the competition.</li>
+  <li>They <strong>are going to</strong> get married in spring.</li>
+  <li>I promise I <strong>will</strong> help you with your project.</li>
+  <li>In 20 years, robots <strong>will</strong> do many of our jobs.</li>
+  <li><strong>Will</strong> you be at the meeting tomorrow?</li>
+</ol>`
+  },
+  13: {
+    title: 'Unit 13: Past Simple Tense',
+    content: `
+<h3>📖 Grammar: Past Simple</h3>
+<p>Use Past Simple for <strong>completed actions in the past</strong> with a clear time reference.</p>
+
+<h4>Regular verbs: + ed</h4>
+<ul>
+  <li>watch → watch<strong>ed</strong>, visit → visit<strong>ed</strong>, start → start<strong>ed</strong></li>
+  <li>study → studi<strong>ed</strong> (y → ied), stop → stop<strong>ped</strong> (double consonant)</li>
+</ul>
+
+<h4>Common Irregular Verbs:</h4>
+<table class="es-table">
+  <tr><th>Base</th><th>Past</th><th>Base</th><th>Past</th></tr>
+  <tr><td>go</td><td>went</td><td>see</td><td>saw</td></tr>
+  <tr><td>come</td><td>came</td><td>have</td><td>had</td></tr>
+  <tr><td>buy</td><td>bought</td><td>eat</td><td>ate</td></tr>
+  <tr><td>take</td><td>took</td><td>write</td><td>wrote</td></tr>
+  <tr><td>meet</td><td>met</td><td>say</td><td>said</td></tr>
+  <tr><td>make</td><td>made</td><td>give</td><td>gave</td></tr>
+</table>
+
+<h4>Negative and Questions:</h4>
+<ul>
+  <li><strong>Negative:</strong> didn't + base verb → She <strong>didn't come</strong> to class.</li>
+  <li><strong>Question:</strong> Did + subject + base verb → <strong>Did</strong> you <strong>enjoy</strong> the film?</li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>She <strong>went</strong> to the cinema last Saturday.</li>
+  <li>They <strong>visited</strong> Cappadocia two years ago.</li>
+  <li>I <strong>didn't eat</strong> breakfast this morning.</li>
+  <li><strong>Did</strong> you <strong>enjoy</strong> the concert? — Yes, I loved it!</li>
+  <li>He <strong>met</strong> his best friend at university.</li>
+  <li>She <strong>wrote</strong> five emails yesterday.</li>
+  <li>We <strong>had</strong> a fantastic holiday in Antalya.</li>
+  <li>The film <strong>started</strong> at 8 and <strong>ended</strong> at 10.</li>
+  <li>He <strong>bought</strong> a new phone last week.</li>
+  <li><strong>Did</strong> they <strong>call</strong> you? — No, they <strong>didn't</strong>.</li>
+</ol>`
+  },
+  14: {
+    title: 'Unit 14: Suggestions & Social Invitations',
+    content: `
+<h3>📖 Grammar: Making Suggestions</h3>
+<table class="es-table">
+  <tr><th>Structure</th><th>Example</th></tr>
+  <tr><td><strong>Let's + base verb</strong></td><td><strong>Let's</strong> go to the park!</td></tr>
+  <tr><td><strong>Let's not + base verb</strong></td><td><strong>Let's not</strong> be late.</td></tr>
+  <tr><td><strong>How about + verb-ing?</strong></td><td><strong>How about going</strong> to a restaurant?</td></tr>
+  <tr><td><strong>Why don't we + base verb?</strong></td><td><strong>Why don't we</strong> play tennis?</td></tr>
+  <tr><td><strong>Shall we + base verb?</strong></td><td><strong>Shall we</strong> have lunch together?</td></tr>
+  <tr><td><strong>Why not + base verb?</strong></td><td><strong>Why not</strong> try the new café?</td></tr>
+</table>
+
+<h3>📌 Accepting & Declining Suggestions</h3>
+<ul>
+  <li>✅ <strong>Accept:</strong> That sounds great! / Good idea! / I'd love to! / Perfect!</li>
+  <li>❌ <strong>Decline:</strong> I'm afraid I can't. / Maybe another time. / I'd rather not.</li>
+</ul>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li><strong>Let's</strong> have a picnic in the park this Sunday!</li>
+  <li><strong>How about</strong> watching a film tonight?</li>
+  <li><strong>Why don't we</strong> try that new Italian restaurant?</li>
+  <li><strong>Shall we</strong> meet at the café at 5?</li>
+  <li>A: "How about going bowling?" B: "That <strong>sounds great</strong>!"</li>
+  <li>She <strong>invited</strong> all her friends to her birthday party.</li>
+  <li><strong>Why not</strong> take the day off and relax?</li>
+  <li><strong>Let's not</strong> stay up too late — we have class tomorrow.</li>
+  <li>A: "Shall we cook at home?" B: "<strong>Good idea</strong>! I'll buy the ingredients."</li>
+  <li>They <strong>are having</strong> a party next Saturday — are you coming?</li>
+</ol>`
+  },
+  15: {
+    title: 'Unit 15: Can/Can\'t & Have to/Don\'t Have to — Jobs',
+    content: `
+<h3>📖 Grammar: Can / Can't (Ability)</h3>
+<ul>
+  <li>Form: subject + <strong>can/can't</strong> + base verb</li>
+  <li>She <strong>can</strong> speak French and German. (ability)</li>
+  <li>He <strong>can't</strong> drive. He doesn't have a licence. (inability)</li>
+  <li><strong>Can</strong> you type quickly? — Yes, I <strong>can</strong>. (question)</li>
+</ul>
+
+<h3>📌 Have to / Don't Have to (Obligation)</h3>
+<table class="es-table">
+  <tr><th>Form</th><th>Meaning</th><th>Example</th></tr>
+  <tr><td><strong>have to</strong></td><td>obligation (necessary)</td><td>Doctors <strong>have to</strong> work long hours.</td></tr>
+  <tr><td><strong>has to</strong> (he/she/it)</td><td>obligation (3rd person)</td><td>She <strong>has to</strong> wear a uniform.</td></tr>
+  <tr><td><strong>don't have to</strong></td><td>no obligation</td><td>You <strong>don't have to</strong> pay — it's free.</td></tr>
+  <tr><td><strong>doesn't have to</strong></td><td>no obligation (3rd person)</td><td>He <strong>doesn't have to</strong> come in on Sundays.</td></tr>
+</table>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>She <strong>can</strong> solve complex maths problems in her head.</li>
+  <li>He <strong>can't</strong> cook at all — he orders food every day!</li>
+  <li>Nurses <strong>have to</strong> work night shifts regularly.</li>
+  <li>University students <strong>don't have to</strong> wear a uniform.</li>
+  <li>A surgeon <strong>has to</strong> be very precise and steady-handed.</li>
+  <li><strong>Can</strong> you use spreadsheet software? — Yes, I'm very good at it.</li>
+  <li>Firefighters <strong>have to</strong> be physically strong and brave.</li>
+  <li>You <strong>don't have to</strong> finish it today — there's no rush.</li>
+  <li>She <strong>can</strong> speak clearly and confidently in public.</li>
+  <li>An accountant <strong>has to</strong> be very good with numbers and details.</li>
+</ol>`
+  },
+  16: {
+    title: 'Unit 16: Present Perfect Tense',
+    content: `
+<h3>📖 Grammar: Present Perfect</h3>
+<p>Use Present Perfect for: <strong>life experiences, recent actions, and situations lasting from the past to now</strong>.</p>
+<ul>
+  <li>Form: subject + <strong>have/has + past participle</strong></li>
+  <li>I <strong>have visited</strong> Rome twice. (life experience)</li>
+  <li>She <strong>has just finished</strong> her exam. (very recently)</li>
+  <li>He <strong>has lived</strong> here for 10 years. (continuing situation)</li>
+</ul>
+
+<h3>📌 Key Time Words</h3>
+<table class="es-table">
+  <tr><th>Word</th><th>Use</th><th>Example</th></tr>
+  <tr><td><strong>ever</strong></td><td>in questions (any time)</td><td>Have you <strong>ever</strong> been to Japan?</td></tr>
+  <tr><td><strong>never</strong></td><td>at no time in life</td><td>I have <strong>never</strong> eaten sushi.</td></tr>
+  <tr><td><strong>just</strong></td><td>very recently</td><td>She has <strong>just</strong> arrived.</td></tr>
+  <tr><td><strong>already</strong></td><td>before now / earlier</td><td>I have <strong>already</strong> done it.</td></tr>
+  <tr><td><strong>yet</strong></td><td>up to now (neg./quest.)</td><td>Have you finished <strong>yet</strong>? / Not <strong>yet</strong>.</td></tr>
+  <tr><td><strong>for</strong></td><td>duration</td><td>I've lived here <strong>for</strong> five years.</td></tr>
+  <tr><td><strong>since</strong></td><td>starting point</td><td>She's worked here <strong>since</strong> 2018.</td></tr>
+</table>
+
+<h3>💬 Example Sentences</h3>
+<ol>
+  <li>I <strong>have visited</strong> Paris three times.</li>
+  <li>She <strong>has just finished</strong> her doctoral thesis!</li>
+  <li>Have you <strong>ever eaten</strong> Turkish food? — Yes, I <strong>have</strong>!</li>
+  <li>He <strong>has never been</strong> to London.</li>
+  <li>They <strong>have already</strong> left for the airport.</li>
+  <li>She <strong>hasn't called</strong> me yet.</li>
+  <li>We <strong>have studied</strong> English <strong>for</strong> two years.</li>
+  <li>He <strong>has worked</strong> here <strong>since</strong> 2015.</li>
+  <li>I <strong>have already</strong> booked the tickets.</li>
+  <li>Have you <strong>finished</strong> the report <strong>yet</strong>? — Not <strong>yet</strong>, sorry!</li>
+</ol>`
+  }
+};
+
 
 /* ══════════ A) STUDENT PROGRESS DATA (for Teacher Panel) ══════════ */
 const STUDENT_PROGRESS = {
@@ -651,13 +2296,12 @@ function openWeek(num){
   const res = WEEK_RESOURCES[num] || {};
   const setLink = (id, url) => {
     const el = document.getElementById(id);
+    if(!el) return;
     el.href = (url && url !== 'PASTE_LINK_HERE') ? url : '#';
   };
   setLink('link-video',  res.video);
   setLink('link-slide',  res.slides);
   setLink('link-pdf',    res.pdf);
-  setLink('link-hw',     res.homework);
-  setLink('link-extra',  res.extra);
 
   // Quiz badge
   const prog = STUDENT_PROGRESS[currentUser.uid];
@@ -836,6 +2480,107 @@ function postComment(){
   });
   document.getElementById('forum-input').value = '';
   renderForum();
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   ██████   E) HOMEWORK ENGINE
+   ════════════════════════════════════════════════════════════════ */
+function openHomework(){
+  if(!currentWeek) return false;
+  const hdata = HOMEWORK[currentWeek];
+  if(!hdata){ alert('Homework for this week is coming soon!'); return false; }
+
+  document.getElementById('hw-title').textContent = `Week ${currentWeek} — Lesson Homework`;
+  document.getElementById('hw-subtitle').textContent = `${hdata.topic} · 20 fill-in-the-blank questions`;
+  setBreadcrumb(`Week ${currentWeek}`, 'Homework');
+
+  const container = document.getElementById('hw-questions');
+  container.innerHTML = hdata.questions.map((q, i) => `
+    <div class="q-card" id="hwcard-${i}">
+      <div class="q-number">Question ${i+1} of ${hdata.questions.length}</div>
+      <div class="q-text">${q.q.replace('___', '<span style="border-bottom:2px dashed var(--gold);padding:0 .3rem;color:var(--gold);font-weight:700">___</span>')}</div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:.4rem;font-family:'DM Mono',monospace">💡 Hint: ${q.hint}</div>
+      <input type="text" class="q-input" id="hw-ans-${i}" placeholder="Type your answer here..." autocomplete="off">
+      <div class="q-feedback" id="hw-fb-${i}"></div>
+    </div>`).join('');
+
+  document.getElementById('btn-check-hw').style.display = 'inline-block';
+  document.getElementById('hw-result-area').innerHTML = '';
+
+  // Re-enable all inputs
+  hdata.questions.forEach((_, i) => {
+    const inp = document.getElementById(`hw-ans-${i}`);
+    if(inp){ inp.disabled = false; inp.value = ''; inp.className = 'q-input'; }
+    const fb = document.getElementById(`hw-fb-${i}`);
+    if(fb){ fb.className = 'q-feedback'; fb.innerHTML = ''; }
+  });
+
+  showPage('hw-page');
+  return false;
+}
+
+function checkHomeworkAnswers(){
+  const hdata = HOMEWORK[currentWeek];
+  let correct = 0;
+  hdata.questions.forEach((q, i) => {
+    const input = document.getElementById(`hw-ans-${i}`);
+    const fb = document.getElementById(`hw-fb-${i}`);
+    const userAns = input.value.trim().toLowerCase();
+
+    // Accept multiple correct answers (comma-separated in ans)
+    const correctAnswers = q.ans.toLowerCase().split(',').map(a => a.trim());
+    const isCorrect = correctAnswers.some(a => userAns === a);
+
+    input.classList.remove('correct','wrong');
+    fb.classList.remove('correct','wrong');
+
+    if(isCorrect){
+      correct++;
+      input.classList.add('correct');
+      fb.className = 'q-feedback show correct';
+      fb.innerHTML = `✅ Correct! ${q.exp}`;
+    } else {
+      input.classList.add('wrong');
+      fb.className = 'q-feedback show wrong';
+      fb.innerHTML = `❌ Correct answer: <strong>${q.ans}</strong>. ${q.exp}`;
+    }
+    input.disabled = true;
+  });
+
+  const total = hdata.questions.length;
+  const pct = Math.round((correct/total)*100);
+  const passed = pct >= 70;
+
+  document.getElementById('btn-check-hw').style.display = 'none';
+  document.getElementById('hw-result-area').innerHTML = `
+    <div class="quiz-result-summary ${passed?'pass':'fail'}">
+      <div style="font-size:2.5rem;margin-bottom:.5rem">${passed?'🎉':'📌'}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900">${passed?'Well done!':'Keep Practising!'}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;margin:.5rem 0;color:${passed?'var(--sage)':'var(--accent)'}">${correct} / ${total}</div>
+      <p style="font-size:.85rem;color:var(--muted)">${passed
+        ? 'You have completed this week\'s homework successfully!'
+        : 'Review the grammar notes in Extra Support and try again.'}</p>
+      <button class="btn-check" onclick="openWeek(${0})" style="margin-top:1rem;background:var(--sky)">← Back to Week</button>
+    </div>`;
+  // Fix the week reference in button
+  document.querySelector('#hw-result-area button').onclick = () => openWeek(currentWeek);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ██████   F) EXTRA SUPPORT ENGINE
+   ════════════════════════════════════════════════════════════════ */
+function openExtraSupport(){
+  if(!currentWeek) return false;
+  const edata = EXTRA_SUPPORT[currentWeek];
+  if(!edata){ alert('Extra support materials for this week are coming soon!'); return false; }
+
+  document.getElementById('extra-title').textContent = edata.title;
+  document.getElementById('extra-sub').textContent = `Week ${currentWeek} — Grammar notes, vocabulary, and example sentences`;
+  document.getElementById('extra-body').innerHTML = edata.content;
+  setBreadcrumb(`Week ${currentWeek}`, 'Extra Support');
+  showPage('extra-page');
+  return false;
 }
 
 /* ════════════════════════════════════════════════════════════════
